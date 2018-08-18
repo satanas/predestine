@@ -1,9 +1,10 @@
 * {
   padding: 0px;
   margin: 0 auto;
-  background-color: #000;
+  background-color: #fff;
 }
 canvas {
+  /*position: absolute;*/
   margin: 0 auto;
   display: block;
   cursor: none;

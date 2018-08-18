@@ -5,4 +5,4 @@ let $ = {},
 // Extra modules
 $.mod = [];
 // Get canvas
-$.canvas = D.querySelector("canvas");
+$.canvas = D.getElementsByTagName("canvas");

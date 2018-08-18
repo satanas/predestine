@@ -1,10 +1,11 @@
 $.init = function() {
   // Viewport height
-  $.vh = $.canvas.height;
+  $.vh = $.canvas[0].height;
   // Viewport width
-  $.vw = $.canvas.width;
+  $.vw = $.canvas[0].width;
   // Canvas context for drawing on-screen
-  $.ctx = $.canvas.getContext('2d');
+  $.ctx = $.canvas[1].getContext('2d'); // World
+  $.ctx2 = $.canvas[0].getContext('2d'); // Fog
 
   $.groups = {};
   $.input = new Input();
@@ -15,11 +16,14 @@ $.init = function() {
 
 function resize() {
   let w = floor(window.innerWidth),
-      h = floor(w * 9 / 16);
+      h = floor(w * 9 / 16),
+      i;
 
-  $.canvas.style.width = w + 'px';
-  $.canvas.style.height = h + 'px';
-  $.canvas.style.marginTop = floor((window.innerHeight - h) / 2) + 'px';
+  for(i = 0; i < $.canvas.length; i++) {
+    $.canvas[i].style.width = w + 'px';
+    $.canvas[i].style.height = h + 'px';
+    $.canvas[i].style.marginTop = floor((window.innerHeight - h) / 2) + 'px';
+  }
 }
 
 // Request Animation Frame

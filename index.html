@@ -5,7 +5,8 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <canvas id="c" width="1024" height="576"></canvas>
+  <canvas id="c1" width="1024" height="576"></canvas>
+  <canvas id="c2" width="1024" height="576"></canvas>
   <!-- Begin imports -->
   <script src="js/engine/core/setup.js"></script>
   <script src="js/engine/core/input.js"></script>
@@ -98,6 +99,8 @@
     constructor() {
       super();
       this.player = new Player();
+      this.radius1 = 100;
+      this.radius2 = 300;
       $.groups.enemies = new Group();
       $.groups.enemies.add(new Enemy());
     }
@@ -113,10 +116,33 @@
       $.txt.render('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10, 40, '#fff', 15);
       $.txt.render('0123456789.:@', 10, 70, '#fff', 15);
 
+      // reveal wherever we drag
+      //var radGrd = $.ctx.createRadialGradient(this.player.x, this.player.y, this.radius1, this.player.x, this.player.y, this.radius2);
+      //radGrd.addColorStop(0, 'rgba(0,0,0,1)');
+      //radGrd.addColorStop(0.4, 'rgba(0,0,0,.1)');
+      //radGrd.addColorStop(1, 'rgba(0,0,0,0)');
+
+      // partially hide the entire map and re-reval where we are now
+      $.ctx2.globalCompositeOperation = 'source-over';
+      $.ctx2.clearRect(0, 0, 1280, 800);
+      $.ctx2.fillStyle = 'rgba(0,0,0,0.8)';
+      $.ctx2.fillRect (0, 0, 1280, 800);
+
+      var radGrd = $.ctx.createRadialGradient(this.player.x, this.player.y, this.radius1, this.player.x, this.player.y, this.radius2);
+      radGrd.addColorStop(0, 'rgba(0,0,0,1)');
+      radGrd.addColorStop(0.8, 'rgba(0,0,0,.1)');
+      radGrd.addColorStop(1, 'rgba(0,0,0,0)');
+
+      $.ctx2.globalCompositeOperation = 'destination-out';
+      $.ctx2.fillStyle = radGrd;
+      $.ctx2.fillRect(this.player.x - this.radius2, this.player.y - this.radius2, this.radius2*2, this.radius2*2);
+
       // Render stuff
       $.cam.render($.groups.enemies);
       $.cam.render(this.player);
       $.cam.render($.groups.particles);
+
+      $.ctx.drawImage($.canvas[0], 0, 0);
     }
   }
 
