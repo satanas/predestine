@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+  <title>Pandemia</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <canvas id="c" width="1024" height="576"></canvas>
+  <!-- Begin imports -->
+  <script src="js/engine/core/setup.js"></script>
+  <script src="js/engine/core/input.js"></script>
+  <script src="js/engine/core/math.js"></script>
+  <script src="js/engine/core/vector.js"></script>
+  <script src="js/engine/core/rectangle.js"></script>
+  <script src="js/engine/core/camera.js"></script>
+  <script src="js/engine/core/scene.js"></script>
+  <script src="js/engine/core/group.js"></script>
+  <script src="js/engine/core/sprite.js"></script>
+  <script src="js/engine/core/animator.js"></script>
+  <script src="js/engine/core/collision.js"></script>
+  <script src="js/engine/core/text.js"></script>
+  <script src="js/engine/core/init.js"></script>
+  <!-- End imports -->
+<script>
+  const ENTER = 13,
+        KEY_A = 65,
+        LEFT = 37,
+        RIGHT = 39,
+        UP = 38,
+        DOWN = 40;
+
+  debug = true;
+  class Player extends Sprite {
+    constructor() {
+      super(100, 100, 64, 64);
+      this.speed = 0.25;
+      this.anim = new Animator(['#0f0', '#fff'], 100);
+      //this.emitter = new Emitter(Vector.fromAngle(0, 2));
+    }
+
+    update(dt) {
+      let dx = 0, dy = 0;
+      // Move left-right
+      if ($.input.isPressed(LEFT)) {
+        dx = -this.speed * dt;
+      } else if ($.input.isPressed(RIGHT)) {
+        dx = this.speed * dt;
+      }
+
+      // Move up-down
+      if ($.input.isPressed(UP)) {
+        dy = -this.speed * dt;
+      } else if ($.input.isPressed(DOWN)) {
+        dy = this.speed * dt;
+      }
+
+      // Mouse down
+      if ($.input.isLeftClick()) {
+        //console.log('hahaha', $.input.mousePos);
+        //this.emitter.emit($.input.mousePos);
+      }
+      this.x += dx;
+      this.y += dy;
+      this.color = '#f00';
+
+      // TODO: How to call this automagically?
+      this.bounds.update(this);
+
+      // Check collisions
+      $.coll.betweenGroup(this, $.groups.enemies, (player, enemy) => {
+        this.anim.update(dt);
+        this.color = this.anim.get();
+      });
+    }
+
+    render(rect) {
+      $.ctx.save();
+      $.ctx.fillStyle = this.color;
+      $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
+      $.ctx.restore();
+    }
+  }
+
+  class Enemy extends Sprite {
+    constructor() {
+      super(200, 200, 64, 64);
+    }
+
+    render(rect) {
+      $.ctx.save();
+      $.ctx.fillStyle = "#00F";
+      $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
+      $.ctx.restore();
+    }
+  }
+
+  class GameScene extends Scene {
+    constructor() {
+      super();
+      this.player = new Player();
+      $.groups.enemies = new Group();
+      $.groups.enemies.add(new Enemy());
+    }
+
+    update() {
+      $.cam.clear('#666');
+
+      // Update stuff
+      $.groups.enemies.update(this.deltaTime);
+      this.player.update(this.deltaTime);
+      $.cam.update(this.deltaTime);
+
+      $.txt.render('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10, 40, '#fff', 15);
+      $.txt.render('0123456789.:@', 10, 70, '#fff', 15);
+
+      // Render stuff
+      $.cam.render($.groups.enemies);
+      $.cam.render(this.player);
+      $.cam.render($.groups.particles);
+    }
+  }
+
+
+  $.init(); // init(['collisions', 'sound', 'astar', ...])
+  // Bind keyboard
+  $.input.bind([ENTER, KEY_A, LEFT, RIGHT, UP, DOWN]);
+  $.input.bindMouse();
+  $.cam.setWorldSize(1024, 1024);
+
+  var scene = new GameScene();
+  scene.start();
+</script>
+</body>
+</html>
