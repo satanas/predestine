@@ -1,11 +1,10 @@
 $.init = function() {
   // Viewport height
-  $.vh = $.canvas[0].height;
+  $.vh = $.canvas.height;
   // Viewport width
-  $.vw = $.canvas[0].width;
+  $.vw = $.canvas.width;
   // Canvas context for drawing on-screen
-  $.ctx = $.canvas[1].getContext('2d'); // World
-  $.ctx2 = $.canvas[0].getContext('2d'); // Fog
+  $.ctx = $.canvas.getContext('2d');
 
   $.groups = {};
   $.input = new Input();
@@ -15,26 +14,32 @@ $.init = function() {
 }
 
 function resize() {
-  let w = floor(window.innerWidth),
+  let w = floor(W.innerWidth),
       h = floor(w * 9 / 16),
-      i;
+      t = floor((W.innerHeight - h) / 2),
+      ev = new CustomEvent('rsize', {detail: {w:w, h:h, t:t}});
 
-  for(i = 0; i < $.canvas.length; i++) {
-    $.canvas[i].style.width = w + 'px';
-    $.canvas[i].style.height = h + 'px';
-    $.canvas[i].style.marginTop = floor((window.innerHeight - h) / 2) + 'px';
-  }
+  resizeCanvas($.canvas, w, h);
+  $.canvas.style.marginTop = t + 'px';
+  W.dispatchEvent(ev);
+}
+
+function resizeCanvas(canvas, w, h, t) {
+  canvas.width = w;
+  canvas.height = h;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
 }
 
 // Request Animation Frame
-raf = window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  function(a){ window.setTimeout(a,1E3/60); };
+raf = W.requestAnimationFrame ||
+  W.webkitRequestAnimationFrame ||
+  W.mozRequestAnimationFrame ||
+  function(a){ W.setTimeout(a,1E3/60); };
 
 // Cancel Animation Frame
-caf = window.cancelAnimationFrame ||
-  window.mozCancelAnimationFrame;
+caf = W.cancelAnimationFrame ||
+  W.mozCancelAnimationFrame;
 
-window.addEventListener('load', resize, false);
-window.addEventListener('resize', resize, false);
+W.addEventListener('load', resize, false);
+W.addEventListener('resize', resize, false);

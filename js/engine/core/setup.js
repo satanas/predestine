@@ -1,8 +1,9 @@
 let $ = {},
     debug = false,
-    D = document;
+    D = document,
+    W = window;
 
 // Extra modules
 $.mod = [];
 // Get canvas
-$.canvas = D.getElementsByTagName("canvas");
+$.canvas = D.querySelector("canvas");
