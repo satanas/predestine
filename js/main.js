@@ -1,15 +1,17 @@
 const ENTER = 13,
       KEY_A = 65,
       // Actions
-      FW = 1,
-      BW = 2,
-      TL = 3,
-      TR = 4,
+      FW = 1, // Move forward
+      BW = 2, // Move backward
+      TL = 3, // Turn left
+      TR = 4, // Turn right
+      RP = 5, // Repair
+      EX = 6, // Extinguish
       // Directions
-      LF = 0,
-      RG = 1,
-      UP = 2,
-      DW = 3,
+      LF = 0, // Left
+      RG = 1, // Right
+      UP = 2, // Up
+      DW = 3, // Down
       GRID = 64;
 
 debug = true;

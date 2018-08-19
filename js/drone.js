@@ -4,7 +4,7 @@ class Drone extends Sprite {
     this.speed = 0.25;
     this.anim = new Animator(['#0f0', '#fff'], 100);
     //this.emitter = new Emitter(Vector.fromAngle(0, 2));
-    this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, FW, TL, FW, FW];
+    this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, FW, RP, TL, FW, FW];
     this.ops.reverse();
     this.op = null;
     this.direction = RG;
@@ -14,12 +14,7 @@ class Drone extends Sprite {
     let dx = 0, dy = 0, result;
 
     if (!this.op && this.ops.length > 0) {
-      let op = this.ops.pop();
-      if (op === FW) {
-        this.op = new Move(this.x, this.y, this.direction, this.speed);
-      } else if (op === TR || op === TL) {
-        this.op = new Turn(this.direction, op);
-      }
+      this.op = Action.create(this.ops.pop(), this);
       console.log('Operation', this.op);
     }
 
@@ -70,11 +65,50 @@ class Drone extends Sprite {
   }
 }
 
-
-class Turn {
-  constructor(origDir, chgDir) {
+class Action {
+  constructor() {
     this.done = false;
     this.pauseTime = 500;
+  }
+
+  static create(op, obj) {
+    if (op === FW) {
+      return new Move(obj.x, obj.y, obj.direction, obj.speed);
+    } else if (op === TR || op === TL) {
+      return new Turn(obj.direction, op);
+    } else if (op === RP) {
+      return new Operation();
+    }
+  }
+
+  tick(dt) {
+    this.pauseTime -= dt;
+    if (this.pauseTime <= 0) this.done = true;
+  }
+}
+class Operation extends Action {
+  constructor() {
+    super();
+    this.opTime = 1500;
+  }
+
+  inc(x, y, dt) {
+    if (this.opTime > 0) {
+      this.opTime -= dt;
+      console.log('doing operation');
+      if (this.opTime <= 0) {
+        // Send signal
+        console.log('operation done');
+      }
+    } else {
+      this.tick(dt);
+    }
+  }
+}
+
+class Turn extends Action {
+  constructor(origDir, chgDir) {
+    super();
     this.dst = origDir;
 
     if (chgDir === TR) {
@@ -91,21 +125,17 @@ class Turn {
   }
 
   inc(x, y, dt) {
-    this.pauseTime -= dt;
-    if (this.pauseTime <= 0) {
-      this.done = true;
-    }
+    this.tick(dt);
     return {
       direction: this.dst
     };
   }
 }
 
-class Move {
+class Move extends Action {
   constructor(x, y, dir, speed) {
+    super();
     this.dir = dir;
-    this.done = false;
-    this.pauseTime = 500;
     this.xspeed = this.yspeed = 0;
 
     // Move left-right
@@ -140,10 +170,7 @@ class Move {
         curr.y = this.dst.y;
       }
     } else {
-      this.pauseTime -= dt;
-      if (this.pauseTime <= 0) {
-        this.done = true;
-      }
+      this.tick(dt);
     }
 
     return {
