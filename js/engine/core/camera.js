@@ -1,7 +1,7 @@
 class Camera {
   constructor(width, height, worldWidth, worldHeight) {
-    this.width = width;
-    this.height = height;
+    //this.width = width;
+    //this.height = height;
     this.offsetX = 0;
     this.offsetY = 0;
 
@@ -29,22 +29,22 @@ class Camera {
   inView(obj) {
     let r = Rectangle.offset(obj, this.offsetX, this.offsetY);
 
-    return ((r.bounds.right >= 0 && r.bounds.right <= this.width) || (r.x >= 0 && r.x <= this.width)) &&
-           ((r.bounds.bottom >= 0 && r.bounds.bottom <= this.height) || (r.y >= 0 && r.y <= this.height));
+    return ((r.bounds.right >= 0 && r.bounds.right <= $.vw) || (r.x >= 0 && r.x <= $.vw)) &&
+           ((r.bounds.bottom >= 0 && r.bounds.bottom <= $.vh) || (r.y >= 0 && r.y <= $.vh));
   }
 
   update(deltaTime) {
     let tx = 0,
         ty = 0,
-        midWidth = this.width / 2,
-        midHeight = this.height / 2;
+        midWidth = $.vw / 2,
+        midHeight = $.vh / 2;
 
     this.offsetX = 0;
     this.offsetY = 0;
     // Update offset according the target.
     if (this.target) {
       // If world width is smaller than viewport width, then tx = target.x so offset x is zero
-      if (this.worldWidth <= this.width) {
+      if (this.worldWidth <= $.vw) {
         tx = this.target.x;
       // If target.x is before the middle of the viewport, offset x is zero
       } else if (this.target.x <= midWidth) {
@@ -56,17 +56,17 @@ class Camera {
       // If target x is after the middle of the viewport and reached the end of the world,
       // offset x is the difference between the world width and the target.x
       } else if ((this.target.x > midWidth) && (this.target.x + midWidth > this.worldWidth)) {
-        tx = this.width - (this.worldWidth - this.target.x);
+        tx = $.vw - (this.worldWidth - this.target.x);
       }
 
-      if (this.worldHeight <= this.height) {
+      if (this.worldHeight <= $.vh) {
         ty = this.target.y;
       } else if (this.target.y <= midHeight) {
         ty = this.target.y;
       } else if ((this.target.y > midHeight) && (this.target.y + midHeight <= this.worldHeight)) {
         ty = midHeight;
       } else if ((this.target.y > midHeight) && (this.target.y + midHeight > this.worldHeight)) {
-        ty = this.height - (this.worldHeight - this.target.y);
+        ty = $.vh - (this.worldHeight - this.target.y);
       }
 
       this.offsetX = this.target.x - tx;

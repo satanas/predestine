@@ -25,4 +25,12 @@ class Vector {
 
   mag() {
   }
+
+  eq(v) {
+    return this.x === v.x && this.y === v.y;
+  }
+
+  gte(v) {
+    return this.x >= v.x && this.y >= v.y;
+  }
 }
