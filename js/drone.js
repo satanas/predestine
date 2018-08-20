@@ -94,6 +94,7 @@ class Operation extends Action {
     let objs = $.coll.betweenGroup(this, $.groups.actions);
     if (objs.length === 0 || objs[0].groupId !== this.groupId) {
       // cancel operation
+      this.pauseTime = 800;
       this.cancel(groupId);
     } else {
       this.actionId = objs[0].id;

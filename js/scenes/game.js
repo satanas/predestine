@@ -23,6 +23,23 @@ class GameScene extends Scene {
     $.cam.clear('#666');
 
     // Render floor
+    $.ctx.save();
+    $.ctx.strokeStyle = 'white';
+    $.ctx.beginPath();
+    for(let x = 0; x < $.vw / GRID; x++) {
+      for(let y = 0; y < $.vh / GRID; y++) {
+        $.ctx.moveTo(x * GRID, 0);
+        $.ctx.lineTo(x * GRID, y * 2 * GRID);
+      }
+    }
+    for(let y = 0; y < $.vh / GRID; y++) {
+      for(let x = 0; x < $.vw / GRID; x++) {
+        $.ctx.moveTo(0, y * GRID);
+        $.ctx.lineTo(x * 2 * GRID, y * GRID);
+      }
+    }
+    $.ctx.stroke();
+    $.ctx.restore();
 
 
     // Update stuff
