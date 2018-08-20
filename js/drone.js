@@ -4,7 +4,7 @@ class Drone extends Sprite {
     this.speed = 0.25;
     this.anim = new Animator(['#0f0', '#fff'], 100);
     //this.emitter = new Emitter(Vector.fromAngle(0, 2));
-    this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, FW, RP, TL, FW, FW];
+    this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, RP, TL, FW, FW];
     this.ops.reverse();
     this.op = null;
     this.direction = RG;
@@ -19,10 +19,9 @@ class Drone extends Sprite {
     }
 
     if (this.op) {
-      result = this.op.inc(this.x, this.y, dt);
-      if (this.op.done) {
-        this.op = null;
-      }
+      // TODO: Only increment (or apply operation) if the conditions are fulfilled (ej. collision)
+      result = this.op.inc(this, dt);
+      if (this.op.done) this.op = null;
 
       // {direction:x, x:y, y:z}
       for (let prop in result) {
@@ -41,10 +40,10 @@ class Drone extends Sprite {
     this.bounds.update(this);
 
     // Check collisions
-    $.coll.betweenGroup(this, $.groups.actions, (player, enemy) => {
-      this.anim.update(dt);
-      this.color = this.anim.get();
-    });
+    //$.coll.betweenGroup(this, $.groups.actions, (player, enemy) => {
+    //  this.anim.update(dt);
+    //  this.color = this.anim.get();
+    //});
   }
 
   render(rect) {
@@ -68,6 +67,7 @@ class Drone extends Sprite {
 class Action {
   constructor() {
     this.done = false;
+    this.cancelled = false;
     this.pauseTime = 500;
   }
 
@@ -77,7 +77,7 @@ class Action {
     } else if (op === TR || op === TL) {
       return new Turn(obj.direction, op);
     } else if (op === RP) {
-      return new Operation();
+      return new Operation('repair');
     }
   }
 
@@ -85,15 +85,30 @@ class Action {
     this.pauseTime -= dt;
     if (this.pauseTime <= 0) this.done = true;
   }
+
+  cancel(groupId) {
+    console.log('Nothing to ' + groupId + '. Operation cancelled');
+    this.cancelled = true;
+  }
 }
 class Operation extends Action {
-  constructor() {
+  constructor(groupId) {
     super();
     this.opTime = 1500;
+    this.groupId = groupId;
+
+    // Check collisions
+    let objs = $.coll.betweenGroup(this, $.groups.actions);
+    if (objs.length === 0 || objs[0].groupId !== this.groupId) {
+      // cancel operation
+      this.cancel(groupId);
+    } else {
+      this.actionId = objs[0].id;
+    }
   }
 
-  inc(x, y, dt) {
-    if (this.opTime > 0) {
+  inc(obj, dt) {
+    if (this.opTime > 0 && !this.cancelled) {
       this.opTime -= dt;
       console.log('doing operation');
       if (this.opTime <= 0) {
@@ -103,6 +118,7 @@ class Operation extends Action {
     } else {
       this.tick(dt);
     }
+    return {};
   }
 }
 
@@ -124,7 +140,7 @@ class Turn extends Action {
     }
   }
 
-  inc(x, y, dt) {
+  inc(obj, dt) {
     this.tick(dt);
     return {
       direction: this.dst
@@ -157,8 +173,8 @@ class Move extends Action {
     }
   }
 
-  inc(x, y, dt) {
-    let curr = new Vector(x, y);
+  inc(obj, dt) {
+    let curr = new Vector(obj.x, obj.y);
 
     // If we haven't reached the destination
     if (!curr.gte(this.dst)) {

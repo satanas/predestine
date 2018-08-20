@@ -1,6 +1,8 @@
 class Actionable extends Sprite {
-  constructor(x, y) {
+  constructor(x, y, groupId, id) {
     super(x, y, GRID, GRID);
+    this.groupId = groupId
+    this.id = id;
   }
 
   render(rect) {

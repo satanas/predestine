@@ -4,14 +4,15 @@ class Collision {
   }
 
   // Check for collisions of objects against any element from group
-  betweenGroup(obj1, group, callback) {
-    let i, obj2, elems = group.all();
+  betweenGroup(obj1, group) {
+    let i, obj2, elems = group.all(), result = [];
     for(i = elems.length; i--;) {
       obj2 = elems[i];
       // FIXME: Dirty hack to improve performance
       if (!$.cam.inView(obj2)) continue;
-      if (this.between(obj1, obj2)) callback(obj1, obj2);
+      if (this.between(obj1, obj2)) result.push(obj2);
     }
+    return result;
   }
 
   between(obj1, obj2) {

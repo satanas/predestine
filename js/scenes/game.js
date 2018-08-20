@@ -7,7 +7,7 @@ class GameScene extends Scene {
     this.canvas = D.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
     $.groups.actions = new Group();
-    $.groups.actions.add(new Actionable(320, 320));
+    $.groups.actions.add(new Actionable(320, 320, 'repair', '12345'));
 
     //D.body.appendChild(this.canvas);
     W.addEventListener('rsize', this.resize.bind(this));
