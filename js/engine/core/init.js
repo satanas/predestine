@@ -19,18 +19,13 @@ function resize() {
       t = floor((W.innerHeight - h) / 2),
       ev = new CustomEvent('rsize', {detail: {w:w, h:h, t:t}});
 
-  $.vw = w;
-  $.vh = h;
   console.log(w,h,t);
-
   resizeCanvas($.canvas, w, h);
   $.canvas.style.marginTop = t + 'px';
   W.dispatchEvent(ev);
 }
 
 function resizeCanvas(canvas, w, h, t) {
-  canvas.width = w;
-  canvas.height = h;
   canvas.style.width = w + 'px';
   canvas.style.height = h + 'px';
 }

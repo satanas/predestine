@@ -19,7 +19,6 @@ class Drone extends Sprite {
     }
 
     if (this.op) {
-      // TODO: Only increment (or apply operation) if the conditions are fulfilled (ej. collision)
       result = this.op.inc(this, dt);
       if (this.op.done) this.op = null;
 
@@ -38,12 +37,6 @@ class Drone extends Sprite {
 
     // TODO: How to call this automagically?
     this.bounds.update(this);
-
-    // Check collisions
-    //$.coll.betweenGroup(this, $.groups.actions, (player, enemy) => {
-    //  this.anim.update(dt);
-    //  this.color = this.anim.get();
-    //});
   }
 
   render(rect) {

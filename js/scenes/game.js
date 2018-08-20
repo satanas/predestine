@@ -5,6 +5,8 @@ class GameScene extends Scene {
     this.radius1 = 100;
     this.radius2 = 300;
     this.canvas = D.createElement('canvas');
+    this.canvas.width = $.vw;
+    this.canvas.height = $.vh;
     this.ctx = this.canvas.getContext('2d');
     $.groups.actions = new Group();
     $.groups.actions.add(new Actionable(320, 320, 'repair', '12345'));
@@ -19,6 +21,9 @@ class GameScene extends Scene {
 
   update() {
     $.cam.clear('#666');
+
+    // Render floor
+
 
     // Update stuff
     $.groups.actions.update(this.deltaTime);
