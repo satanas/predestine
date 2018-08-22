@@ -4,9 +4,10 @@ class Scene {
     this.startTime = 0;
     this.goTo = null;
     this.deltaTime = 0;
-    this.elapsedTime = 0;
-    this.frames = 0;
+    // FPS calculation
     this.fps = 0;
+    this.frames = 0;
+    this.fpsStartTime = now();
   }
 
   start() {
@@ -29,11 +30,11 @@ class Scene {
     //-- DEBUG_START --
     if (debug) {
       this.frames += 1;
-      this.elapsedTime += this.deltaTime;
-      if (this.elapsedTime >= 1000) {
-        this.fps = 1000 * this.frames / this.elapsedTime;
+      if (this.frames >= 100) {
+        let elapsed = now() - this.fpsStartTime;
+        this.fps = 1000 * this.frames / elapsed;
         this.frames = 0;
-        this.elapsedTime = 0;
+        this.fpsStartTime;
       }
       $.ctx.save();
       $.ctx.fillStyle = '#fff';
