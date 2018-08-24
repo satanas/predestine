@@ -22,19 +22,21 @@ class Scene {
     // Calculate elapsed time
     this.deltaTime = (this.startTime !== 0) ? now() - this.startTime : 0;
 
-    // Update Scene
+    // Update scene
     this.update();
+    // Render scene
+    this.render();
 
     this.startTime = now();
 
     //-- DEBUG_START --
     if (debug) {
       this.frames += 1;
-      if (this.frames >= 100) {
+      if (this.frames >= 30) {
         let elapsed = now() - this.fpsStartTime;
         this.fps = 1000 * this.frames / elapsed;
         this.frames = 0;
-        this.fpsStartTime;
+        this.fpsStartTime = now();
       }
       $.ctx.save();
       $.ctx.fillStyle = '#fff';
@@ -60,5 +62,9 @@ class Scene {
 
   // To be override by child class
   update() {
+  }
+
+  // To be override by child class
+  render() {
   }
 }

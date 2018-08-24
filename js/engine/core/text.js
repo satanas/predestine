@@ -71,6 +71,7 @@ class TextRenderer {
     offset = 0;
     spacing = floor(fontWidth / 3);
 
+    text = text.toUpperCase();
     $.ctx.save();
     $.ctx.strokeStyle = color;
     $.ctx.lineWidth = 2;

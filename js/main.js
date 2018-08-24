@@ -22,5 +22,5 @@ $.input.bind([ENTER, KEY_A]);
 $.input.bindMouse();
 $.cam.setWorldSize(1024, 1024);
 
-var scene = new GameScene();
+var scene = new ProgrammingScene();
 scene.start();

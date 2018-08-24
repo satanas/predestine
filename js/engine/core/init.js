@@ -9,7 +9,7 @@ $.init = function() {
   $.groups = {};
   $.input = new Input();
   $.cam = new Camera($.vw, $.vh);
-  $.coll = new Collision(); // Collision detection
+  $.collision = new Collision(); // Collision detection
   $.txt = new TextRenderer();
 }
 

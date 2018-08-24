@@ -1,21 +1,37 @@
 class Collision {
+
   isRect(obj) {
     return (obj.bounds && Object.keys(obj.bounds).length === 4);
   }
 
-  // Check for collisions of objects against any element from group
-  betweenGroup(obj1, group) {
-    let i, obj2, elems = group.all(), result = [];
-    for(i = elems.length; i--;) {
-      obj2 = elems[i];
-      // FIXME: Dirty hack to improve performance
-      if (!$.cam.inView(obj2)) continue;
+  /**
+   * Check if a vector is inside an object (Rectangle)
+   * @return True if the vector collides with the rectangle. False otherwise
+   */
+  vector(v, obj) {
+    // FIXME: Dirty hack to improve performance
+    if (!$.cam.inView(obj)) return false;
+    if (!this.isRect(obj)) return false;
+    console.log('checking', v, obj.bounds);
+    return (v.x < obj.bounds.right && v.x > obj.bounds.left &&
+            v.y < obj.bounds.bottom && v.y > obj.bounds.top);
+  }
+
+  /**
+   * Check for collisions of an object against any element of a group
+   * @return An array of objects that collided with `obj1` or an empty array is there were no collisions
+   */
+  group(obj1, group) {
+    let obj2, result = [];
+    for(obj2 in group.all()) {
       if (this.between(obj1, obj2)) result.push(obj2);
     }
     return result;
   }
 
   between(obj1, obj2) {
+    // FIXME: Dirty hack to improve performance
+    if (!$.cam.inView(obj2)) return false;
     if (!this.isRect(obj1) || !this.isRect(obj2)) return false;
     return (obj1.bounds.left < obj2.bounds.right &&
             obj1.bounds.left > obj2.bounds.left &&
