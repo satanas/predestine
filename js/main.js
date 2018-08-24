@@ -1,12 +1,14 @@
 const ENTER = 13,
       KEY_A = 65,
       // Actions
-      FW = 1, // Move forward
-      BW = 2, // Move backward
-      TL = 3, // Turn left
-      TR = 4, // Turn right
-      RP = 5, // Repair
-      EX = 6, // Extinguish
+      ACTIONS = {
+        FW: 'move forward',
+        BW: 'move backward',
+        TL: 'turn left',
+        TR: 'turn right',
+        RP: 'repair',
+        EX: 'extinguish'
+      },
       // Directions
       LF = 0, // Left
       RG = 1, // Right

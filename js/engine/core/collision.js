@@ -12,7 +12,6 @@ class Collision {
     // FIXME: Dirty hack to improve performance
     if (!$.cam.inView(obj)) return false;
     if (!this.isRect(obj)) return false;
-    console.log('checking', v, obj.bounds);
     return (v.x < obj.bounds.right && v.x > obj.bounds.left &&
             v.y < obj.bounds.bottom && v.y > obj.bounds.top);
   }

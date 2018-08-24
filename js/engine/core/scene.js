@@ -39,7 +39,7 @@ class Scene {
         this.fpsStartTime = now();
       }
       $.ctx.save();
-      $.ctx.fillStyle = '#fff';
+      $.ctx.fillStyle = 'red';
       $.ctx.fillText('FPS: ' + floor(this.fps), 10, 10);
       $.ctx.restore();
     }
