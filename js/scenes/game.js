@@ -1,15 +1,17 @@
 class GameScene extends Scene {
   constructor() {
     super();
-    this.drone = new Drone(0, 0);
     this.radius1 = 100;
     this.radius2 = 300;
     this.canvas = D.createElement('canvas');
     this.canvas.width = $.vw;
     this.canvas.height = $.vh;
     this.ctx = this.canvas.getContext('2d');
-    $.groups.actions = new Group();
-    $.groups.actions.add(new Actionable(320, 320, 'repair', '12345'));
+
+    this.drone = new Drone(0, 0, DIR.RG, [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TR, ACTIONS.FW]);
+
+    $.groups.actionables = new Group();
+    $.groups.actionables.add(new Actionable(320, 320, ACTIONS.RP, '12345'));
 
     // TODO: Use local instance groups (no need to use $.groups)
     $.groups.walls = new Group();
@@ -20,15 +22,6 @@ class GameScene extends Scene {
     this.noiseCanvas = D.createElement('canvas');
     this.noiseCanvas.width = $.vw;
     this.noiseCanvas.height = $.vh;
-    let context = this.noiseCanvas.getContext("2d");
-
-    for(let i=0; i<$.vw; i=i+4) {
-      for(let j=0; j<$.vh; j=j+4) {
-        var num = floor(rnd()*120)
-        context.fillStyle = "rgb(" + num + "," + num + "," + num + ")";
-        context.fillRect(i, j, 4, 4);
-      }
-    }
   }
 
   rsize(e) {
@@ -48,13 +41,13 @@ class GameScene extends Scene {
 
   update() {
     // Update stuff
-    $.groups.actions.update(this.deltaTime);
-    this.drone.update(this.deltaTime);
+    $.groups.actionables.update(this.deltaTime);
+    this.drone.update(this.deltaTime, $.groups.walls.all(), $.groups.actionables.all());
+
     $.cam.update(this.deltaTime);
   }
 
   render() {
-    //$.cam.clear('#9396A4');
     $.cam.clear('#444');
 
     //$.ctx.drawImage(this.noiseCanvas, 0, 0);
@@ -100,7 +93,7 @@ class GameScene extends Scene {
     this.ctx.fillRect(this.drone.x - this.radius2, this.drone.y - this.radius2, this.radius2*2, this.radius2*2);
 
     // Render stuff
-    $.cam.render($.groups.actions);
+    $.cam.render($.groups.actionables);
     $.cam.render($.groups.walls);
     $.cam.render(this.drone);
 

@@ -1,43 +1,73 @@
 class Drone extends Sprite {
-  constructor(x, y) {
+  constructor(x, y, dir, ops) {
     super(x, y, GRID, GRID);
     this.speed = 0.25;
     this.anim = new Animator(['#0f0', '#fff'], 100);
-    //this.emitter = new Emitter(Vector.fromAngle(0, 2));
-    //this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, RP, TL, FW, FW];
-    this.ops = [];
-    this.ops.reverse();
-    this.op = null;
-    this.direction = RG;
+    this.instructions = ops;
+    this.instructions.reverse();
+    this.currOp = null;
+    this.direction = dir;
+    this.color = '#f00';
   }
 
-  update(dt) {
-    let dx = 0, dy = 0, result;
+  nextPosition() {
+    let x, y;
+    if (this.direction === DIR.UP) {
+      x = this.x;
+      y = this.y - GRID;
+    } else if (this.direction === DIR.LF) {
+      x = this.x - GRID;
+      y = this.y;
+    } else if (this.direction === DIR.RG) {
+      x = this.x + GRID;
+      y = this.y;
+    } else if (this.direction === DIR.DW) {
+      x = this.x;
+      y = this.y + GRID;
+    }
+    return new Vector(x, y);
+  }
 
-    if (!this.op && this.ops.length > 0) {
-      this.op = Action.create(this.ops.pop(), this);
-      console.log('Operation', this.op);
+  scanWalls(walls) {
+    let nextPos = this.nextPosition();
+
+    for(let wall of walls) {
+      if (nextPos.eq(wall)) return wall;
+    }
+    return null;
+  }
+
+  scanActionables(actionables) {
+  }
+
+  // Instructions are turned into actions after evaluating the conditions
+  update(dt, walls, actionables) {
+    let dx = 0, dy = 0, result, inst;
+
+    // Get next instruction
+    if (!this.currOp && this.instructions.length > 0) {
+      inst = this.instructions.pop();
+      // Evaluate operation. Return NoOp if cannot perform operation
+      // Check for movement instructions
+      if ((inst === ACTIONS.FW || inst === ACTIONS.BW) && this.scanWalls(walls)) {
+        this.currOp = new NoOp();
+        console.log('cannot move, object blocking');
+      } else {
+        this.currOp = Action.create(inst, this);
+      }
+      console.log('action', this.currOp);
     }
 
-    if (this.op) {
-      result = this.op.inc(this, dt);
-      if (this.op.done) this.op = null;
+    // Execute instruction
+    if (this.currOp) {
+      result = this.currOp.inc(this, dt);
+      if (this.currOp.done) this.currOp = null;
 
       // {direction:x, x:y, y:z}
       for (let prop in result) {
         this[prop] = result[prop];
       }
     }
-
-    //// Mouse down
-    //if ($.input.isLeftClick()) {
-    //  //console.log('hahaha', $.input.mousePos);
-    //  //this.emitter.emit($.input.mousePos);
-    //}
-    this.color = '#f00';
-
-    // TODO: How to call this automagically?
-    this.bounds.update(this);
   }
 
   render(rect) {
@@ -45,13 +75,13 @@ class Drone extends Sprite {
     $.ctx.fillStyle = this.color;
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     $.ctx.fillStyle = '#000';
-    if (this.direction === RG) {
+    if (this.direction === DIR.RG) {
       $.ctx.fillRect(rect.bounds.right - 10, rect.y + (this.h / 2) - 4, 8, 8);
-    } else if (this.direction === LF) {
+    } else if (this.direction === DIR.LF) {
       $.ctx.fillRect(rect.bounds.left + 2, rect.y + (this.h / 2) - 4, 8, 8);
-    } else if (this.direction === UP) {
+    } else if (this.direction === DIR.UP) {
       $.ctx.fillRect(rect.x + (this.w / 2), rect.y + 2, 8, 8);
-    } else if (this.direction === DW) {
+    } else if (this.direction === DIR.DW) {
       $.ctx.fillRect(rect.x + (this.w / 2), rect.bounds.bottom - 10, 8, 8);
     }
     $.ctx.restore();
@@ -66,11 +96,11 @@ class Action {
   }
 
   static create(op, obj) {
-    if (op === FW) {
+    if (op === ACTIONS.FW) {
       return new Move(obj.x, obj.y, obj.direction, obj.speed);
-    } else if (op === TR || op === TL) {
+    } else if (op === ACTIONS.TR || op === ACTIONS.TL) {
       return new Turn(obj.direction, op);
-    } else if (op === RP) {
+    } else if (op === ACTIONS.RP) {
       return new Operation('repair');
     }
   }
@@ -118,20 +148,19 @@ class Operation extends Action {
 }
 
 class Turn extends Action {
-  constructor(origDir, chgDir) {
+  constructor(origDir, inst) {
     super();
-    this.dst = origDir;
 
-    if (chgDir === TR) {
-      if (origDir === RG) this.dst = DW;
-      if (origDir === DW) this.dst = LF;
-      if (origDir === LF) this.dst = UP;
-      if (origDir === UP) this.dst = RG;
+    if (inst === ACTIONS.TR) {
+      if (origDir === DIR.RG) this.dst = DIR.DW;
+      if (origDir === DIR.DW) this.dst = DIR.LF;
+      if (origDir === DIR.LF) this.dst = DIR.UP;
+      if (origDir === DIR.UP) this.dst = DIR.RG;
     } else {
-      if (origDir === RG) this.dst = UP;
-      if (origDir === UP) this.dst = LF;
-      if (origDir === LF) this.dst = DW;
-      if (origDir === DW) this.dst = RG;
+      if (origDir === DIR.RG) this.dst = DIR.UP;
+      if (origDir === DIR.UP) this.dst = DIR.LF;
+      if (origDir === DIR.LF) this.dst = DIR.DW;
+      if (origDir === DIR.DW) this.dst = DIR.RG;
     }
   }
 
@@ -150,19 +179,19 @@ class Move extends Action {
     this.xspeed = this.yspeed = 0;
 
     // Move left-right
-    if (this.dir === LF) {
+    if (this.dir === DIR.LF) {
       this.xspeed = -speed;
       this.dst = new Vector(x - GRID, y);
-    } else if (this.dir === RG) {
+    } else if (this.dir === DIR.RG) {
       this.xspeed = speed;
       this.dst = new Vector(x + GRID, y);
     }
 
     // Move up-down
-    if (this.dir === UP) {
+    if (this.dir === DIR.UP) {
       this.yspeed = -speed;
       this.dst = new Vector(x, y - GRID);
-    } else if (this.dir === DW) {
+    } else if (this.dir === DIR.DW) {
       this.yspeed= speed;
       this.dst = new Vector(x, y + GRID);
     }
@@ -188,5 +217,16 @@ class Move extends Action {
       x: curr.x,
       y: curr.y
     };
+  }
+}
+
+class NoOp extends Action {
+  constructor() {
+    super();
+  }
+
+  inc(obj, dt) {
+    this.tick(dt);
+    return {};
   }
 }

@@ -10,10 +10,12 @@ const ENTER = 13,
         EX: 'extinguish'
       },
       // Directions
-      LF = 0, // Left
-      RG = 1, // Right
-      UP = 2, // Up
-      DW = 3, // Down
+      DIR = {
+        LF: 0, // Left
+        RG: 1, // Right
+        UP: 2, // Up
+        DW: 3 // Down
+      },
       GRID = 64;
 
 debug = true;
