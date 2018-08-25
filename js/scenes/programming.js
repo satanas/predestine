@@ -6,10 +6,12 @@ class ProgrammingScene extends Scene {
     this.instructions = [ACTIONS.FW, ACTIONS.FW, ACTIONS.TR, ACTIONS.FW, ACTIONS.FW, ACTIONS.TL, ACTIONS.RP];
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
-    this.addBtn = new AddButton(20, 10, () => { this.instPanel.enabled = true; });
+    this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
   }
 
   update() {
+    let yCoord = 50 + (20 * this.instructions.length);
+    this.addBtn.setPos({y: yCoord});
     this.addBtn.update();
   }
 
@@ -27,8 +29,6 @@ class ProgrammingScene extends Scene {
       let op = this.instructions[i];
       $.txt.render('0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
-    let yCoord = 50 + (20 * this.instructions.length);
-    this.addBtn.y = yCoord;
 
     $.cam.render(this.addBtn);
     $.cam.render(this.instPanel);
@@ -60,7 +60,6 @@ class InstButton extends UIButton {
   }
 
   update() {
-    this.bounds.update(this);
     this.checkClick();
   }
 
@@ -79,7 +78,6 @@ class AddButton extends UIButton {
   }
 
   update() {
-    this.bounds.update(this);
     this.checkClick();
   }
 

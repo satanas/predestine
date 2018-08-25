@@ -19,9 +19,16 @@ class Camera {
     this.target = t;
   }
 
-  // Transform point coordinates
+  // Transform point coordinates within the same coordinate system for the camera (scrolling)
   transformVector(v) {
     return new Vector(v.x - this.offsetX, v.y - this.offsetY);
+  }
+
+  // Transform coordinates from real canvas size (real coords) to viewport size
+  relativeCoords(v) {
+    let width = parseInt($.canvas.style.width.replace('px')),
+        height = parseInt($.canvas.style.height.replace('px'));
+    return new Vector(v.x * $.vw / width, v.y * $.vh / height);
   }
 
   // Indicates if the object is inside the viewport.
@@ -108,7 +115,7 @@ class Camera {
 
     objs.forEach((o) => {
       if (this.inView(o) && o.enabled) {
-        o.render(Rectangle.offset(o, this.offsetX, this.offsetY));
+        o._render(Rectangle.offset(o, this.offsetX, this.offsetY));
       }
     });
   }

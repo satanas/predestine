@@ -69,8 +69,7 @@ class Input {
   bindMouse() {
     this.bind([1, 3]);
     D.body.addEventListener('mousemove', (e) => {
-      var rect = $.canvas.getBoundingClientRect();
-      this.mousePos = new Vector(e.clientX - rect.left, e.clientY - rect.top);
+      this.mousePos = $.cam.relativeCoords(new Vector(e.clientX - $.canvas.offsetLeft, e.clientY - $.canvas.offsetTop));
     });
   }
 

@@ -5,6 +5,21 @@ class Sprite extends Rectangle {
     this.enabled = true;
   }
 
+  _render(rect) {
+    this.render(rect);
+
+    //-- DEBUG_START --
+    if (debug) {
+      $.ctx.save();
+      $.ctx.strokeStyle = '#0f0';
+      $.ctx.fillStyle = '#000';
+      $.ctx.strokeRect(rect.x, rect.y, this.w, this.h);
+      $.ctx.fillText('(' + floor(this.x) + "," + floor(this.y) + ")", rect.x, rect.y - 5);
+      $.ctx.restore();
+    }
+    //-- DEBUG_END --
+  }
+
   render(rect) {
     throw "Not Implemented";
   }

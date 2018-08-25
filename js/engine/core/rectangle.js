@@ -11,6 +11,13 @@ class Rectangle {
     return new Vector(this.x + (this.w / 2), this.y + (this.h / 2));
   }
 
+  setPos(props) {
+    for(let p in props) {
+      this[p] = props[p];
+    }
+    this.bounds.update(this);
+  }
+
   // Returns a new rect, offset by offsetX and offsetY
   static offset(rect, offsetX, offsetY) {
     return new Rectangle(rect.x - offsetX, rect.y - offsetY, rect.w, rect.h);
