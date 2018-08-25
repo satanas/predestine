@@ -12,9 +12,9 @@ class Sprite extends Rectangle {
     if (debug) {
       $.ctx.save();
       $.ctx.strokeStyle = '#0f0';
-      $.ctx.fillStyle = '#000';
+      $.ctx.fillStyle = '#0f0';
       $.ctx.strokeRect(rect.x, rect.y, this.w, this.h);
-      $.ctx.fillText('(' + floor(this.x) + "," + floor(this.y) + ")", rect.x, rect.y - 5);
+      $.ctx.fillText('(' + floor(this.x) + "," + floor(this.y) + ")", rect.x, rect.y + 10);
       $.ctx.restore();
     }
     //-- DEBUG_END --

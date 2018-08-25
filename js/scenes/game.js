@@ -11,6 +11,10 @@ class GameScene extends Scene {
     $.groups.actions = new Group();
     $.groups.actions.add(new Actionable(320, 320, 'repair', '12345'));
 
+    // TODO: Use local instance groups (no need to use $.groups)
+    $.groups.walls = new Group();
+    $.groups.walls.add(new Wall(192, 0));
+
     $.listen(this, 'rsize')
 
     this.noiseCanvas = D.createElement('canvas');
@@ -43,6 +47,13 @@ class GameScene extends Scene {
   }
 
   update() {
+    // Update stuff
+    $.groups.actions.update(this.deltaTime);
+    this.drone.update(this.deltaTime);
+    $.cam.update(this.deltaTime);
+  }
+
+  render() {
     //$.cam.clear('#9396A4');
     $.cam.clear('#444');
 
@@ -73,15 +84,6 @@ class GameScene extends Scene {
     $.ctx.stroke();
     $.ctx.restore();
 
-
-    // Update stuff
-    $.groups.actions.update(this.deltaTime);
-    this.drone.update(this.deltaTime);
-    $.cam.update(this.deltaTime);
-
-    $.txt.render('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10, 40, '#fff', 15);
-    $.txt.render('0123456789.:@', 10, 70, '#fff', 15);
-
     // partially hide the entire map and re-reval where we are now
     this.ctx.globalCompositeOperation = 'source-over';
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -99,8 +101,8 @@ class GameScene extends Scene {
 
     // Render stuff
     $.cam.render($.groups.actions);
+    $.cam.render($.groups.walls);
     $.cam.render(this.drone);
-    $.cam.render($.groups.particles);
 
     $.ctx.drawImage(this.canvas, 0, 0);
   }

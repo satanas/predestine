@@ -4,7 +4,8 @@ class Drone extends Sprite {
     this.speed = 0.25;
     this.anim = new Animator(['#0f0', '#fff'], 100);
     //this.emitter = new Emitter(Vector.fromAngle(0, 2));
-    this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, RP, TL, FW, FW];
+    //this.ops = [FW, FW, FW, FW, FW, TR, FW, FW, FW, FW, RP, TL, FW, FW];
+    this.ops = [];
     this.ops.reverse();
     this.op = null;
     this.direction = RG;

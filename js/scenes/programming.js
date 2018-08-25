@@ -4,26 +4,44 @@ class ProgrammingScene extends Scene {
   constructor() {
     super();
     //this.instructions = [ACTIONS.FW, ACTIONS.FW, ACTIONS.TR, ACTIONS.FW, ACTIONS.FW, ACTIONS.TL, ACTIONS.RP];
-    this.instructions = [ACTIONS.FW];
+    this.instructions = [];
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
 
     this.btnGroup = new Group();
-    this.btnGroup.add(this.addBtn);
+    //this.btnGroup.add(this.addBtn);
 
     $.listen(this, 'addInstruction');
+    $.listen(this, 'remInstruction');
   }
 
   addInstruction(ev) {
     this.instructions.push(ev.detail.inst);
     this.instPanel.enabled = false;
-    this.btnGroup.add(new DelButton(210, 16 + (20 * this.instructions.length)));
+    this.rebuildDeleteButtons();
+  }
+
+  remInstruction(ev) {
+    this.instructions.splice(ev.detail.index, 1);
+    this.rebuildDeleteButtons();
+  }
+
+  rebuildDeleteButtons() {
+    this.btnGroup.clear();
+    for(let i = 0; i < this.instructions.length; i++) {
+      this.btnGroup.add(new DelButton(210, 16 + (20 * i), i));
+    }
   }
 
   update() {
     let yCoord = 50 + (20 * this.instructions.length);
     this.addBtn.setPos({y: yCoord});
+    this.addBtn.update();
+
+    this.btnGroup.all().map((btn, i) => {
+      btn.setPos({y: 36 + (20 * i)});
+    });
     this.btnGroup.update();
     this.instPanel.update();
   }
@@ -43,9 +61,13 @@ class ProgrammingScene extends Scene {
       $.txt.render('0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
 
+    $.cam.render(this.addBtn);
     $.cam.render(this.btnGroup);
     $.cam.render(this.instPanel);
   }
+}
+
+class InstructionLabel extends Sprite {
 }
 
 class InstructionsPanel extends Sprite {
@@ -98,13 +120,14 @@ class InstructionButton extends UIButton {
 }
 
 class DelButton extends UIButton {
-  constructor(x, y, cb) {
+  constructor(x, y, i) {
     super(x, y, 16, 16);
-    this.cb = cb;
+    this.index = i;
   }
 
   onClick() {
-    this.cb();
+    //console.log('removing', this.index);
+    $.emit('remInstruction', {index: this.index});
   }
 
   update() {
