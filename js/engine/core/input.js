@@ -2,7 +2,7 @@ class Input {
   constructor() {
     this.pressed = {};
     this.events = {};
-    this.mousePos = null;
+    this.mousePos = new Vector(0, 0);
 
     D.body.addEventListener('keydown', (e) => {
       if (e.keyCode in this.events) {
@@ -68,9 +68,8 @@ class Input {
   // 3: right click
   bindMouse() {
     this.bind([1, 3]);
-    D.body.addEventListener('mousemove', (e) => {
-      this.mousePos = $.cam.relativeCoords(new Vector(e.clientX - $.canvas.offsetLeft, e.clientY - $.canvas.offsetTop));
-    });
+    D.body.addEventListener('mouseenter', this.updateMousePos.bind(this));
+    D.body.addEventListener('mousemove', this.updateMousePos.bind(this));
   }
 
   updateEvent(e, m, n, key) {
@@ -78,5 +77,9 @@ class Input {
     e.preventDefault();
     this.events[key] = m;
     this.pressed[key] = n;
+  }
+
+  updateMousePos(e) {
+    this.mousePos = $.cam.relativeCoords(new Vector(e.clientX - $.canvas.offsetLeft, e.clientY - $.canvas.offsetTop));
   }
 }
