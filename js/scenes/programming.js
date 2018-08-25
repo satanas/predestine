@@ -45,13 +45,16 @@ class ProgrammingScene extends Scene {
 class InstructionsPanel extends Sprite {
   constructor(x, y, cb) {
     super(x, y, 200, 400);
-    this.fwBtn = new InstructionButton(x + 10, y + 10, ACTIONS.FW);
-    this.bwBtn = new InstructionButton(x + 10, y + 40, ACTIONS.BW);
+    this.btnGroup = new Group();
+    let i = 0, a;
+    for(let a in ACTIONS) {
+      this.btnGroup.add(new InstructionButton(x + 10, y + 10 + (i * 30), ACTIONS[a]));
+      i++;
+    }
   }
 
   update() {
-    this.fwBtn.update();
-    this.bwBtn.update();
+    this.btnGroup.update();
   }
 
   render(rect) {
@@ -60,8 +63,7 @@ class InstructionsPanel extends Sprite {
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     $.ctx.restore();
 
-    $.cam.render(this.fwBtn);
-    $.cam.render(this.bwBtn);
+    $.cam.render(this.btnGroup);
   }
 }
 
