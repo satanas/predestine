@@ -1,7 +1,6 @@
 class UIButton extends Sprite {
-  constructor(x, y, w, h, cb) {
+  constructor(x, y, w, h) {
     super(x, y, w, h);
-    this.cb = cb;
     this.pressed = false;
     D.body.addEventListener('mouseup', this.releaseClick.bind(this));
   }
@@ -17,7 +16,6 @@ class UIButton extends Sprite {
 
   // To be implemented in child class
   onClick() {
-    this.cb();
   }
 
   releaseClick() {

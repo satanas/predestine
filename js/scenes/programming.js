@@ -7,12 +7,19 @@ class ProgrammingScene extends Scene {
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
+    $.listen(this, 'addInstruction');
+  }
+
+  addInstruction(ev) {
+    this.instructions.push(ev.detail.inst);
+    this.instPanel.enabled = false;
   }
 
   update() {
     let yCoord = 50 + (20 * this.instructions.length);
     this.addBtn.setPos({y: yCoord});
     this.addBtn.update();
+    this.instPanel.update();
   }
 
   render() {
@@ -36,10 +43,15 @@ class ProgrammingScene extends Scene {
 }
 
 class InstructionsPanel extends Sprite {
-  constructor(x, y) {
+  constructor(x, y, cb) {
     super(x, y, 200, 400);
-    this.fwBtn = new InstButton(x + 10, y + 10, ACTIONS.FW, () => {});
-    this.bwBtn = new InstButton(x + 10, y + 40, ACTIONS.BW, () => {});
+    this.fwBtn = new InstructionButton(x + 10, y + 10, ACTIONS.FW);
+    this.bwBtn = new InstructionButton(x + 10, y + 40, ACTIONS.BW);
+  }
+
+  update() {
+    this.fwBtn.update();
+    this.bwBtn.update();
   }
 
   render(rect) {
@@ -53,10 +65,14 @@ class InstructionsPanel extends Sprite {
   }
 }
 
-class InstButton extends UIButton {
-  constructor(x, y, instruction, cb) {
-    super(x, y, 180, 25, cb);
+class InstructionButton extends UIButton {
+  constructor(x, y, instruction) {
+    super(x, y, 180, 25);
     this.instruction = instruction;
+  }
+
+  onClick() {
+    $.emit('addInstruction', {inst: this.instruction});
   }
 
   update() {
@@ -74,7 +90,12 @@ class InstButton extends UIButton {
 
 class AddButton extends UIButton {
   constructor(x, y, cb) {
-    super(x, y, 210, 25, cb);
+    super(x, y, 210, 25);
+    this.cb = cb;
+  }
+
+  onClick() {
+    this.cb();
   }
 
   update() {

@@ -11,8 +11,7 @@ class GameScene extends Scene {
     $.groups.actions = new Group();
     $.groups.actions.add(new Actionable(320, 320, 'repair', '12345'));
 
-    //D.body.appendChild(this.canvas);
-    W.addEventListener('rsize', this.resize.bind(this));
+    $.listen(this, 'rsize')
 
     this.noiseCanvas = D.createElement('canvas');
     this.noiseCanvas.width = $.vw;
@@ -24,11 +23,11 @@ class GameScene extends Scene {
         var num = floor(rnd()*120)
         context.fillStyle = "rgb(" + num + "," + num + "," + num + ")";
         context.fillRect(i, j, 4, 4);
+      }
     }
-}
   }
 
-  resize(e) {
+  rsize(e) {
     resizeCanvas(this.canvas, e.detail.w, e.detail.h);
     resizeCanvas(this.noiseCanvas, e.detail.w, e.detail.h);
   }

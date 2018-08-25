@@ -13,16 +13,24 @@ $.init = function() {
   $.txt = new TextRenderer();
 }
 
+$.listen = function(ctx, evt) {
+  W.addEventListener(evt, ctx[evt].bind(ctx));
+}
+
+$.emit = function(evt, data) {
+  let ev = new CustomEvent(evt, {detail: data});
+  W.dispatchEvent(ev);
+}
+
 function resize() {
   let w = floor(W.innerWidth),
       h = floor(w * 9 / 16),
-      t = floor((W.innerHeight - h) / 2),
-      ev = new CustomEvent('rsize', {detail: {w:w, h:h, t:t}});
+      t = floor((W.innerHeight - h) / 2);
 
   console.log(w,h,t);
   resizeCanvas($.canvas, w, h);
   $.canvas.style.marginTop = t + 'px';
-  W.dispatchEvent(ev);
+  $.emit('rsize', {w:w, h:h, t:t});
 }
 
 function resizeCanvas(canvas, w, h, t) {
