@@ -8,10 +8,11 @@ class GameScene extends Scene {
     this.canvas.height = $.vh;
     this.ctx = this.canvas.getContext('2d');
 
-    this.drone = new Drone(0, 0, DIR.RG, [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TR, ACTIONS.FW]);
+    this.drone = new Drone(0, 0, DIR.RG, [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TR,
+      ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.RP, ACTIONS.FW]);
 
     $.groups.actionables = new Group();
-    $.groups.actionables.add(new Actionable(320, 320, ACTIONS.RP, '12345'));
+    $.groups.actionables.add(new Actionable(128, 192, ACTIONS.RP, '12345'));
 
     // TODO: Use local instance groups (no need to use $.groups)
     $.groups.walls = new Group();
@@ -42,7 +43,7 @@ class GameScene extends Scene {
   update() {
     // Update stuff
     $.groups.actionables.update(this.deltaTime);
-    this.drone.update(this.deltaTime, $.groups.walls.all(), $.groups.actionables.all());
+    this.drone.update(this.deltaTime, $.groups.walls.all(), $.groups.actionables);
 
     $.cam.update(this.deltaTime);
   }

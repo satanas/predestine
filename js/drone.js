@@ -31,13 +31,19 @@ class Drone extends Sprite {
   scanWalls(walls) {
     let nextPos = this.nextPosition();
 
-    for(let wall of walls) {
+    for (let wall of walls) {
       if (nextPos.eq(wall)) return wall;
     }
     return null;
   }
 
-  scanActionables(actionables) {
+  scanActionables(actionables, groupId) {
+    let objs = $.collision.group(this, actionables);
+    if (objs.length === 0) return false;
+    for (let obj of objs) {
+      if (obj.groupId === groupId) return true;
+    }
+    return false;
   }
 
   // Instructions are turned into actions after evaluating the conditions
@@ -52,6 +58,9 @@ class Drone extends Sprite {
       if ((inst === ACTIONS.FW || inst === ACTIONS.BW) && this.scanWalls(walls)) {
         this.currOp = new NoOp();
         console.log('cannot move, object blocking');
+      } else if ((inst === ACTIONS.RP || inst === ACTIONS.EX) && !this.scanActionables(actionables, inst)) {
+        this.currOp = new NoOp();
+        console.log('no actionables near by');
       } else {
         this.currOp = Action.create(inst, this);
       }
@@ -68,6 +77,8 @@ class Drone extends Sprite {
         this[prop] = result[prop];
       }
     }
+
+    this.bounds.update(this);
   }
 
   render(rect) {
@@ -91,7 +102,6 @@ class Drone extends Sprite {
 class Action {
   constructor() {
     this.done = false;
-    this.cancelled = false;
     this.pauseTime = 500;
   }
 
@@ -109,31 +119,16 @@ class Action {
     this.pauseTime -= dt;
     if (this.pauseTime <= 0) this.done = true;
   }
-
-  cancel(groupId) {
-    console.log('Nothing to ' + groupId + '. Operation cancelled');
-    this.cancelled = true;
-  }
 }
 class Operation extends Action {
   constructor(groupId) {
     super();
     this.opTime = 1500;
     this.groupId = groupId;
-
-    // Check collisions
-    let objs = $.coll.betweenGroup(this, $.groups.actions);
-    if (objs.length === 0 || objs[0].groupId !== this.groupId) {
-      // cancel operation
-      this.pauseTime = 800;
-      this.cancel(groupId);
-    } else {
-      this.actionId = objs[0].id;
-    }
   }
 
   inc(obj, dt) {
-    if (this.opTime > 0 && !this.cancelled) {
+    if (this.opTime > 0) {
       this.opTime -= dt;
       console.log('doing operation');
       if (this.opTime <= 0) {
@@ -223,6 +218,7 @@ class Move extends Action {
 class NoOp extends Action {
   constructor() {
     super();
+    this.pauseTime = 1000;
   }
 
   inc(obj, dt) {

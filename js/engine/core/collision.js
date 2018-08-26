@@ -22,7 +22,7 @@ class Collision {
    */
   group(obj1, group) {
     let obj2, result = [];
-    for(obj2 in group.all()) {
+    for(obj2 of group.all()) {
       if (this.between(obj1, obj2)) result.push(obj2);
     }
     return result;
@@ -33,7 +33,7 @@ class Collision {
     if (!$.cam.inView(obj2)) return false;
     if (!this.isRect(obj1) || !this.isRect(obj2)) return false;
     return (obj1.bounds.left < obj2.bounds.right &&
-            obj1.bounds.left > obj2.bounds.left &&
+            obj1.bounds.left >= obj2.bounds.left &&
             obj1.bounds.top < obj2.bounds.bottom &&
             obj1.bounds.bottom > obj2.bounds.top);
   }
