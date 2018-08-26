@@ -8,9 +8,8 @@ class ProgrammingScene extends Scene {
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
-
     this.btnGroup = new Group();
-    //this.btnGroup.add(this.addBtn);
+    this.levelPreview = new LevelPreview(300);
 
     $.listen(this, 'addInstruction');
     $.listen(this, 'remInstruction');
@@ -61,13 +60,28 @@ class ProgrammingScene extends Scene {
       $.txt.render('0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
 
+    // Level preview
+    $.ctx.drawImage(this.levelPreview.canvas, this.levelPreview.x, this.levelPreview.y, this.levelPreview.w, this.levelPreview.h);
+
     $.cam.render(this.addBtn);
     $.cam.render(this.btnGroup);
     $.cam.render(this.instPanel);
   }
 }
 
-class InstructionLabel extends Sprite {
+class LevelPreview extends Rectangle {
+  constructor(offset) {
+    let ctx,
+        w = $.vw - offset;
+    super(offset, 0, w, w * $.vh / $.vw);
+
+    this.canvas = D.createElement('canvas');
+
+    ctx = this.canvas.getContext('2d');
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, this.w, this.h);
+
+  }
 }
 
 class InstructionsPanel extends Sprite {
