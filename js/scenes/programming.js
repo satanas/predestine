@@ -9,7 +9,22 @@ class ProgrammingScene extends Scene {
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
     this.btnGroup = new Group();
-    this.levelPreview = new LevelPreview(350);
+    // Use three hex to represent each object in the level
+    // 0-F = Element
+    // 0-F = Index of X
+    // 0-F = Index of Y
+    let level = [
+      "................",
+      "....WWWWW.......",
+      "....W.D.W.......",
+      "....W...WWW.....",
+      "....W.....W.....",
+      "....W....XW.....",
+      "....W.....W.....",
+      "....WWWWWWW.....",
+      "................",
+    ];
+    this.levelPreview = new LevelPreview(350, new Level(level));
 
     $.listen(this, 'addInstruction');
     $.listen(this, 'remInstruction');
@@ -70,7 +85,7 @@ class ProgrammingScene extends Scene {
 }
 
 class LevelPreview extends Rectangle {
-  constructor(offset) {
+  constructor(offset, level) {
     let ctx,
         w = $.vw - offset,
         h = w * $.vh / $.vw,
@@ -92,6 +107,15 @@ class LevelPreview extends Rectangle {
       if (y === 0) continue;
       ctx.fillRect(0, y * scaledGrid, this.w, 1);
     }
+
+    ctx.fillStyle = '#fff';
+    for (w of level.walls) {
+      ctx.fillRect(w[0] * scaledGrid, w[1] * scaledGrid, scaledGrid, scaledGrid);
+    }
+    ctx.fillStyle = 'red';
+    ctx.fillRect(level.dock[0] * scaledGrid, level.dock[1] * scaledGrid, scaledGrid, scaledGrid);
+    ctx.fillStyle = 'green';
+    ctx.fillRect(level.exit[0] * scaledGrid, level.exit[1] * scaledGrid, scaledGrid, scaledGrid);
   }
 }
 
