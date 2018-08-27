@@ -9,7 +9,7 @@ class ProgrammingScene extends Scene {
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
     this.btnGroup = new Group();
-    this.levelPreview = new LevelPreview(300);
+    this.levelPreview = new LevelPreview(350);
 
     $.listen(this, 'addInstruction');
     $.listen(this, 'remInstruction');
@@ -72,15 +72,26 @@ class ProgrammingScene extends Scene {
 class LevelPreview extends Rectangle {
   constructor(offset) {
     let ctx,
-        w = $.vw - offset;
-    super(offset, 0, w, w * $.vh / $.vw);
+        w = $.vw - offset,
+        h = w * $.vh / $.vw,
+        scaledGrid = w / ($.vw / GRID);
+    super(offset, 0, w, h);
 
-    this.canvas = D.createElement('canvas');
+    this.canvas = $.canvas.create(w, h);
 
     ctx = this.canvas.getContext('2d');
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, this.w, this.h);
+    ctx.fillStyle = '#fff';
 
+    for(let x = 0; x < this.w / scaledGrid; x++) {
+      if (x === 0) continue;
+      ctx.fillRect(floor(x * scaledGrid), 0, 1, this.h);
+    }
+    for(let y = 0; y <= this.h / scaledGrid; y++) {
+      if (y === 0) continue;
+      ctx.fillRect(0, y * scaledGrid, this.w, 1);
+    }
   }
 }
 

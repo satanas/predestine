@@ -22,6 +22,13 @@ $.emit = function(evt, data) {
   W.dispatchEvent(ev);
 }
 
+$.canvas.create = function(w, h) {
+  let canvas = D.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  return canvas;
+}
+
 function resize() {
   let w = floor(W.innerWidth),
       h = floor(w * 9 / 16),

@@ -3,9 +3,7 @@ class GameScene extends Scene {
     super();
     this.radius1 = 100;
     this.radius2 = 300;
-    this.canvas = D.createElement('canvas');
-    this.canvas.width = $.vw;
-    this.canvas.height = $.vh;
+    this.canvas = $.canvas.create($.vw, $.vh);
     this.ctx = this.canvas.getContext('2d');
 
     this.drone = new Drone(0, 0, DIR.RG, [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TR,
@@ -20,9 +18,7 @@ class GameScene extends Scene {
 
     $.listen(this, 'rsize')
 
-    this.noiseCanvas = D.createElement('canvas');
-    this.noiseCanvas.width = $.vw;
-    this.noiseCanvas.height = $.vh;
+    this.noiseCanvas = $.canvas.create($.vw, $.vh);
   }
 
   rsize(e) {
@@ -59,21 +55,21 @@ class GameScene extends Scene {
     $.ctx.fillStyle = 'hsla(0,0%,80%,0.5)';
     $.ctx.beginPath();
     for(let x = 0; x < $.vw / GRID; x++) {
-      for(let y = 0; y < $.vh / GRID; y++) {
+      //for(let y = 0; y < $.vh / GRID; y++) {
         //$.ctx.moveTo(x * GRID, 0);
         //$.ctx.lineTo(x * GRID, y * 2 * GRID);
         //
         $.ctx.fillRect(x * GRID - 4, 0, 8, $.vh);
 
         //this.renderNoiseLine($.ctx, x * GRID - 4, 0, 8, $.vh);
-      }
+      //}
     }
     for(let y = 0; y < $.vh / GRID; y++) {
-      for(let x = 0; x < $.vw / GRID; x++) {
+      //for(let x = 0; x < $.vw / GRID; x++) {
         //$.ctx.moveTo(0, y * GRID);
         //$.ctx.lineTo(x * 2 * GRID, y * GRID);
         $.ctx.fillRect(0, y * GRID - 4, $.vw, 8);
-      }
+      //}
     }
     $.ctx.stroke();
     $.ctx.restore();
