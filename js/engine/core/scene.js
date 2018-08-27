@@ -1,8 +1,11 @@
 class Scene {
+  static onExit() {
+    $.emit('sceneExit');
+  }
+
   reset() {
     this.exitFlag = false;
     this.startTime = 0;
-    this.goTo = null;
     this.deltaTime = 0;
     // FPS calculation
     this.fps = 0;
@@ -48,11 +51,13 @@ class Scene {
     if (!this.exitFlag) {
       raf(this.loop.bind(this));
     } else {
+      Scene.onExit();
       return;
     }
   }
 
   exit() {
+    console.log('exit scene');
     this.exitFlag = true;
   }
 
@@ -66,5 +71,12 @@ class Scene {
 
   // To be override by child class
   render() {
+  }
+
+  // To be override by child class
+  // Here, the fade out (and stuff like that) can be activated
+  unload() {
+    console.log('unload scene');
+    this.exit();
   }
 }

@@ -11,6 +11,7 @@ $.init = function() {
   $.cam = new Camera($.vw, $.vh);
   $.collision = new Collision(); // Collision detection
   $.txt = new TextRenderer();
+  $.scenemng = new SceneManager();
 }
 
 $.listen = function(ctx, evt) {

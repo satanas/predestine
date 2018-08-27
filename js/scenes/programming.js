@@ -8,23 +8,10 @@ class ProgrammingScene extends Scene {
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
+    this.runBtn = new RunButton(950, 500, () => { this.runProgram(); });
     this.btnGroup = new Group();
-    // Use three hex to represent each object in the level
-    // 0-F = Element
-    // 0-F = Index of X
-    // 0-F = Index of Y
-    let level = [
-      "................",
-      "....WWWWW.......",
-      "....W.D.W.......",
-      "....W...WWW.....",
-      "....W.....W.....",
-      "....W....XW.....",
-      "....W.....W.....",
-      "....WWWWWWW.....",
-      "................",
-    ];
-    this.levelPreview = new LevelPreview(350, new Level(level));
+
+    this.levelPreview = new LevelPreview(350, $.data.level);
 
     $.listen(this, 'addInstruction');
     $.listen(this, 'remInstruction');
@@ -48,10 +35,15 @@ class ProgrammingScene extends Scene {
     }
   }
 
+  runProgram() {
+    $.scenemng.load(new GameScene());
+  }
+
   update() {
     let yCoord = 50 + (20 * this.instructions.length);
     this.addBtn.setPos({y: yCoord});
-    this.addBtn.update();
+    this.addBtn.checkClick();
+    this.runBtn.checkClick();
 
     this.btnGroup.all().map((btn, i) => {
       btn.setPos({y: 36 + (20 * i)});
@@ -79,6 +71,7 @@ class ProgrammingScene extends Scene {
     $.ctx.drawImage(this.levelPreview.canvas, this.levelPreview.x, this.levelPreview.y, this.levelPreview.w, this.levelPreview.h);
 
     $.cam.render(this.addBtn);
+    $.cam.render(this.runBtn);
     $.cam.render(this.btnGroup);
     $.cam.render(this.instPanel);
   }
@@ -202,15 +195,30 @@ class AddButton extends UIButton {
     this.cb();
   }
 
-  update() {
-    this.checkClick();
-  }
-
   render(rect) {
     $.ctx.save();
     $.ctx.fillStyle = 'purple';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     $.txt.render('Add instruction', rect.x + 40, rect.y + 8, '#fff', 6);
+    $.ctx.restore();
+  }
+}
+
+class RunButton extends UIButton {
+  constructor(x, y, cb) {
+    super(x, y, 48, 48);
+    this.cb = cb;
+  }
+
+  onClick() {
+    this.cb();
+  }
+
+  render(rect) {
+    $.ctx.save();
+    $.ctx.fillStyle = 'green';
+    $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
+    $.txt.render('RUN', rect.x + 12, rect.y + 16, '#fff', 6);
     $.ctx.restore();
   }
 }
