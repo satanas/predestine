@@ -65,11 +65,11 @@ class ProgrammingScene extends Scene {
     $.ctx.fillRect(0, 0, 256, 576);
     $.ctx.restore();
 
-    $.txt.render('Program Memory', 20, 10, '#fff', 10);
+    $.txt.render($.ctx, 'Program Memory', 20, 10, '#fff', 10);
 
     for(let i = 0; i < this.program.length; i++) {
       let op = this.program[i];
-      $.txt.render('0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
+      $.txt.render($.ctx, '0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
 
     // Level preview
@@ -165,8 +165,9 @@ class InstructionButton extends UIButton {
     $.ctx.save();
     $.ctx.fillStyle = 'green';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    $.txt.render(this.instruction, rect.x + 40, rect.y + 8, '#fff', 6);
     $.ctx.restore();
+
+    $.txt.render($.ctx, this.instruction, rect.x + 40, rect.y + 8, '#fff', 6);
   }
 }
 
@@ -189,7 +190,7 @@ class DelButton extends UIButton {
     $.ctx.save();
     $.ctx.fillStyle = 'red';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    $.txt.render('X', rect.x + 4, rect.y + 4, '#fff', 6);
+    $.txt.render($.ctx, 'X', rect.x + 4, rect.y + 4, '#fff', 6);
     $.ctx.restore();
   }
 }
@@ -208,7 +209,7 @@ class AddButton extends UIButton {
     $.ctx.save();
     $.ctx.fillStyle = 'purple';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    $.txt.render('Add instruction', rect.x + 40, rect.y + 8, '#fff', 6);
+    $.txt.render($.ctx, 'Add instruction', rect.x + 40, rect.y + 8, '#fff', 6);
     $.ctx.restore();
   }
 }
@@ -227,7 +228,7 @@ class RunButton extends UIButton {
     $.ctx.save();
     $.ctx.fillStyle = 'green';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    $.txt.render('RUN', rect.x + 12, rect.y + 16, '#fff', 6);
+    $.txt.render($.ctx, 'RUN', rect.x + 12, rect.y + 16, '#fff', 6);
     $.ctx.restore();
   }
 }
