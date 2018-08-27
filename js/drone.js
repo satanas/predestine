@@ -8,6 +8,7 @@ class Drone extends Sprite {
     this.currOp = null;
     this.direction = dir;
     this.color = '#f00';
+    this.delayTime = 800; // ms
   }
 
   nextPosition() {
@@ -49,6 +50,11 @@ class Drone extends Sprite {
   // Instructions are turned into actions after evaluating the conditions
   update(dt, walls, actionables) {
     let dx = 0, dy = 0, result, inst;
+
+    if (this.delayTime > 0) {
+      this.delayTime -= dt;
+      return;
+    }
 
     // Get next instruction
     if (!this.currOp && this.program.length > 0) {
