@@ -5,16 +5,18 @@ class GameScene extends Scene {
     this.radius2 = 300;
     this.canvas = $.canvas.create($.vw, $.vh);
     this.ctx = this.canvas.getContext('2d');
-
-    this.drone = new Drone(0, 0, DIR.RG, [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TR,
-      ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.RP, ACTIONS.FW]);
+    this.walls = new Group();
 
     $.groups.actionables = new Group();
     $.groups.actionables.add(new Actionable(128, 192, ACTIONS.RP, '12345'));
 
-    // TODO: Use local instance groups (no need to use $.groups)
-    $.groups.walls = new Group();
-    $.groups.walls.add(new Wall(192, 0));
+    for (let w of $.data.level.walls) {
+      this.walls.add(new Wall(w[0] * GRID, w[1] * GRID));
+    }
+
+    this.drone = new Drone($.data.level.dock[0] * GRID, $.data.level.dock[1] * GRID, DIR.DW,
+      [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TL,
+      ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.RP, ACTIONS.FW]);
 
     $.listen(this, 'rsize')
 
@@ -39,7 +41,7 @@ class GameScene extends Scene {
   update() {
     // Update stuff
     $.groups.actionables.update(this.deltaTime);
-    this.drone.update(this.deltaTime, $.groups.walls.all(), $.groups.actionables);
+    this.drone.update(this.deltaTime, this.walls.all(), $.groups.actionables);
 
     $.cam.update(this.deltaTime);
   }
@@ -91,7 +93,7 @@ class GameScene extends Scene {
 
     // Render stuff
     $.cam.render($.groups.actionables);
-    $.cam.render($.groups.walls);
+    $.cam.render(this.walls);
     $.cam.render(this.drone);
 
     $.ctx.drawImage(this.canvas, 0, 0);
