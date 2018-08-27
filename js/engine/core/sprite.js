@@ -13,7 +13,7 @@ class Sprite extends Rectangle {
       $.ctx.save();
       $.ctx.strokeStyle = '#0f0';
       $.ctx.fillStyle = '#0f0';
-      $.ctx.strokeRect(rect.x, rect.y, this.w, this.h);
+      $.ctx.strokeRect(rect.x, rect.y, this.bounds.right - this.x, this.bounds.bottom - this.y);
       $.ctx.fillText('(' + floor(this.x) + "," + floor(this.y) + ")", rect.x, rect.y + 10);
       $.ctx.restore();
     }

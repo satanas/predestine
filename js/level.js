@@ -1,6 +1,8 @@
 class Level {
   constructor(strLvl) {
     this.walls = [];
+    this.repair = [];
+    this.extinguish = [];
     this.dock = this.exit = 0;
 
     let line, elem, x, y;
@@ -13,6 +15,9 @@ class Level {
         } else if (elem === 'D') {
           this.dock = [x, y];
         } else if (elem === 'R') {
+          this.repair.push([x, y]);
+        } else if (elem === 'F') {
+          this.extinguish.push([x, y]);
         } else if (elem === 'X') {
           this.exit = [x, y];
         }

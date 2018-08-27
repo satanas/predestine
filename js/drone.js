@@ -3,8 +3,8 @@ class Drone extends Sprite {
     super(x, y, GRID, GRID);
     this.speed = 0.25;
     this.anim = new Animator(['#0f0', '#fff'], 100);
-    this.instructions = ops;
-    this.instructions.reverse();
+    this.program = ops;
+    this.program.reverse();
     this.currOp = null;
     this.direction = dir;
     this.color = '#f00';
@@ -51,8 +51,8 @@ class Drone extends Sprite {
     let dx = 0, dy = 0, result, inst;
 
     // Get next instruction
-    if (!this.currOp && this.instructions.length > 0) {
-      inst = this.instructions.pop();
+    if (!this.currOp && this.program.length > 0) {
+      inst = this.program.pop();
       // Evaluate operation. Return NoOp if cannot perform operation
       // Check for movement instructions
       if ((inst === ACTIONS.FW || inst === ACTIONS.BW) && this.scanWalls(walls)) {
@@ -78,7 +78,7 @@ class Drone extends Sprite {
       }
     }
 
-    this.bounds.update(this);
+    //this.bounds.update(this);
   }
 
   render(rect) {

@@ -1,7 +1,7 @@
 class Rectangle {
   constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
     this.w = w;
     this.h = h;
     this.bounds = Bounds.fromRect(this);
@@ -11,11 +11,29 @@ class Rectangle {
     return new Vector(this.x + (this.w / 2), this.y + (this.h / 2));
   }
 
-  setPos(props) {
-    for(let p in props) {
-      this[p] = props[p];
-    }
+  //setPos(props) {
+  //  for(let p in props) {
+  //    this[p] = props[p];
+  //  }
+  //  this.bounds.update(this);
+  //}
+
+  set x(value) {
+    this._x = value;
     this.bounds.update(this);
+  }
+
+  get x() {
+    return this._x;
+  }
+
+  set y(value) {
+    this._y = value;
+    this.bounds.update(this);
+  }
+
+  get y() {
+    return this._y;
   }
 
   // Returns a new rect, offset by offsetX and offsetY

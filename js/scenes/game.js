@@ -6,17 +6,17 @@ class GameScene extends Scene {
     this.canvas = $.canvas.create($.vw, $.vh);
     this.ctx = this.canvas.getContext('2d');
     this.walls = new Group();
+    this.actionables = new Group();
 
-    $.groups.actionables = new Group();
-    $.groups.actionables.add(new Actionable(128, 192, ACTIONS.RP, '12345'));
-
-    for (let w of $.data.level.walls) {
-      this.walls.add(new Wall(w[0] * GRID, w[1] * GRID));
+    let o;
+    for (o of $.data.level.walls) {
+      this.walls.add(new Wall(o[0] * GRID, o[1] * GRID));
+    }
+    for (o of $.data.level.repair) {
+      this.actionables.add(new Actionable(o[0] * GRID, o[1] * GRID, ACTIONS.RP, '12345'));
     }
 
-    this.drone = new Drone($.data.level.dock[0] * GRID, $.data.level.dock[1] * GRID, DIR.DW,
-      [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.TL,
-      ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.RP, ACTIONS.FW]);
+    this.drone = new Drone($.data.level.dock[0] * GRID, $.data.level.dock[1] * GRID, DIR.DW, $.data.program);
 
     $.listen(this, 'rsize')
 
@@ -40,8 +40,8 @@ class GameScene extends Scene {
 
   update() {
     // Update stuff
-    $.groups.actionables.update(this.deltaTime);
-    this.drone.update(this.deltaTime, this.walls.all(), $.groups.actionables);
+    this.actionables.update(this.deltaTime);
+    this.drone.update(this.deltaTime, this.walls.all(), this.actionables);
 
     $.cam.update(this.deltaTime);
   }
@@ -92,7 +92,7 @@ class GameScene extends Scene {
     this.ctx.fillRect(this.drone.x - this.radius2, this.drone.y - this.radius2, this.radius2*2, this.radius2*2);
 
     // Render stuff
-    $.cam.render($.groups.actionables);
+    $.cam.render(this.actionables);
     $.cam.render(this.walls);
     $.cam.render(this.drone);
 

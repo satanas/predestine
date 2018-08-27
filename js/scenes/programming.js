@@ -3,8 +3,8 @@ HEX_BASE = 32512;
 class ProgrammingScene extends Scene {
   constructor() {
     super();
-    //this.instructions = [ACTIONS.FW, ACTIONS.FW, ACTIONS.TR, ACTIONS.FW, ACTIONS.FW, ACTIONS.TL, ACTIONS.RP];
-    this.instructions = [];
+    this.program = [ACTIONS.FW, ACTIONS.FW, ACTIONS.FW, ACTIONS.RP, ACTIONS.TL, ACTIONS.FW, ACTIONS.FW, ACTIONS.FW];
+    //this.program = [];
     this.instPanel = new InstructionsPanel(240, 40);
     this.instPanel.enabled = false;
     this.addBtn = new AddButton(20, 0, () => { this.instPanel.enabled = true; });
@@ -18,35 +18,40 @@ class ProgrammingScene extends Scene {
   }
 
   addInstruction(ev) {
-    this.instructions.push(ev.detail.inst);
+    this.program.push(ev.detail.inst);
     this.instPanel.enabled = false;
     this.rebuildDeleteButtons();
   }
 
   remInstruction(ev) {
-    this.instructions.splice(ev.detail.index, 1);
+    this.program.splice(ev.detail.index, 1);
     this.rebuildDeleteButtons();
   }
 
   rebuildDeleteButtons() {
     this.btnGroup.clear();
-    for(let i = 0; i < this.instructions.length; i++) {
+    for(let i = 0; i < this.program.length; i++) {
       this.btnGroup.add(new DelButton(210, 16 + (20 * i), i));
     }
   }
 
   runProgram() {
+    if (this.program.length === 0) {
+      alert('You cannot run an empty program');
+      return;
+    }
+    $.data.program = this.program;
     $.scenemng.load(new GameScene());
   }
 
   update() {
-    let yCoord = 50 + (20 * this.instructions.length);
-    this.addBtn.setPos({y: yCoord});
+    let yCoord = 50 + (20 * this.program.length);
+    this.addBtn.y = yCoord;
     this.addBtn.checkClick();
     this.runBtn.checkClick();
 
     this.btnGroup.all().map((btn, i) => {
-      btn.setPos({y: 36 + (20 * i)});
+      btn.y = 36 + (20 * i);
     });
     this.btnGroup.update();
     this.instPanel.update();
@@ -62,8 +67,8 @@ class ProgrammingScene extends Scene {
 
     $.txt.render('Program Memory', 20, 10, '#fff', 10);
 
-    for(let i = 0; i < this.instructions.length; i++) {
-      let op = this.instructions[i];
+    for(let i = 0; i < this.program.length; i++) {
+      let op = this.program[i];
       $.txt.render('0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
 
@@ -103,6 +108,10 @@ class LevelPreview extends Rectangle {
 
     ctx.fillStyle = '#fff';
     for (w of level.walls) {
+      ctx.fillRect(w[0] * scaledGrid, w[1] * scaledGrid, scaledGrid, scaledGrid);
+    }
+    ctx.fillStyle = '#00f';
+    for (w of level.repair) {
       ctx.fillRect(w[0] * scaledGrid, w[1] * scaledGrid, scaledGrid, scaledGrid);
     }
     ctx.fillStyle = 'red';
