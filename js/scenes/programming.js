@@ -11,6 +11,7 @@ class ProgrammingScene extends Scene {
     this.runBtn = new RunButton(950, 500, () => { this.runProgram(); });
     this.btnGroup = new Group();
 
+    this.programPanel = new ProgramPanel();
     this.levelPreview = new LevelPreview(350, $.data.level);
 
     $.listen(this, 'addInstruction');
@@ -60,10 +61,10 @@ class ProgrammingScene extends Scene {
   render() {
     $.cam.clear('#000');
 
-    $.ctx.save();
-    $.ctx.fillStyle = '#ccc';
-    $.ctx.fillRect(0, 0, 256, 576);
-    $.ctx.restore();
+    // Program memory panel
+    $.ctx.drawImage(this.programPanel.canvas, 0, 0, this.programPanel.w, this.programPanel.h);
+    // Level preview
+    $.ctx.drawImage(this.levelPreview.canvas, this.levelPreview.x, this.levelPreview.y, this.levelPreview.w, this.levelPreview.h);
 
     $.txt.render($.ctx, 'Program Memory', 20, 10, '#fff', 10);
 
@@ -71,9 +72,6 @@ class ProgrammingScene extends Scene {
       let op = this.program[i];
       $.txt.render($.ctx, '0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
     }
-
-    // Level preview
-    $.ctx.drawImage(this.levelPreview.canvas, this.levelPreview.x, this.levelPreview.y, this.levelPreview.w, this.levelPreview.h);
 
     $.cam.render(this.addBtn);
     $.cam.render(this.runBtn);
@@ -158,6 +156,34 @@ class LevelPreview extends Rectangle {
     ctx.fillRect(130 + level.dock[0] * scaledGrid, 50 + level.dock[1] * scaledGrid, scaledGrid, scaledGrid);
     ctx.fillStyle = 'green';
     ctx.fillRect(130 + level.exit[0] * scaledGrid, 50 + level.exit[1] * scaledGrid, scaledGrid, scaledGrid);
+  }
+}
+
+class ProgramPanel extends Sprite {
+  constructor() {
+    let ctx;
+    super(0, 0, 300, 576);
+
+    this.canvas = $.canvas.create(this.w, this.h);
+
+    ctx = this.canvas.getContext('2d');
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, this.w, this.h);
+
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#0f0';
+    ctx.beginPath();
+    ctx.moveTo(30, 1);
+    ctx.lineTo(2, 30);
+    ctx.lineTo(2, 564);
+    ctx.lineTo(10, 572);
+    ctx.lineTo(290, 572);
+    ctx.lineTo(300, 562);
+    ctx.lineTo(300, 2);
+    ctx.lineTo(30, 2);
+
+    ctx.stroke();
   }
 }
 
