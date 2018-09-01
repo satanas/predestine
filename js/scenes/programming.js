@@ -66,11 +66,24 @@ class ProgrammingScene extends Scene {
     // Level preview
     $.ctx.drawImage(this.levelPreview.canvas, this.levelPreview.x, this.levelPreview.y, this.levelPreview.w, this.levelPreview.h);
 
-    $.txt.render($.ctx, 'Program Memory', 20, 10, '#fff', 10);
+    $.ctx.save();
+    $.ctx.strokeStyle = '#fff';
+    for (let j = 0; j < 25; j++) {
+      $.ctx.strokeRect(5, 32 + (j * 20), 144, 20);
+      $.ctx.strokeRect(152, 32 + (j * 20), 144, 20);
+    }
+    $.ctx.restore();
 
+    //for(let x = 0; x <= w / scaledGrid; x++) {
+    //  ctx.fillRect(130 + floor(x * scaledGrid), 50, 1, h);
+    //}
+    //for(let y = 0; y <= h / scaledGrid; y++) {
+    //  ctx.fillRect(130, 50 + (y * scaledGrid), w, 1);
+    //}
+    //--------
     for(let i = 0; i < this.program.length; i++) {
       let op = this.program[i];
-      $.txt.render($.ctx, '0x' + (HEX_BASE + i).toString(16) + ': ' + op, 20, 40 + (20 * i), '#fff', 7);
+      $.txt.render($.ctx, '0x' + (HEX_BASE + i).toString(16) + ': ' + op, 8, 47 + (20 * i), '#fff', 12);
     }
 
     $.cam.render(this.addBtn);
@@ -174,16 +187,25 @@ class ProgramPanel extends Sprite {
     ctx.lineJoin = 'round';
     ctx.strokeStyle = '#0f0';
     ctx.beginPath();
-    ctx.moveTo(30, 1);
-    ctx.lineTo(2, 30);
+    ctx.moveTo(2, 30);
     ctx.lineTo(2, 564);
     ctx.lineTo(10, 572);
     ctx.lineTo(290, 572);
     ctx.lineTo(300, 562);
-    ctx.lineTo(300, 2);
-    ctx.lineTo(30, 2);
-
+    ctx.lineTo(300, 30);
+    ctx.lineTo(220, 30);
     ctx.stroke();
+
+    ctx.fillStyle = '#0f0';
+    ctx.beginPath();
+    ctx.moveTo(221, 31);
+    ctx.lineTo(201, 1);
+    ctx.lineTo(1, 1);
+    ctx.lineTo(1, 31);
+    ctx.lineTo(221, 31);
+    ctx.fill();
+
+    $.txt.render(ctx, 'Program Memory', 10, 20, '#fff', 20);
   }
 }
 

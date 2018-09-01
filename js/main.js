@@ -18,13 +18,14 @@ const ENTER = 13,
       },
       GRID = 64;
 
-debug = true;
+debug = false;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
 $.input.bind([ENTER, KEY_A]);
 $.input.bindMouse();
 $.cam.setWorldSize(1024, 1024);
+$.txt = new TextRenderer('monospace');
 
 // Use three hex to represent each object in the level
 // 0-F = Element

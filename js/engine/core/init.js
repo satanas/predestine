@@ -10,7 +10,6 @@ $.init = function() {
   $.input = new Input();
   $.cam = new Camera($.vw, $.vh);
   $.collision = new Collision(); // Collision detection
-  $.txt = new AsteroidsTextRenderer();
   $.scenemng = new SceneManager();
 }
 
