@@ -64,7 +64,7 @@ class AsteroidsTextRenderer {
     };
   }
 
-  render(text, x, y, color, fontWidth) {
+  render(ctx, text, x, y, color, fontWidth) {
     // Render single-line words
     let i, m, n, letter, seg, fontHeight, offset, spacing;
     fontHeight = floor(fontWidth * 3 / 2);
@@ -72,22 +72,22 @@ class AsteroidsTextRenderer {
     spacing = floor(fontWidth / 3);
 
     text = text.toUpperCase();
-    $.ctx.save();
-    $.ctx.strokeStyle = color;
-    $.ctx.lineWidth = 2;
-    $.ctx.beginPath();
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
     // Render each letter
     for (i = 0; i < text.length; i++) {
       letter = this.font[text.charAt(i)];
       // Render each segment of a letter
       for (m = 0; m < letter.length; m++) {
         seg = letter[m];
-        $.ctx.moveTo(floor(x + offset + (seg[0] * fontWidth)), floor(y + (seg[1] * fontHeight)));
-        $.ctx.lineTo(floor(x + offset + (seg[2] * fontWidth)), floor(y + (seg[3] * fontHeight)));
+        ctx.moveTo(floor(x + offset + (seg[0] * fontWidth)), floor(y + (seg[1] * fontHeight)));
+        ctx.lineTo(floor(x + offset + (seg[2] * fontWidth)), floor(y + (seg[3] * fontHeight)));
       }
       offset += fontWidth + spacing;
     }
-    $.ctx.stroke();
-    $.ctx.restore();
+    ctx.stroke();
+    ctx.restore();
   }
 }

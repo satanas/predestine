@@ -58,7 +58,7 @@ class ProgrammingScene extends Scene {
   }
 
   render() {
-    $.cam.clear('#444');
+    $.cam.clear('#000');
 
     $.ctx.save();
     $.ctx.fillStyle = '#ccc';
@@ -88,36 +88,76 @@ class LevelPreview extends Rectangle {
         w = $.vw - offset,
         h = w * $.vh / $.vw,
         scaledGrid = w / ($.vw / GRID);
-    super(offset, 0, w, h);
+    super(offset, 5, w, h);
 
     this.canvas = $.canvas.create(w, h);
 
     ctx = this.canvas.getContext('2d');
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, this.w, this.h);
-    ctx.fillStyle = '#fff';
 
-    for(let x = 0; x < this.w / scaledGrid; x++) {
-      if (x === 0) continue;
-      ctx.fillRect(floor(x * scaledGrid), 0, 1, this.h);
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#0f0';
+    ctx.beginPath();
+    ctx.moveTo(410, 370);
+    ctx.lineTo(210, 370);
+    ctx.lineTo(202, 378);
+    ctx.lineTo(25, 378);
+    ctx.lineTo(10, 365);
+    ctx.lineTo(10, 120);
+    ctx.lineTo(1, 110);
+    ctx.lineTo(1, 10);
+    ctx.lineTo(10, 1);
+    ctx.lineTo(250, 1);
+    ctx.lineTo(250, 30);
+    ctx.lineTo(550, 30);
+    ctx.lineTo(550, 1);
+    ctx.lineTo(660, 1);
+    ctx.lineTo(670, 10);
+    ctx.lineTo(670, 180);
+    ctx.lineTo(660, 190);
+    ctx.lineTo(660, 355);
+    ctx.lineTo(652, 366);
+    ctx.lineTo(510, 366);
+
+    ctx.moveTo(670, 220);
+    ctx.lineTo(670, 368);
+    ctx.lineTo(660, 378);
+    ctx.lineTo(500, 378);
+    ctx.lineTo(480, 358);
+    ctx.lineTo(360, 358);
+
+    ctx.stroke();
+
+    // Rendering level preview (radar mode)
+    w = 510;
+    h = 288;
+
+    ctx.fillStyle = 'hsla(125,100%,53%,0.16)';
+    ctx.fillRect(130, 50, w, h);
+
+    scaledGrid = w / ($.vw / GRID);
+    ctx.fillStyle = '#fff';
+    for(let x = 0; x <= w / scaledGrid; x++) {
+      ctx.fillRect(130 + floor(x * scaledGrid), 50, 1, h);
     }
-    for(let y = 0; y <= this.h / scaledGrid; y++) {
-      if (y === 0) continue;
-      ctx.fillRect(0, y * scaledGrid, this.w, 1);
+    for(let y = 0; y <= h / scaledGrid; y++) {
+      ctx.fillRect(130, 50 + (y * scaledGrid), w, 1);
     }
 
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
     for (w of level.walls) {
-      ctx.fillRect(w[0] * scaledGrid, w[1] * scaledGrid, scaledGrid, scaledGrid);
+      ctx.fillRect(130 + w[0] * scaledGrid, 50 + w[1] * scaledGrid, scaledGrid, scaledGrid);
     }
     ctx.fillStyle = '#00f';
     for (w of level.repair) {
-      ctx.fillRect(w[0] * scaledGrid, w[1] * scaledGrid, scaledGrid, scaledGrid);
+      ctx.fillRect(130 + w[0] * scaledGrid, 50 + w[1] * scaledGrid, scaledGrid, scaledGrid);
     }
     ctx.fillStyle = 'red';
-    ctx.fillRect(level.dock[0] * scaledGrid, level.dock[1] * scaledGrid, scaledGrid, scaledGrid);
+    ctx.fillRect(130 + level.dock[0] * scaledGrid, 50 + level.dock[1] * scaledGrid, scaledGrid, scaledGrid);
     ctx.fillStyle = 'green';
-    ctx.fillRect(level.exit[0] * scaledGrid, level.exit[1] * scaledGrid, scaledGrid, scaledGrid);
+    ctx.fillRect(130 + level.exit[0] * scaledGrid, 50 + level.exit[1] * scaledGrid, scaledGrid, scaledGrid);
   }
 }
 
