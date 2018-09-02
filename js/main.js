@@ -47,4 +47,4 @@ $.data = {
   level: new Level(level)
 };
 
-$.scenemng.load(new ProgrammingScene());
+$.scenemng.load(new ConnectCables());

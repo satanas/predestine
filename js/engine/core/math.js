@@ -27,4 +27,14 @@ let abs = Math.abs,
     // Choose random element from array
     rnda = function(e) {
       return e[rndi(0, e.length)];
+    },
+    shuffle = function(e) {
+      let i, j, temp, a = e.slice(0, e.length);
+      for (i = 0; i < a.length; i++) {
+        j = rndi(0, a.length);
+        temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+      }
+      return a;
     };
