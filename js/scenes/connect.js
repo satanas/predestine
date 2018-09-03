@@ -6,94 +6,90 @@ class ConnectCables extends Scene {
     D.body.addEventListener('mouseup', this.togglePaint.bind(this, false));
     D.body.addEventListener('mousemove', this.doPaint.bind(this));
 
-    this.connect = false;
-    this.connectingColor = 0;
+    // Number of cables
     this.num = 3;
     this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black']).slice(0, this.num);
-    this.upper = shuffle(this.colors);
-    this.lower = shuffle(this.colors);
 
     let i, color,
         padding = 200,
-        slot = ($.vw - padding) / this.num;
+        slot = ($.vw - padding) / this.num,
+        upper = shuffle(this.colors),
+        lower = shuffle(this.colors);
     this.upperCables = {};
     this.lowerCables = {};
     this.sensors = {};
-    this.startCable = 0;
-    this.endCable = 0;
-    this.colorCable = 0;
+    this.connections = [];
 
-    for (i = 0; i < this.upper.length; i++) {
-      color = this.upper[i];
+    // Connection variables
+    this.resetConnection();
+
+    for (i = 0; i < upper.length; i++) {
+      color = upper[i];
       this.upperCables[color] = new Cable(i, color, padding, slot, true);
     }
 
-    for (i = 0; i < this.lower.length; i++) {
-      color = this.lower[i];
+    for (i = 0; i < lower.length; i++) {
+      color = lower[i];
       this.lowerCables[color] = new Cable(i, color, padding, slot, false);
+    }
+
+    for (color of this.colors) {
+      this.sensors[color] = [
+        new Sensor(this.upperCables[color].x, this.upperCables[color].bounds.bottom, color),
+        new Sensor(this.lowerCables[color].x, this.lowerCables[color].y - 32, color)
+      ];
     }
 
     this.maxTimer = 5000;
     this.timer = this.maxTimer;
-
-    for (color of this.colors) {
-      let obj1, obj2, xs, ys, n = 3;
-      let yOff;
-
-      if (this.upperCables[color].x > this.lowerCables[color].x) {
-        obj1 = this.lowerCables[color];
-        obj2 = this.upperCables[color];
-      } else {
-        obj1 = this.upperCables[color];
-        obj2 = this.lowerCables[color];
-      }
-      xs = floor((obj2.x - obj1.x) / n);
-
-      if (obj1.y < obj2.y) {
-        // Down
-        ys = floor((obj2.y - 32 - obj1.bounds.bottom) / n);
-        yOff = obj1.bounds.bottom;
-      } else {
-        // Up
-        ys = -1 * floor((obj1.y - 32 - obj2.bounds.bottom) / n);
-        yOff = obj1.y - 32;
-      }
-
-      this.sensors[color] = [];
-
-      for (i = 0; i <= n; i++) {
-        let sen = new Sensor(obj1.x + (xs * i), yOff + (ys * i), color);
-        this.sensors[color].push(sen);
-      }
-    }
   }
 
   togglePaint(val) {
+    let color, start, end, sensors;
+
     if (val) {
-      let color, start, end, sensors;
+      // Start connecting
       for (color of this.colors) {
         sensors = this.sensors[color];
         start = $.collision.vector($.input.mousePos, sensors[0]);
-        end = $.collision.vector($.input.mousePos, sensors[sensors.length - 1]);
+        end = $.collision.vector($.input.mousePos, sensors[1]);
         if (start || end) {
-          this.startCable = $.input.mousePos;
+          if (start) {
+            this.startCable = sensors[0];
+            this.expectedCable =sensors[1];
+          } else {
+            this.startCable = sensors[1];
+            this.expectedCable = sensors[0]
+          }
           this.colorCable = color;
-          this.connect = val;
-          console.log('color', color, 'start', start, 'end', end);
+          this.connecting = val;
         }
       }
     } else {
-      this.connect = false;
-      this.startCable = 0;
-      this.endCable = 0;
+      if (!val && this.connecting) {
+        let connected = $.collision.vector($.input.mousePos, this.expectedCable);
+        if (connected) {
+          this.connections.push(new Connection(this.startCable, this.expectedCable, this.connections.length, this.colorCable));
+          //this.sensors[this.colorCable] = [];
+          console.log('CONNECTED');
+        }
+      }
+      this.resetConnection();
     }
   }
 
   doPaint() {
-    if (this.connect) {
+    if (this.connecting) {
       this.endCable = $.input.mousePos;
-      console.log('painting', this.startCable, this.endCable);
     }
+  }
+
+  resetConnection() {
+    this.connecting = false;
+    this.startCable = 0;
+    this.endCable = 0;
+    this.expectedCable = 0;
+    this.colorCable = 0;
   }
 
   update() {
@@ -120,15 +116,19 @@ class ConnectCables extends Scene {
         $.cam.render(obj);
       }
     }
+    // Render connections
+    for (obj of this.connections) {
+      obj.render();
+    }
 
     $.ctx.save();
 
     // Render drawing line
-    if (this.connect) {
+    if (this.connecting) {
       $.ctx.beginPath();
       $.ctx.strokeStyle = this.colorCable;
-      $.ctx.lineWidth = 15;
-      $.ctx.moveTo(this.startCable.x, this.startCable.y);
+      $.ctx.lineWidth = 5;
+      $.ctx.moveTo(this.startCable.x + 16, this.startCable.y + 16);
       $.ctx.lineTo(this.endCable.x, this.endCable.y);
       $.ctx.stroke();
     }
@@ -141,6 +141,27 @@ class ConnectCables extends Scene {
     $.ctx.fillStyle = 'rgba(55,255,0,0.5)';
     $.ctx.fillRect(0, 0, w, 20);
 
+    $.ctx.restore();
+  }
+}
+
+class Connection {
+  constructor(obj1, obj2, index, color) {
+    this.orig = new Vector(obj1.x, obj1.y);
+    this.dst = new Vector(obj2.x, obj2.y);
+    this.index = index;
+    this.color = color;
+    console.log(index);
+  }
+
+  render(rect) {
+    $.ctx.save();
+    $.ctx.beginPath();
+    $.ctx.lineWidth = 32;
+    $.ctx.strokeStyle = this.color;
+    $.ctx.moveTo(this.orig.x + 16, this.orig.y);
+    $.ctx.lineTo(this.dst.x + 16, this.dst.y);
+    $.ctx.stroke();
     $.ctx.restore();
   }
 }
