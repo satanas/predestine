@@ -1,4 +1,4 @@
-class ConnectCables extends Scene {
+class ConnectScene extends Scene {
   constructor() {
     super();
 
@@ -7,7 +7,7 @@ class ConnectCables extends Scene {
     D.body.addEventListener('mousemove', this.doPaint.bind(this));
 
     // Number of cables
-    this.num = 3;
+    this.num = 4;
     this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black']).slice(0, this.num);
 
     let i, color,
