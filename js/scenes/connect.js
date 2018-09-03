@@ -69,9 +69,8 @@ class ConnectCables extends Scene {
       if (!val && this.connecting) {
         let connected = $.collision.vector($.input.mousePos, this.expectedCable);
         if (connected) {
-          this.connections.push(new Connection(this.startCable, this.expectedCable, this.connections.length, this.colorCable));
+          this.connections.push(new Connection(this.startCable, this.expectedCable, this.connections.length, this.num, this.colorCable));
           //this.sensors[this.colorCable] = [];
-          console.log('CONNECTED');
         }
       }
       this.resetConnection();
@@ -146,22 +145,49 @@ class ConnectCables extends Scene {
 }
 
 class Connection {
-  constructor(obj1, obj2, index, color) {
-    this.orig = new Vector(obj1.x, obj1.y);
-    this.dst = new Vector(obj2.x, obj2.y);
-    this.index = index;
+  constructor(obj1, obj2, index, num, color) {
+    let upper, lower, temp, h;
+
+    // We always render from left to right
+    if (obj1.x > obj2.x) {
+      temp = obj1;
+      obj1 = obj2;
+      obj2 = temp;
+    }
     this.color = color;
-    console.log(index);
+    this.rects = [];
+
+    if (obj1.x === obj2.x) {
+      if (obj1.y < obj2.y) {
+        upper = obj1;
+        lower = obj2;
+      } else {
+        upper = obj2;
+        lower = obj1;
+      }
+      this.rects.push(new Rectangle(obj1.x, upper.y, 32, lower.y - upper.y + 32));
+    } else if (obj1.y < obj2.y) {
+      // If we're going from top to bottom
+      h = (index + 2) * 32;
+      this.rects.push(new Rectangle(obj1.x, obj1.y, 32, h));
+      this.rects.push(new Rectangle(obj1.x, obj1.y + h, obj2.x - obj1.x, 32));
+      this.rects.push(new Rectangle(obj2.x, obj1.y + h, 32, obj2.y - obj1.y - h + 32));
+    } else if (obj1.y > obj2.y) {
+      // If we're going from bottom to top
+      index = num - index;
+      h = (index + 1) * 32;
+      this.rects.push(new Rectangle(obj1.x, obj1.y - h, 32, h + 32));
+      this.rects.push(new Rectangle(obj1.x, obj1.y - h, obj2.x - obj1.x, 32));
+      this.rects.push(new Rectangle(obj2.x, obj2.y, 32, obj2.y - h + 32 + 4)); // + 12 is a hack
+    }
   }
 
   render(rect) {
     $.ctx.save();
-    $.ctx.beginPath();
-    $.ctx.lineWidth = 32;
-    $.ctx.strokeStyle = this.color;
-    $.ctx.moveTo(this.orig.x + 16, this.orig.y);
-    $.ctx.lineTo(this.dst.x + 16, this.dst.y);
-    $.ctx.stroke();
+    $.ctx.fillStyle = this.color;
+    for (let rect of this.rects) {
+      $.ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    }
     $.ctx.restore();
   }
 }
@@ -174,9 +200,8 @@ class Sensor extends Sprite {
 
   render(rect) {
     $.ctx.save();
-
-    $.ctx.strokeStyle = this.color;
-    $.ctx.strokeRect(rect.x, rect.y, this.w, this.h);
+    $.ctx.fillStyle = '#deb887';
+    $.ctx.fillRect(rect.x + 4, rect.y, this.w - 8, this.h);
     $.ctx.restore();
   }
 }
