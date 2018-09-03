@@ -47,6 +47,9 @@ class Input {
     return this.isPressed(1);
   }
 
+  // TODO: is left click released
+  // TODO: is right click released
+
   isRightClick() {
     // event.button (2) + 1
     return this.isPressed(3);
