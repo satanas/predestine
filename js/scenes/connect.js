@@ -3,27 +3,66 @@ class ConnectCables extends Scene {
     super();
 
     this.num = 3;
-    this.padding = 200;
-    this.slot = ($.vw - this.padding) / this.num;
     this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black']).slice(0, this.num);
     this.upper = shuffle(this.colors);
     this.lower = shuffle(this.colors);
 
-    let i;
-    this.upperCables = new Group();
+    let i, color,
+        padding = 200,
+        slot = ($.vw - padding) / this.num;
+    this.upperCables = {};
+    this.lowerCables = {};
+    this.sensors = {};
+
     for (i = 0; i < this.upper.length; i++) {
-      this.upperCables.add(new Cable(i, this.upper[i], this.padding, this.slot, true));
+      color = this.upper[i];
+      this.upperCables[color] = new Cable(i, color, padding, slot, true);
     }
 
-    this.lowerCables = new Group();
     for (i = 0; i < this.lower.length; i++) {
-      this.upperCables.add(new Cable(i, this.lower[i], this.padding, this.slot, false));
+      color = this.lower[i];
+      this.lowerCables[color] = new Cable(i, color, padding, slot, false);
     }
 
     this.maxTimer = 5000;
     this.timer = this.maxTimer;
 
-    console.log(this.upper, this.lower);
+    for (color of this.colors) {
+      let obj1, obj2, xs, ys, n = 3;
+      let yOff;
+
+      if (this.upperCables[color].x > this.lowerCables[color].x) {
+        obj1 = this.lowerCables[color];
+        obj2 = this.upperCables[color];
+      } else {
+        obj1 = this.upperCables[color];
+        obj2 = this.lowerCables[color];
+      }
+
+      if (obj1.y < obj2.y) {
+        // Down
+        ys = floor((obj2.y - 32 - obj1.bounds.bottom) / n);
+        yOff = obj1.bounds.bottom;
+      } else {
+        // Up
+        ys = -1 * floor((obj1.y - 32 - obj2.bounds.bottom) / n);
+        yOff = obj1.y - 32;
+      }
+
+      xs = floor((obj2.x - obj1.x) / n);
+
+      this.sensors[color] = [];
+
+      console.log('obj1', obj1);
+      console.log('obj2', obj2);
+      for (i = 0; i <= n; i++) {
+        let sen = new Sensor(obj1.x + (xs * i), yOff + (ys * i), color);
+        console.log('sensor[' + i + '] ' + color + ':', sen.x, sen.y, 'xs', xs, 'ys', ys);
+        this.sensors[color].push(sen);
+      }
+    }
+    console.log(this.upperCables, this.lowerCables);
+    console.log();
   }
 
   update() {
@@ -35,11 +74,21 @@ class ConnectCables extends Scene {
   render() {
     $.cam.clear('#ccc');
 
+    let obj, color;
     // Render upper cables
-    $.cam.render(this.upperCables);
-
+    for (color in this.upperCables) {
+      $.cam.render(this.upperCables[color]);
+    }
     // Render lower cables
-    $.cam.render(this.lowerCables);
+    for (color in this.lowerCables) {
+      $.cam.render(this.lowerCables[color]);
+    }
+    // Render sensors
+    for (color in this.sensors) {
+      for (obj of this.sensors[color]) {
+        $.cam.render(obj);
+      }
+    }
 
     $.ctx.save();
     // Render progress bar bg
@@ -57,25 +106,25 @@ class ConnectCables extends Scene {
 
 class Sensor extends Sprite {
   constructor(x, y, color) {
-    super(x, y, 16, 16);
+    super(x, y, 32, 32);
+    this.color = color;
   }
 
   render(rect) {
     $.ctx.save();
 
-    $.ctx.fillStyle = 'green';
-    $.ctx.fillRect(rect.x, rect.y, w, h);
-    $.crx.restore();
+    $.ctx.strokeStyle = this.color;
+    $.ctx.strokeRect(rect.x, rect.y, this.w, this.h);
+    $.ctx.restore();
   }
-
 }
 
 class Cable extends Sprite {
   constructor(i, color, padding, slot, upper) {
     let h = 180,
         w = 32,
-        x = (padding / 2) + (slot * i) + (slot / 2) - (w / 2),
-        y = (upper) ? 0 : $.vh - h;
+        x = floor((padding / 2) + (slot * i) + (slot / 2) - (w / 2)),
+        y = floor((upper) ? 0 : $.vh - h);
     super(x, y, w, h);
     this.color = color;
   }

@@ -41,6 +41,10 @@ class Rectangle {
     return new Rectangle(rect.x - offsetX, rect.y - offsetY, rect.w, rect.h);
   }
 
+  static distance(r1, r2) {
+    return sqrt(pow(r2.x - r1.x, 2) + pow(r2.y - r1.y, 2));
+  }
+
   // TODO
   // fromGrid
 
