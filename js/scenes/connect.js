@@ -1,4 +1,4 @@
-class ConnectScene extends Scene {
+class ConnectScene extends BaseScene {
   constructor() {
     super();
 
@@ -39,9 +39,6 @@ class ConnectScene extends Scene {
         new Sensor(this.lowerCables[color].x, this.lowerCables[color].y - 32, color)
       ];
     }
-
-    this.maxTimer = 5000;
-    this.timer = this.maxTimer;
   }
 
   togglePaint(val) {
@@ -92,9 +89,7 @@ class ConnectScene extends Scene {
   }
 
   update() {
-    this.timer -= this.deltaTime;
-    if (this.timer <= 0) {
-    }
+    this.updateProgress();
   }
 
   render() {
@@ -121,7 +116,6 @@ class ConnectScene extends Scene {
     }
 
     $.ctx.save();
-
     // Render drawing line
     if (this.connecting) {
       $.ctx.beginPath();
@@ -131,16 +125,13 @@ class ConnectScene extends Scene {
       $.ctx.lineTo(this.endCable.x, this.endCable.y);
       $.ctx.stroke();
     }
-    // Render progress bar bg
-    $.ctx.fillStyle = 'rgba(55,255,0,0.2)';
-    $.ctx.fillRect(0, 0, $.vw, 20);
-
-    // Render progress bar fg
-    let w = this.timer * $.vw / 5000;
-    $.ctx.fillStyle = 'rgba(55,255,0,0.5)';
-    $.ctx.fillRect(0, 0, w, 20);
-
     $.ctx.restore();
+
+    this.renderProgress();
+  }
+
+  finish() {
+    console.log('listo');
   }
 }
 

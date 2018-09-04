@@ -1,4 +1,4 @@
-class FillingScene extends Scene {
+class FillingScene extends BaseScene {
   constructor() {
     super();
 
@@ -7,11 +7,7 @@ class FillingScene extends Scene {
     D.body.addEventListener('mousemove', this.doPaint.bind(this));
 
     this.painting = false;
-    this.processed = false;
-    this.maxTimer = 5000;
-    this.timer = this.maxTimer;
-
-    this.percSuccess = 90;
+    this.percSuccess = 80;
     this.color = [255, 0, 0, 255];
 
     this.pad = new Pad(this.percSuccess, this.color);
@@ -46,27 +42,15 @@ class FillingScene extends Scene {
   }
 
   update() {
-    this.timer -= this.deltaTime;
-    if (this.timer <= 0 && !this.processed) {
-      this.pad.isCovered();
-      this.processed = true;
-    }
+    this.updateProgress();
   }
 
   render() {
-    $.ctx.save();
-    // Render progress bar bg
-    $.ctx.fillStyle = '#444';
-    $.ctx.fillRect(0, 0, $.vw, 20);
-    $.ctx.fillStyle = 'rgba(55,255,0,0.2)';
-    $.ctx.fillRect(0, 0, $.vw, 20);
+    this.renderProgress();
+  }
 
-    // Render progress bar fg
-    let w = this.timer * $.vw / this.maxTimer;
-    $.ctx.fillStyle = 'rgba(55,255,0,0.5)';
-    $.ctx.fillRect(0, 0, w, 20);
-
-    $.ctx.restore();
+  finish() {
+    this.pad.isCovered();
   }
 }
 
