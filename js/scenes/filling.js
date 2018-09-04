@@ -7,12 +7,20 @@ class FillingScene extends Scene {
     D.body.addEventListener('mousemove', this.doPaint.bind(this));
 
     this.painting = false;
-
+    this.processed = false;
     this.maxTimer = 5000;
     this.timer = this.maxTimer;
 
+    this.percSuccess = 90;
+    this.color = [255, 0, 0, 255];
+
+    this.pad = new Pad(this.percSuccess, this.color);
+
     $.ctx.lineWidth = 20;
+
+    // Render everything only once to allow painting over
     $.cam.clear('#444');
+    $.cam.render(this.pad);
   }
 
   togglePaint(val) {
@@ -39,6 +47,10 @@ class FillingScene extends Scene {
 
   update() {
     this.timer -= this.deltaTime;
+    if (this.timer <= 0 && !this.processed) {
+      this.pad.isCovered();
+      this.processed = true;
+    }
   }
 
   render() {
@@ -54,6 +66,44 @@ class FillingScene extends Scene {
     $.ctx.fillStyle = 'rgba(55,255,0,0.5)';
     $.ctx.fillRect(0, 0, w, 20);
 
+    $.ctx.restore();
+  }
+}
+
+class Pad extends Sprite {
+  constructor(percSuccess, color) {
+    let x = rndi(100, 900),
+        y = rndi(100, 400);
+    super(x, y, 120, 120);
+    this.percSuccess = percSuccess;
+    this.color = color;
+  }
+
+  isCovered() {
+    let i, r, g, b, a, perc,
+        totalPx = 0,
+        totalCovered = 0,
+        imgData = $.ctx.getImageData(this.x, this.y, this.w, this.h),
+        data = imgData.data;
+    for (i = 0; i < data.length; i += 4) {
+      r = data[i];
+      g = data[i + 1];
+      b = data[i + 2];
+      a = data[i + 3];
+      totalPx += 1;
+      if (r === this.color[0] && g === this.color[1] && b === this.color[2] && a === this.color[3]) {
+        totalCovered += 1;
+      }
+    }
+    perc = totalCovered * 100 / totalPx;
+    console.log(perc, perc >= this.percSuccess);
+    return perc >= this.percSuccess;
+  }
+
+  render(rect) {
+    $.ctx.save();
+    $.ctx.fillStyle = '#deb887';
+    $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     $.ctx.restore();
   }
 }

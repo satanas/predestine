@@ -47,4 +47,4 @@ $.data = {
   level: new Level(level)
 };
 
-$.scenemng.load(new FillingScene());
+$.scenemng.load(new CalibrateScene());
