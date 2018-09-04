@@ -1,9 +1,9 @@
 class BaseScene extends Scene {
-  constructor() {
+  constructor(maxTimer) {
     super();
 
     this.processed = false;
-    this.maxTimer = 5000;
+    this.maxTimer = maxTimer || 5000;
     this.timer = this.maxTimer;
   }
 

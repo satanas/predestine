@@ -35,4 +35,9 @@ class Group {
   clear() {
     this.elems = [];
   }
+
+  // Returns element at index `i`
+  at(i) {
+    return this.elems[i];
+  }
 }
