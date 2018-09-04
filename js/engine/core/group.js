@@ -1,6 +1,7 @@
 class Group {
   constructor() {
     this.elems = [];
+    this.length = 0;
   }
 
   all() {
@@ -10,6 +11,7 @@ class Group {
   // Add element to the group
   add(e) {
     this.elems.push(e);
+    this.length = this.elems.length;
   }
 
   update(deltaTime) {
@@ -29,6 +31,7 @@ class Group {
         return del.indexOf(i) < 0;
       });
     }
+    this.length = this.elems.length;
   }
 
   // Clear group

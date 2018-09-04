@@ -2,7 +2,7 @@ class SealScene extends BaseScene {
   constructor() {
     super(8000);
 
-    this.holes = [];
+    this.holes = new Group();
     this.showingIndex = 0;
     this.secureTime = 3000;
 
@@ -21,7 +21,7 @@ class SealScene extends BaseScene {
     for (curr of arr) {
       let obj = new Hole(curr, maxHoriz);
       obj.enabled = false;
-      this.holes.push(obj);
+      this.holes.add(obj);
     }
 
     // We need at least one second to react to the last hole
@@ -30,30 +30,26 @@ class SealScene extends BaseScene {
   }
 
   update() {
-    for (let hole of this.holes) {
-      hole.checkClick();
-    }
+    this.holes.update();
     this.updateProgress();
     this.showCounter -= this.deltaTime;
     if (this.showCounter <= 0 && this.showingIndex < this.holes.length) {
       this.showCounter = this.stepTime;
-      this.holes[this.showingIndex].enabled = true;
+      this.holes.at(this.showingIndex).enabled = true;
       this.showingIndex += 1;
     }
   }
 
   render() {
     $.cam.clear('#345');
-    for (let hole of this.holes) {
-      $.cam.render(hole);
-    }
+    $.cam.render(this.holes);
     this.renderProgress();
   }
 
   finish() {
     let success = true,
         hole;
-    for (hole of this.holes) {
+    for (hole of this.holes.all()) {
       if (!hole.sealed) {
         success = false;
         break;
@@ -76,6 +72,10 @@ class Hole extends UIButton {
 
     super(hPadding + (x * w), vPadding + (y * h), w, h);
     this.sealed = false;
+  }
+
+  update() {
+    this.checkClick();
   }
 
   render() {
