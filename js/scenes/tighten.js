@@ -19,13 +19,22 @@ class Pliers {
   constructor() {
     let nutSize = 64;
 
-    this.nut = new Rectangle(($.vw - nutSize) / 2, ($.vh - nutSize) / 2, nutSize, nutSize);
+    this.nut = new Rectangle(0, (150 - 64) / 2, nutSize, nutSize);
+
+    this.canvas = $.canvas.create(150, 300);
+    this.ctx = this.canvas.getContext('2d');
+  }
+
+  renderWrench() {
+    this.ctx.fillStyle = '#ccc';
+    this.ctx.fillRect(this.nut.x, this.nut.y, this.nut.w, this.nut.h);
   }
 
   render() {
-    $.ctx.save();
-    $.ctx.fillStyle = '#ccc';
-    $.ctx.fillRect(this.nut.x, this.nut.y, this.nut.w, this.nut.h);
+    $.ctx.save()
+    $.ctx.rotate(PI / 6);
+    $.ctx.drawImage(this.canvas, 100, 100, 150, 300);
+    $.ctx.setTransform(1, 0, 0, 1, 0, 0);
     $.ctx.restore();
   }
 }
