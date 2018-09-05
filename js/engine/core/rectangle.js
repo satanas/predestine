@@ -36,6 +36,10 @@ class Rectangle {
     return this._y;
   }
 
+  center() {
+    return this.bounds.center();
+  }
+
   // Returns a new rect, offset by offsetX and offsetY
   static offset(rect, offsetX, offsetY) {
     return new Rectangle(rect.x - offsetX, rect.y - offsetY, rect.w, rect.h);
@@ -61,6 +65,10 @@ class Bounds {
     this.top = rect.y;
     this.left = rect.x;
     this.right = rect.x + rect.w;
+  }
+
+  center() {
+    return new Vector(this.left + ((this.right - this.left) / 2), this.top + ((this.bottom - this.top) / 2));
   }
 
   static fromRect(rect) {
