@@ -25,7 +25,7 @@ $.init(); // init(['collisions', 'sound', 'astar', ...])
 $.input.bind([ENTER, KEY_A]);
 $.input.bindMouse();
 $.cam.setWorldSize(1024, 1024);
-$.txt = new TextRenderer('monospace');
+//$.txt = new TextRenderer('monospace');
 
 // Use three hex to represent each object in the level
 // 0-F = Element
@@ -47,4 +47,4 @@ $.data = {
   level: new Level(level)
 };
 
-$.scenemng.load(new TightenScene());
+$.scenemng.load(new TerminalScene());
