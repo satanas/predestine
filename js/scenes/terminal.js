@@ -45,7 +45,7 @@ class TerminalScene extends Scene {
 
   next() {
     if (this.analyzed) {
-      console.log('asatan');
+      $.scenemng.load(new LevelSelectionScene());
     } else {
       this.booted = true;
       this.analyzed = true;
