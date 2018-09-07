@@ -1,5 +1,6 @@
 class TerminalScene extends Scene {
   constructor(output) {
+    super();
     output = [
       ['Fusion power generator', 1],
       ['Life support system', 0],
@@ -9,7 +10,6 @@ class TerminalScene extends Scene {
       ['Nuclear engines', 0],
       ['Nuclear engines', 0],
     ];
-    super();
     this.output = output || [];
     this.booting = [
       ['AEROS ROM Operating System', 0],
@@ -39,6 +39,17 @@ class TerminalScene extends Scene {
     this.rFont = new TextRenderer("monospace", "#f00", 16);
     this.booted = false;
     this.analyzed = false;
+
+    D.body.addEventListener('mousedown', this.next.bind(this));
+  }
+
+  next() {
+    if (this.analyzed) {
+      console.log('asatan');
+    } else {
+      this.booted = true;
+      this.analyzed = true;
+    }
   }
 
   update() {
