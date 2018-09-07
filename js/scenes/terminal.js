@@ -17,13 +17,13 @@ class TerminalScene extends Scene {
 
   booting() {
     return [
-      'AEROS ROM Operating System',
-      'Copyright 2412 by Hyper-Tec',
-      '',
-      'Exec Version 23.93',
-      '',
-      'Loading FxD-6 module...',
-      ''
+      ['AEROS ROM Operating System', 0],
+      ['Copyright 2412 by Hyper-Tec', 0],
+      ['', 0],
+      ['Exec Version 23.93', 600],
+      ['', 0],
+      ['Loading FxD-6 module...', 0],
+      ['', 0]
     ];
   }
 
@@ -33,11 +33,11 @@ class TerminalScene extends Scene {
     if (this.charTime <= 0 && !this.done) {
       this.charTime = this.maxCharTime;
       this.charIndex += 1;
-      if (this.charIndex > this.output[this.lineIndex].length) {
+      if (this.charIndex > this.output[this.lineIndex][0].length) {
         this.charIndex = 0
         this.lineIndex += 1;
         if (this.lineIndex > this.output.length - 1) {
-          this.lineIndex = this.output.length - 1;
+          //this.lineIndex = this.output.length - 1;
           this.done = true;
         }
       }
@@ -49,7 +49,7 @@ class TerminalScene extends Scene {
   getPartialText(index) {
     let i, text = '';
     for (i = 0; i < this.charIndex; i++) {
-      text += this.output[index].charAt(i);
+      text += this.output[index][0].charAt(i);
     }
     return text;
   }
@@ -67,7 +67,7 @@ class TerminalScene extends Scene {
     for (i = 0; i < this.output.length; i++) {
       lineY = this.topMargin + this.padding + (this.lineHeight * (i + 1));
       if (i < this.lineIndex || this.done) {
-        this.font.render($.ctx, this.output[i], this.padding * 2, lineY);
+        this.font.render($.ctx, this.output[i][0], this.padding * 2, lineY);
       } else if (i === this.lineIndex) {
         this.prompt.x = this.padding + (this.charIndex * this.charWidth) + 5;
         this.prompt.y = lineY - 14;
