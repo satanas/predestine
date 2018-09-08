@@ -18,7 +18,7 @@ const ENTER = 13,
       },
       GRID = 64;
 
-debug = true;
+debug = false;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
@@ -31,4 +31,4 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(new TerminalScene());
+$.scenemng.load(new AuxiliaryScene());
