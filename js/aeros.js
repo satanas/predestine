@@ -25,7 +25,7 @@ class Aeros extends Sprite {
     this.currLine = 0;
     this.lineIndex = 0;
     this.printing = false;
-    this.printTime = 100;
+    this.printTime = 300;
     this.printCounter = 0;
 
     $.listen(this, 'mousedown');
@@ -38,9 +38,9 @@ class Aeros extends Sprite {
         this.lineIndex = 0;
         this.printCounter = 0;
         this.currLine = this.dialog.pop();
-      } else {
-        this.elapsed = 0;
-        this.movingOut = true;
+      //} else {
+      //  this.elapsed = 0;
+      //  this.movingOut = true;
       }
     }
   }
@@ -59,23 +59,22 @@ class Aeros extends Sprite {
     if (this.movingIn) {
       this.elapsed += dt;
       let y = $.easeInQuad(this.elapsed, this.origY, this.destY, this.transitionDelay);
-      console.log(y);
       if (y <= this.destY) {
         y = this.destY;
         this.movingIn = false;
         this.showed = true;
       }
       this.y = y;
-    } else if (this.movingOut) {
-      this.elapsed += dt;
-      let y = $.easeInQuad(this.elapsed, this.destY, this.origY, this.transitionDelay);
-      console.log(y);
-      if (y >= this.origY) {
-        y = this.origY;
-        this.movingOut = false;
-        this.showed = false;
-      }
-      this.y = y;
+    //} else if (this.movingOut) {
+    //  this.elapsed += dt;
+    //  let y = $.easeInQuad(this.elapsed, this.destY, this.origY, this.transitionDelay);
+    //  console.log(y);
+    //  if (y >= this.origY) {
+    //    y = this.origY;
+    //    this.movingOut = false;
+    //    this.showed = false;
+    //  }
+    //  this.y = y;
     } else {
       if (!this.currLine && this.dialog.length > 0) {
         this.currLine = this.dialog.pop();
@@ -114,7 +113,7 @@ class Aeros extends Sprite {
       }
     }
 
-    if (this.anim.get()) {
+    if (this.anim.get() && this.dialog.length > 0) {
       this.ctx.fillStyle = '#fff';
       this.ctx.beginPath();
       this.ctx.moveTo(this.w - 30, this.h - 30);
@@ -122,6 +121,9 @@ class Aeros extends Sprite {
       this.ctx.lineTo(this.w - 20, this.h - 10);
       this.ctx.lineTo(this.w - 30, this.h - 30);
       this.ctx.fill();
+    } else if (this.anim.get() && this.dialog.length === 0) {
+      this.ctx.fillStyle = '#fff';
+      this.ctx.fillRect(this.w - 30, this.h - 30, 20, 20);
     }
   }
 }

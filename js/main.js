@@ -25,26 +25,10 @@ $.init(); // init(['collisions', 'sound', 'astar', ...])
 $.input.bind([ENTER, KEY_A]);
 $.input.bindMouse();
 $.cam.setWorldSize(1024, 1024);
-//$.txt = new TextRenderer('monospace');
 
-// Use three hex to represent each object in the level
-// 0-F = Element
-// 0-F = Index of X
-// 0-F = Index of Y
-let level = [
-  "................",
-  "....WWWWW.......",
-  "....W.D.W.......",
-  "....W...WWW.....",
-  "....W.....W.....",
-  "....W.R..XW.....",
-  "....W.....W.....",
-  "....WWWWWWW.....",
-  "................",
-];
 $.data = {
-  program: 0,
-  level: new Level(level)
+  branch: 0,
+  level: 0
 };
 
-$.scenemng.load(new ConnectScene());
+$.scenemng.load(new LevelSelectionScene());
