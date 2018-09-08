@@ -1,7 +1,7 @@
 class TerminalScene extends Scene {
-  constructor(output) {
+  constructor() {
     super();
-    output = [
+    this.output = [
       ['Fusion power generator', 1],
       ['Life support system', 0],
       ['Nuclear engines', 0],
@@ -10,7 +10,6 @@ class TerminalScene extends Scene {
       ['Nuclear engines', 0],
       ['Nuclear engines', 0],
     ];
-    this.output = output || [];
     this.booting = [
       ['AEROS ROM Operating System', 0],
       ['Copyright 2412 by Hyper-Tec', 0],
