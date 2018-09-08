@@ -14,15 +14,6 @@ $.init = function() {
   $.scenemng = new SceneManager();
 }
 
-$.listen = function(ctx, evt) {
-  W.addEventListener(evt, ctx[evt].bind(ctx));
-}
-
-$.emit = function(evt, data) {
-  let ev = new CustomEvent(evt, {detail: data});
-  W.dispatchEvent(ev);
-}
-
 $.easeInQuad = function(elapsed, begin, end, duration) {
   elapsed = elapsed / duration;
   return (end - begin) * pow(elapsed, 2) + begin;
@@ -48,7 +39,7 @@ function resize() {
   console.log(w,h,t);
   resizeCanvas($.canvas, w, h);
   $.canvas.style.marginTop = t + 'px';
-  $.emit('rsize', {w:w, h:h, t:t});
+  $.events.emit('resizeCanvas', {w:w, h:h, t:t});
 }
 
 function resizeCanvas(canvas, w, h, t) {

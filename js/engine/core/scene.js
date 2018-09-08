@@ -1,6 +1,6 @@
 class Scene {
   static onExit() {
-    $.emit('sceneExit');
+    $.events.emit('sceneexit');
   }
 
   reset() {

@@ -2,7 +2,7 @@ class SceneManager {
   constructor() {
     this.goTo = 0;
     this.scene = 0;
-    $.listen(this, 'sceneExit');
+    $.events.register('sceneexit');
   }
 
   sceneExit() {
@@ -21,6 +21,7 @@ class SceneManager {
 
   load(sceneCls) {
     $.events.clear();
+    $.events.listen('sceneexit', this.sceneExit.bind(this));
     let scene = new (Function.prototype.bind.apply(sceneCls));
     // Intent. What do we want to load?
     this.goTo = scene;

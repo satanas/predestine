@@ -34,7 +34,15 @@ class Events {
 
   clear() {
     for (let evt in this.listeners) {
+      //if (this.systemEvents.indexOf(evt) >= 0) continue;
       this.listeners[evt] = [];
+    }
+  }
+
+  register(evt) {
+    if (!this.listeners[evt]) {
+      this.listeners[evt] = [];
+      W.addEventListener(evt, this.onCustom.bind(this, evt));
     }
   }
 
@@ -45,5 +53,14 @@ class Events {
   emit(evt, data) {
     let ev = new CustomEvent(evt, {detail: data});
     W.dispatchEvent(ev);
+  }
+
+  onCustom(evt, data) {
+    let callbacks = this.listeners[evt];
+    if (callbacks) {
+      for (let cb of callbacks) {
+        cb(data);
+      }
+    }
   }
 }

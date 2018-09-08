@@ -5,19 +5,6 @@ class UIButton extends Sprite {
     this.active = true;
     $.events.listen('mouseup', this.onMouseUp.bind(this));
     $.events.listen('mousedown', this.onMouseDown.bind(this));
-    //$.listen(this, 'btnClicked');
-  }
-
-  checkClick() {
-    if(!this.active) return;
-
-    //if (!this.pressed) {
-    //  if ($.input.isLeftClick() && $.collision.vector($.input.mousePos, this)) {
-    //    this.pressed = true;
-    //    this.onClick();
-    //    $.emit('btnClicked');
-    //  }
-    //}
   }
 
   // To be implemented in child class
@@ -25,7 +12,6 @@ class UIButton extends Sprite {
   }
 
   onMouseUp() {
-    //console.log('releaseClick', this.index);
     this.pressed = false;
     this.active = true;
     this.leftClick = false;
@@ -36,13 +22,7 @@ class UIButton extends Sprite {
       if ($.collision.vector($.input.mousePos, this)) {
         this.pressed = true;
         this.onClick();
-        //$.emit('btnClicked');
       }
     }
   }
-
-  //btnClicked() {
-  //  //console.log('btnClicked', this.index);
-  //  this.active = false;
-  //}
 }
