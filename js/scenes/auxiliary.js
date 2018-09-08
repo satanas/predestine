@@ -62,7 +62,7 @@ class AuxiliaryScene extends Scene {
       this.delayTime -= this.deltaTime;
       if (this.delayTime <= 0) {
         $.data.level += 1;
-        $.scenemng.load(new LevelSelectionScene())
+        $.scenemng.load(new TerminalScene())
       }
     }
   }

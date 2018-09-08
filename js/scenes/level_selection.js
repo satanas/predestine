@@ -18,11 +18,27 @@ class LevelSelectionScene extends Scene {
         ],
         [
           'We can attempt a reparation but I need you to activate',
-          'the auxiliary control sequence, then I will be able',
-          'to run an overall diagnostic report.',
+          'the auxiliary control sequence, so I can run an overall',
+          'diagnostic report.',
         ],
         [
-          'Select the blinking area in the screen to start.'
+          'Select the blinking area on the screen to start.'
+        ]
+      ]);
+    } else if ($.data.level === 1) {
+      this.aeros.speak([
+        [
+          'The status of the spaceship is critical and survival',
+          'chances are minimal with 10% of power remaining.',
+        ],
+        [
+          'Two courses of action possible: repair the ultracomm',
+          'to request a rescue operation and wait or repair the',
+          'escape pod and try to reach Andromeda.',
+        ],
+        [
+          'Choose the course of action by selecting the blinking',
+          'area on the screen.'
         ]
       ]);
     }

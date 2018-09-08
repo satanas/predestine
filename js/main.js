@@ -31,4 +31,4 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(new AuxiliaryScene());
+$.scenemng.load(new LevelSelectionScene());

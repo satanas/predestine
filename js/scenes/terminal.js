@@ -2,14 +2,21 @@ class TerminalScene extends Scene {
   constructor() {
     super();
     this.output = [
-      ['Fusion power generator', 1],
+      ['Emergency power source', 0],
+      ['Auxiliary control panel', 0],
+      ['Power generator', 0],
       ['Life support system', 0],
       ['Nuclear engines', 0],
-      ['Nuclear engines', 0],
-      ['Nuclear engines', 0],
-      ['Nuclear engines', 0],
-      ['Nuclear engines', 0],
+      ['Fuel tanks', 0],
+      ['Ultracomm emitter', 0],
+      ['Navigation system', 0],
+      ['Cryotex chambers', 0],
+      ['Escape pods', 0],
     ];
+    if ($.data.level === 1) {
+      this.output[0][1] = 1;
+      this.output[1][1] = 1;
+    }
     this.booting = [
       ['AEROS ROM Operating System', 0],
       ['Copyright 2412 by Hyper-Tec', 0],
