@@ -6,10 +6,15 @@ class LevelSelectionScene extends Scene {
     this.topMargin = 30;
 
     this.aeros = new Aeros();
+
     this.aeros.speak([
       [
         'Hello, Captain. The crash damaged 85% of our systems',
         'I\'m AEROS 9000',
+      ],
+      [
+        'This is a second line of text',
+        'And thid is a third?'
       ]
     ]);
   }
@@ -37,19 +42,23 @@ class Aeros extends Sprite {
     let w = 700,
         h = 120,
         x = ($.vw - w) / 2;
-    super(x, 400, w, h);
+    super(x, 600, w, h);
 
     this.canvas = $.canvas.create(w, h);
     this.ctx = this.canvas.getContext('2d');
 
-    // Transition stuff
-    this.movingIn = true;
-    this.destY = 420;
-    this.origY = 600;
-    this.elapsed = 0;
     this.titleFont = new TextRenderer('monospace', '#fff', 20);
     this.textFont = new TextRenderer('monospace', '#fff', 16);
     this.anim = new Animator([0, 1], 200);
+
+    // Transition stuff
+    this.showed = false;
+    this.movingIn = false;
+    this.movingOut = false;
+    this.destY = 420;
+    this.origY = 600;
+    this.elapsed = 0;
+    this.transitionDelay = 400;
 
     this.dialog = [];
     this.currLine = 0;
@@ -57,9 +66,29 @@ class Aeros extends Sprite {
     this.printing = false;
     this.printTime = 100;
     this.printCounter = 0;
+
+    $.listen(this, 'mousedown');
+  }
+
+  mousedown(e) {
+    if (this.showed) {
+      if (this.dialog.length > 0) {
+        this.printing = true;
+        this.lineIndex = 0;
+        this.printCounter = 0;
+        this.currLine = this.dialog.pop();
+      } else {
+        this.elapsed = 0;
+        this.movingOut = true;
+      }
+    }
   }
 
   speak(d) {
+    if (!this.showed) {
+      this.movingIn = true;
+      this.elapsed = 0;
+    }
     this.dialog = d.reverse();
   }
 
@@ -68,10 +97,22 @@ class Aeros extends Sprite {
 
     if (this.movingIn) {
       this.elapsed += dt;
-      let y = easeInQuad(this.elapsed, this.origY, this.destY, 600);
+      let y = easeInQuad(this.elapsed, this.origY, this.destY, this.transitionDelay);
+      console.log(y);
       if (y <= this.destY) {
         y = this.destY;
         this.movingIn = false;
+        this.showed = true;
+      }
+      this.y = y;
+    } else if (this.movingOut) {
+      this.elapsed += dt;
+      let y = easeInQuad(this.elapsed, this.destY, this.origY, this.transitionDelay);
+      console.log(y);
+      if (y >= this.origY) {
+        y = this.origY;
+        this.movingOut = false;
+        this.showed = false;
       }
       this.y = y;
     } else {
@@ -124,10 +165,6 @@ class Aeros extends Sprite {
   }
 }
 
-function easeIn(elapsed, begin, end, duration) {
-  return pow(t, 3) - (t * 0.3 * sin(t * PI));
-}
-
 function easeInQuad(elapsed, begin, end, duration) {
   elapsed = elapsed / duration;
   return (end - begin) * pow(elapsed, 2) + begin;
@@ -135,6 +172,6 @@ function easeInQuad(elapsed, begin, end, duration) {
 
 function easeOutQuad(elapsed, begin, end, duration) {
   elapsed = elapsed / duration;
-  return -(end - begin) * elapsed * (elapsed - 2) + begin;
+  return (end + begin) * elapsed * (elapsed - 2) + begin;
 }
 
