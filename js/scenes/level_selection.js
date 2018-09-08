@@ -72,11 +72,11 @@ class AuxCtrlBtn extends UIButton {
   }
 
   onClick() {
-    $.scenemng.load(new AuxiliaryScene());
+    $.scenemng.load(AuxiliaryScene);
   }
 
   update(dt) {
-    this.checkClick();
+    //this.checkClick();
     this.anim.update(dt);
   }
 

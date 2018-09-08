@@ -8,26 +8,26 @@ class Events {
     }
   }
 
-  mousedown() {
+  mousedown(ev) {
     if (this.listeners.mousedown.length > 0) {
       for (let cb of this.listeners.mousedown) {
-        cb();
+        cb(ev);
       }
     }
   }
 
-  mouseup() {
+  mouseup(ev) {
     if (this.listeners.mouseup.length > 0) {
       for (let cb of this.listeners.mouseup) {
-        cb();
+        cb(ev);
       }
     }
   }
 
-  mousemove() {
+  mousemove(ev) {
     if (this.listeners.mousemove.length > 0) {
       for (let cb of this.listeners.mousemove) {
-        cb();
+        cb(ev);
       }
     }
   }

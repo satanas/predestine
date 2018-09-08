@@ -3,7 +3,8 @@ class UIButton extends Sprite {
     super(x, y, w, h);
     this.pressed = false;
     this.active = true;
-    //D.body.addEventListener('mouseup', this.releaseClick.bind(this));
+    $.events.listen('mouseup', this.onMouseUp.bind(this));
+    $.events.listen('mousedown', this.onMouseDown.bind(this));
     //$.listen(this, 'btnClicked');
   }
 
@@ -23,14 +24,25 @@ class UIButton extends Sprite {
   onClick() {
   }
 
-  releaseClick() {
+  onMouseUp() {
     //console.log('releaseClick', this.index);
     this.pressed = false;
     this.active = true;
+    this.leftClick = false;
   }
 
-  btnClicked() {
-    //console.log('btnClicked', this.index);
-    this.active = false;
+  onMouseDown(ev) {
+    if (ev.button === 0) {
+      if ($.collision.vector($.input.mousePos, this)) {
+        this.pressed = true;
+        this.onClick();
+        //$.emit('btnClicked');
+      }
+    }
   }
+
+  //btnClicked() {
+  //  //console.log('btnClicked', this.index);
+  //  this.active = false;
+  //}
 }
