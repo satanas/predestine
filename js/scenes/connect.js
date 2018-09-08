@@ -8,7 +8,7 @@ class ConnectScene extends BaseScene {
 
     // Number of cables
     this.num = 4;
-    this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black']).slice(0, this.num);
+    this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black', 'white', 'purple', 'yellow']).slice(0, this.num);
 
     let i, color,
         padding = 200,
@@ -156,20 +156,20 @@ class Connection {
         upper = obj2;
         lower = obj1;
       }
-      this.rects.push(new Rectangle(obj1.x, upper.y, 32, lower.y - upper.y + 32));
+      this.rects.push(new Rectangle(obj1.x + 16, upper.y, 32, lower.y - upper.y + 64));
     } else if (obj1.y < obj2.y) {
       // If we're going from top to bottom
       h = (index + 2) * 32;
-      this.rects.push(new Rectangle(obj1.x, obj1.y, 32, h));
-      this.rects.push(new Rectangle(obj1.x, obj1.y + h, obj2.x - obj1.x, 32));
-      this.rects.push(new Rectangle(obj2.x, obj1.y + h, 32, obj2.y - obj1.y - h + 32));
+      this.rects.push(new Rectangle(obj1.x + 16, obj1.y, 32, h));
+      this.rects.push(new Rectangle(obj1.x + 16, obj1.y + h, obj2.x - obj1.x, 32));
+      this.rects.push(new Rectangle(obj2.x + 16, obj1.y + h, 32, obj2.y - obj1.y - h + 64));
     } else if (obj1.y > obj2.y) {
       // If we're going from bottom to top
       index = num - index;
       h = (index + 1) * 32;
-      this.rects.push(new Rectangle(obj1.x, obj1.y - h, 32, h + 32));
-      this.rects.push(new Rectangle(obj1.x, obj1.y - h, obj2.x - obj1.x, 32));
-      this.rects.push(new Rectangle(obj2.x, obj2.y, 32, obj2.y - h + 32 + 4)); // + 12 is a hack
+      this.rects.push(new Rectangle(obj1.x + 16, obj1.y - h + 6, 32, h + 64));
+      this.rects.push(new Rectangle(obj1.x + 16, obj1.y - h + 6, obj2.x - obj1.x, 32));
+      this.rects.push(new Rectangle(obj2.x + 16, obj2.y, 32, obj2.y - h + 32 + 10)); // + 10 is a hack
     }
   }
 
@@ -185,14 +185,14 @@ class Connection {
 
 class Sensor extends Sprite {
   constructor(x, y, color) {
-    super(x, y, 32, 32);
+    super(x - 16, y, 64, 64);
     this.color = color;
   }
 
   render(rect) {
     $.ctx.save();
     $.ctx.fillStyle = '#deb887';
-    $.ctx.fillRect(rect.x + 4, rect.y, this.w - 8, this.h);
+    $.ctx.fillRect(rect.x + 16, rect.y, this.w - 32, this.h);
     $.ctx.restore();
   }
 }

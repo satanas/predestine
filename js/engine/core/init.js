@@ -22,6 +22,16 @@ $.emit = function(evt, data) {
   W.dispatchEvent(ev);
 }
 
+$.easeInQuad = function(elapsed, begin, end, duration) {
+  elapsed = elapsed / duration;
+  return (end - begin) * pow(elapsed, 2) + begin;
+}
+
+$.easeOutQuad = function(elapsed, begin, end, duration) {
+  elapsed = elapsed / duration;
+  return (end + begin) * elapsed * (elapsed - 2) + begin;
+}
+
 $.canvas.create = function(w, h) {
   let canvas = D.createElement('canvas');
   canvas.width = w;

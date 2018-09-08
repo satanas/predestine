@@ -47,4 +47,4 @@ $.data = {
   level: new Level(level)
 };
 
-$.scenemng.load(new LevelSelectionScene());
+$.scenemng.load(new ConnectScene());
