@@ -31,4 +31,4 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(TerminalScene);
+$.scenemng.load(FillingScene);

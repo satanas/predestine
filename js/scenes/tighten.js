@@ -8,7 +8,7 @@ class TightenScene extends BaseScene {
         incrStep = 25;
     this.gauge = new Gauge(x, 500, barWidth, dragStep, incrStep, 80, 30);
 
-    D.body.addEventListener('mousedown', this.tighten.bind(this));
+    $.events.listen('mousedown', this.tighten.bind(this));
   }
 
   tighten() {

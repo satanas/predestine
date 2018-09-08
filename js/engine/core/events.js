@@ -2,7 +2,7 @@ class Events {
   constructor() {
     this.listeners = {};
 
-    for (let evt of ['mousedown']) {
+    for (let evt of ['mousedown', 'mouseup', 'mousemove']) {
       this.listeners[evt] = [];
       D.body.addEventListener(evt, this[evt].bind(this));
     }
@@ -11,6 +11,22 @@ class Events {
   mousedown() {
     if (this.listeners.mousedown.length > 0) {
       for (let cb of this.listeners.mousedown) {
+        cb();
+      }
+    }
+  }
+
+  mouseup() {
+    if (this.listeners.mouseup.length > 0) {
+      for (let cb of this.listeners.mouseup) {
+        cb();
+      }
+    }
+  }
+
+  mousemove() {
+    if (this.listeners.mousemove.length > 0) {
+      for (let cb of this.listeners.mousemove) {
         cb();
       }
     }

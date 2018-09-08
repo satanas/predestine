@@ -2,9 +2,9 @@ class FillingScene extends BaseScene {
   constructor() {
     super();
 
-    D.body.addEventListener('mousedown', this.togglePaint.bind(this, true));
-    D.body.addEventListener('mouseup', this.togglePaint.bind(this, false));
-    D.body.addEventListener('mousemove', this.doPaint.bind(this));
+    $.events.listen('mousedown', this.togglePaint.bind(this, true));
+    $.events.listen('mouseup', this.togglePaint.bind(this, false));
+    $.events.listen('mousemove', this.doPaint.bind(this));
 
     this.painting = false;
     this.percSuccess = 80;
