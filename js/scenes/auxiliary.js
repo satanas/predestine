@@ -54,15 +54,12 @@ class AuxiliaryScene extends Scene {
 
   update() {
     $.cam.update(this.deltaTime);
-    for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].checkClick();
-    }
 
     if (this.activated && this.deltaTime > 0) {
       this.delayTime -= this.deltaTime;
       if (this.delayTime <= 0) {
         $.data.level += 1;
-        $.scenemng.load(new TerminalScene())
+        $.scenemng.load(TerminalScene)
       }
     }
   }

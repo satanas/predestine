@@ -38,11 +38,6 @@ class Events {
     }
   }
 
-  // Register lets you add listeners to a DOM event
-  //register(evt) {
-  //  this.events[evt] = [];
-  //}
-
   listen(evt, cb) {
     this.listeners[evt].push(cb);
   }

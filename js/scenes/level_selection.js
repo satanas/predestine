@@ -76,7 +76,6 @@ class AuxCtrlBtn extends UIButton {
   }
 
   update(dt) {
-    //this.checkClick();
     this.anim.update(dt);
   }
 
