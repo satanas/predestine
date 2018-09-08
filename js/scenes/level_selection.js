@@ -13,13 +13,16 @@ class LevelSelectionScene extends Scene {
       this.aeros.speak([
         //'Text length ---------------------------------------',
         [
-          'Hello, Captain. The crash damaged most of our systems',
-          'and 90% of the ship is offline.',
+          'Hello, Captain. The crash damaged most of our ship',
+          'and 90% of the systems are offline.',
         ],
         [
-          'The recommended course of action is to enable the',
-          'auxiliary control system. Select the blinking spot',
-          'in the screen to start.'
+          'We can attempt a reparation but I need you to activate',
+          'the auxiliary control sequence, then I will be able',
+          'to run an overall diagnostic report.',
+        ],
+        [
+          'Select the blinking area in the screen to start.'
         ]
       ]);
     }

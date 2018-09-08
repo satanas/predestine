@@ -23,7 +23,7 @@ class Aeros extends Sprite {
 
     this.dialog = [];
     this.currLine = 0;
-    this.lineIndex = 0;
+    this.lineIndex = -1;
     this.printing = false;
     this.printTime = 300;
     this.printCounter = 0;
@@ -35,12 +35,9 @@ class Aeros extends Sprite {
     if (this.showed) {
       if (this.dialog.length > 0) {
         this.printing = true;
-        this.lineIndex = 0;
+        this.lineIndex = -1;
         this.printCounter = 0;
         this.currLine = this.dialog.pop();
-      //} else {
-      //  this.elapsed = 0;
-      //  this.movingOut = true;
       }
     }
   }
@@ -65,16 +62,6 @@ class Aeros extends Sprite {
         this.showed = true;
       }
       this.y = y;
-    //} else if (this.movingOut) {
-    //  this.elapsed += dt;
-    //  let y = $.easeInQuad(this.elapsed, this.destY, this.origY, this.transitionDelay);
-    //  console.log(y);
-    //  if (y >= this.origY) {
-    //    y = this.origY;
-    //    this.movingOut = false;
-    //    this.showed = false;
-    //  }
-    //  this.y = y;
     } else {
       if (!this.currLine && this.dialog.length > 0) {
         this.currLine = this.dialog.pop();
