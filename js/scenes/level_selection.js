@@ -56,7 +56,7 @@ class AuxCtrlBtn extends UIButton {
   }
 
   onClick() {
-    $.scenemng.load(new ConnectScene());
+    $.scenemng.load(new AuxiliaryScene());
   }
 
   update(dt) {
