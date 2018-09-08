@@ -28,7 +28,7 @@ class Aeros extends Sprite {
     this.printTime = 300;
     this.printCounter = 0;
 
-    $.listen(this, 'mousedown');
+    $.events.listen('mousedown', this.mousedown.bind(this));
   }
 
   mousedown(e) {

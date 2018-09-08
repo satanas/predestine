@@ -3,20 +3,20 @@ class UIButton extends Sprite {
     super(x, y, w, h);
     this.pressed = false;
     this.active = true;
-    D.body.addEventListener('mouseup', this.releaseClick.bind(this));
-    $.listen(this, 'btnClicked');
+    //D.body.addEventListener('mouseup', this.releaseClick.bind(this));
+    //$.listen(this, 'btnClicked');
   }
 
   checkClick() {
     if(!this.active) return;
 
-    if (!this.pressed) {
-      if ($.input.isLeftClick() && $.collision.vector($.input.mousePos, this)) {
-        this.pressed = true;
-        this.onClick();
-        $.emit('btnClicked');
-      }
-    }
+    //if (!this.pressed) {
+    //  if ($.input.isLeftClick() && $.collision.vector($.input.mousePos, this)) {
+    //    this.pressed = true;
+    //    this.onClick();
+    //    $.emit('btnClicked');
+    //  }
+    //}
   }
 
   // To be implemented in child class

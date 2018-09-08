@@ -19,7 +19,9 @@ class SceneManager {
     }
   }
 
-  load(scene) {
+  load(sceneCls) {
+    $.events.clear();
+    let scene = new (Function.prototype.bind.apply(sceneCls));
     // Intent. What do we want to load?
     this.goTo = scene;
     // Unload previous scene (if loaded) and then load the intent

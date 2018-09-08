@@ -10,6 +10,7 @@ $.init = function() {
   $.input = new Input();
   $.cam = new Camera($.vw, $.vh);
   $.collision = new Collision(); // Collision detection
+  $.events = new Events();
   $.scenemng = new SceneManager();
 }
 

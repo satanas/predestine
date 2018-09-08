@@ -46,12 +46,12 @@ class TerminalScene extends Scene {
     this.booted = false;
     this.analyzed = false;
 
-    D.body.addEventListener('mousedown', this.next.bind(this));
+    $.events.listen('mousedown', this.next.bind(this));
   }
 
   next() {
     if (this.analyzed) {
-      $.scenemng.load(new LevelSelectionScene());
+      $.scenemng.load(LevelSelectionScene);
     } else {
       this.booted = true;
       this.analyzed = true;
