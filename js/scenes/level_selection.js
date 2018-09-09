@@ -5,12 +5,19 @@ class LevelSelectionScene extends Scene {
     this.padding = 5;
     this.topMargin = 30;
 
+    this.layoutFont = new TextRenderer('monospace', '#aaa', 14);
     this.map = new ShipMap(600, 350);
-    this.auxCtrlBtn = new AuxCtrlBtn();
+    // Zone buttons
+    this.zoneButtons = new Group();
+    this.zoneButtons.add(new AuxCtrlBtn(this.layoutFont));
+    this.zoneButtons.add(new UltraCommBtn(this.layoutFont));
+    this.zoneButtons.add(new EscapePodBtn(this.layoutFont));
+    this.zoneButtons.add(new OxygenBtn(this.layoutFont));
+
     this.aeros = new Aeros();
 
     if ($.data.level === 0) {
-      this.auxCtrlBtn.active = true;
+      this.zoneButtons.at(0).highlight = true;
       this.aeros.speak([
         //'Text length ---------------------------------------',
         [
@@ -27,6 +34,9 @@ class LevelSelectionScene extends Scene {
         ]
       ]);
     } else if ($.data.level === 1) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(1).highlight = true;
+      this.zoneButtons.at(2).highlight = true;
       this.aeros.speak([
         [
           'The status of the spaceship is critical and survival',
@@ -34,8 +44,8 @@ class LevelSelectionScene extends Scene {
         ],
         [
           'Two courses of action possible: repair the ultracomm',
-          'to request a rescue operation and wait or repair the',
-          'escape pod and try to reach Andromeda.',
+          'to request a rescue operation or repair the escape',
+          'pod and try to reach Andromeda.',
         ],
         [
           'Choose the course of action by selecting the blinking',
@@ -47,7 +57,7 @@ class LevelSelectionScene extends Scene {
 
   update() {
     this.aeros.update(this.deltaTime);
-    this.auxCtrlBtn.update(this.deltaTime);
+    this.zoneButtons.update(this.deltaTime);
   }
 
   render() {
@@ -60,23 +70,23 @@ class LevelSelectionScene extends Scene {
 
     // Start rendering objects here
 
-    $.cam.render(this.auxCtrlBtn);
     this.aeros.render();
 
     $.ctx.drawImage(this.map.canvas, this.map.x, this.map.y, this.map.w, this.map.h);
     $.ctx.drawImage(this.aeros.canvas, this.aeros.x, this.aeros.y, this.aeros.w, this.aeros.h);
+
+    $.cam.render(this.zoneButtons);
   }
 }
 
-class AuxCtrlBtn extends UIButton {
-  constructor() {
-    super(60, 60, 64, 48);
+class ZoneButton extends UIButton {
+  constructor(x, y, w, h, text, font) {
+    super(x, y, w, h);
     this.anim = new Animator([0, 1], 200);
-    this.active = false;
-  }
-
-  onClick() {
-    $.scenemng.load(AuxiliaryScene);
+    this.highlight = false;
+    this.font = font;
+    this.text = text;
+    this.offset = new Vector((w - (this.font.width / 1.6 * this.text.length)) / 2, (h / 2) + 3);
   }
 
   update(dt) {
@@ -84,43 +94,63 @@ class AuxCtrlBtn extends UIButton {
   }
 
   render() {
-    if (this.active) {
+    if (this.highlight) {
       if (this.anim.get()) {
         $.ctx.fillStyle = 'white';
         $.ctx.fillRect(this.x, this.y, this.w, this.h);
       }
-    } else {
-      $.ctx.fillStyle = 'gray';
+    } else if (!this.highlight && !this.done) {
+      $.ctx.fillStyle = '#383838';
+      $.ctx.fillRect(this.x, this.y, this.w, this.h);
+    } else if (this.done) {
+      $.ctx.fillStyle = '#187000';
       $.ctx.fillRect(this.x, this.y, this.w, this.h);
     }
+    this.font.render($.ctx, this.text, this.x + this.offset.x, this.y + this.offset.y);
   }
 }
 
-class UltraCommBtn extends UIButton {
-  constructor() {
-    super(60, 60, 64, 48);
-    this.anim = new Animator([0, 1], 200);
-    this.active = false;
+class AuxCtrlBtn extends ZoneButton {
+  constructor(font) {
+    super(655, 200, 64, 48, 'AUX', font);
   }
 
   onClick() {
+    if (!this.highlight) return;
     $.scenemng.load(AuxiliaryScene);
   }
+}
 
-  update(dt) {
-    this.anim.update(dt);
+class UltraCommBtn extends ZoneButton {
+  constructor(font) {
+    super(410, 280, 90, 30, 'ULTRACOMM', font);
   }
 
-  render() {
-    if (this.active) {
-      if (this.anim.get()) {
-        $.ctx.fillStyle = 'white';
-        $.ctx.fillRect(this.x, this.y, this.w, this.h);
-      }
-    } else {
-      $.ctx.fillStyle = 'gray';
-      $.ctx.fillRect(this.x, this.y, this.w, this.h);
-    }
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
+  }
+}
+
+class EscapePodBtn extends ZoneButton {
+  constructor(font) {
+    super(500, 200, 48, 48, 'POD', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
+  }
+}
+
+class OxygenBtn extends ZoneButton {
+  constructor(font) {
+    super(430, 140, 64, 30, 'OXY', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
   }
 }
 

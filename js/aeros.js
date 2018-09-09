@@ -1,4 +1,4 @@
-class Aeros extends Sprite {
+class Aeros extends UIButton {
   constructor() {
     let w = 700,
         h = 120,
@@ -10,6 +10,7 @@ class Aeros extends Sprite {
 
     this.titleFont = new TextRenderer('monospace', '#fff', 20);
     this.textFont = new TextRenderer('monospace', '#fff', 16);
+    this.subFont = new TextRenderer('monospace', '#fff', 9);
     this.anim = new Animator([0, 1], 200);
 
     // Transition stuff
@@ -27,11 +28,9 @@ class Aeros extends Sprite {
     this.printing = false;
     this.printTime = 300;
     this.printCounter = 0;
-
-    $.events.listen('mousedown', this.mousedown.bind(this));
   }
 
-  mousedown(e) {
+  onClick() {
     if (this.showed) {
       if (this.dialog.length > 0) {
         this.printing = true;
@@ -98,6 +97,10 @@ class Aeros extends Sprite {
       for (let i = 0; i <= this.lineIndex; i++) {
         this.textFont.render(this.ctx, this.currLine[i], 125, 55 + (20 * i));
       }
+    }
+
+    if (this.dialog.length > 0) {
+      this.subFont.render(this.ctx, 'CLICK', this.w - 33, this.h - 35);
     }
 
     if (this.anim.get() && this.dialog.length > 0) {
