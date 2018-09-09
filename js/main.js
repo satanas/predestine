@@ -1,6 +1,7 @@
 const ENTER = 13,
       KEY_A = 65,
-      GRID = 64;
+      GRID = 64,
+      TAP_FAST = 'Click rapidly to ';
 
 debug = false;
 
