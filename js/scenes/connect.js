@@ -135,7 +135,13 @@ class ConnectScene extends BaseScene {
   }
 
   finish() {
-    console.log(this.connections);
+    if (this.connections.length === this.num) {
+      // TODO: Success scene
+      $.data.level += 1;
+      //$.scenemng.load(FuseScene);
+    } else {
+      // TODO: Failure case
+    }
   }
 }
 

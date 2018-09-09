@@ -15,4 +15,4 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(LevelSelectionScene);
+$.scenemng.load(RechargeScene);
