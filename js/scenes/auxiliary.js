@@ -98,8 +98,8 @@ class Indicator extends Sprite {
     this.index = index;
     this.value = value; // The real value within the sequence
     this.colors = colors;
-    this.font = new TextRenderer('monospace', this.colors[this.value], 15);
-    this.text = rnda(this.colors);
+    this.font = new TextRenderer('monospace', rnda(this.colors), 15);
+    this.text = this.colors[this.value];
     this.done = false;
   }
 

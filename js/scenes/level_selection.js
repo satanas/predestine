@@ -136,7 +136,8 @@ class UltraCommBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
+    $.data.branch = 1;
+    $.scenemng.load(ConnectScene);
   }
 }
 

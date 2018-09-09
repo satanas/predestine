@@ -7,7 +7,11 @@ class ConnectScene extends BaseScene {
     $.events.listen('mousemove', this.doPaint.bind(this));
 
     // Number of cables
-    this.num = 4;
+    if ($.data.level === 1 && $.data.branch === 1) {
+      this.num = 3;
+    } else {
+      this.num = 2;
+    }
     this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black', 'white', 'purple', 'yellow']).slice(0, this.num);
 
     let i, color,
@@ -131,7 +135,7 @@ class ConnectScene extends BaseScene {
   }
 
   finish() {
-    console.log('listo');
+    console.log(this.connections);
   }
 }
 
