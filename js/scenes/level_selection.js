@@ -13,6 +13,9 @@ class LevelSelectionScene extends Scene {
     this.zoneButtons.add(new UltraCommBtn(this.layoutFont));
     this.zoneButtons.add(new EscapePodBtn(this.layoutFont));
     this.zoneButtons.add(new OxygenBtn(this.layoutFont));
+    this.zoneButtons.add(new EngineBtn(this.layoutFont));
+    this.zoneButtons.add(new CryoBtn(this.layoutFont));
+    this.zoneButtons.add(new FuelBtn(this.layoutFont));
 
     this.aeros = new Aeros();
 
@@ -94,10 +97,14 @@ class ZoneButton extends UIButton {
   }
 
   render() {
+    $.ctx.save();
     if (this.highlight) {
       if (this.anim.get()) {
         $.ctx.fillStyle = 'white';
         $.ctx.fillRect(this.x, this.y, this.w, this.h);
+      } else {
+        $.ctx.strokeStyle = '#999';
+        $.ctx.strokeRect(this.x, this.y, this.w, this.h);
       }
     } else if (!this.highlight && !this.done) {
       $.ctx.fillStyle = '#383838';
@@ -106,6 +113,7 @@ class ZoneButton extends UIButton {
       $.ctx.fillStyle = '#187000';
       $.ctx.fillRect(this.x, this.y, this.w, this.h);
     }
+    $.ctx.restore();
     this.font.render($.ctx, this.text, this.x + this.offset.x, this.y + this.offset.y);
   }
 }
@@ -146,6 +154,39 @@ class EscapePodBtn extends ZoneButton {
 class OxygenBtn extends ZoneButton {
   constructor(font) {
     super(430, 140, 64, 30, 'OXY', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
+  }
+}
+
+class EngineBtn extends ZoneButton {
+  constructor(font) {
+    super(340, 193, 90, 64, 'ENGINE', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
+  }
+}
+
+class CryoBtn extends ZoneButton {
+  constructor(font) {
+    super(550, 192, 64, 64, 'CRYO', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(AuxiliaryScene);
+  }
+}
+
+class FuelBtn extends ZoneButton {
+  constructor(font) {
+    super(280, 206, 50, 38, 'FUEL', font);
   }
 
   onClick() {
