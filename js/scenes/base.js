@@ -6,7 +6,7 @@ class BaseScene extends Scene {
     this.subtitle = new Title(-600, ($.vw - (title.length * 14)) / 2, 160, subtitle, 25);
     this.processed = false;
     this.maxTimer = (maxTimer) ? maxTimer : 5000;
-    this.maxTimer += (this.title.delay * 2) + this.title.showTime;
+    this.maxTimer += (this.title.delay * 2) + this.title.showTime / 2;
     this.timer = this.maxTimer;
   }
 
@@ -55,7 +55,7 @@ class Title extends Vector {
     this.status = 'in';
     this.elapsed = 0;
     this.delay = 300;
-    this.showTime = 1200;
+    this.showTime = 1500;
   }
 
   update(dt) {
