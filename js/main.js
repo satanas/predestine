@@ -2,7 +2,7 @@ const ENTER = 13,
       KEY_A = 65,
       GRID = 64;
 
-debug = false;
+debug = true;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
