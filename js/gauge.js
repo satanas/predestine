@@ -14,11 +14,15 @@ class Gauge extends Sprite {
   }
 
   incr() {
-    this.barWidth += rndi(this.incrStep - 10, this.incrStep + 10);
+    this.barWidth = clamp(this.barWidth + rndi(this.incrStep - 10, this.incrStep + 10), 0, this.maxWidth);
   }
 
-  isDone() {
+  isOk() {
     return this.barWidth >= this.successWidth;
+  }
+
+  isComplete() {
+    return this.barWidth >= 98 * this.maxWidth / 100;
   }
 
   update(dt) {

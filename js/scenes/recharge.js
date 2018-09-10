@@ -9,17 +9,21 @@ class RechargeScene extends BaseScene {
     this.gauge.fgColor = 'lightblue';
 
     $.events.listen('mousedown', this.recharge.bind(this));
-    this.endingMessage();
   }
 
   recharge() {
-    this.gauge.incr();
+    if (!this.processed) {
+      this.gauge.incr();
+    }
   }
 
   update() {
     this.updateProgress();
     this.gauge.update(this.deltaTime);
-    this.checkSuccess();
+    if (this.gauge.isComplete() && !this.processed) {
+      this.processed = true;
+      this.finish();
+    }
   }
 
   render() {
@@ -29,12 +33,11 @@ class RechargeScene extends BaseScene {
   }
 
   finish() {
-    checkSuccess();
-  }
-
-  checkSuccess() {
-    if (this.gauge.isDone()) {
-      this.gauge.active = false;
+    this.gauge.active = false;
+    if (this.gauge.isOk()) {
+      this.endingMessage(0);
+    } else {
+      this.endingMessage(1);
     }
   }
 }

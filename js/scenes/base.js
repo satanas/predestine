@@ -11,16 +11,18 @@ class BaseScene extends Scene {
   }
 
   updateProgress() {
-    this.timer -= this.deltaTime;
     this.title.update(this.deltaTime);
     this.subtitle.update(this.deltaTime);
     if (this.ending) {
       this.ending.update(this.deltaTime);
     }
 
-    if (this.timer <= 0 && !this.processed) {
-      this.finish();
-      this.processed = true;
+    if (!this.processed) {
+      this.timer -= this.deltaTime;
+      if (this.timer <= 0) {
+        this.finish();
+        this.processed = true;
+      }
     }
   }
 
@@ -59,7 +61,6 @@ class BaseScene extends Scene {
       posX = 100;
     }
     this.ending = new Title(-1200, posX, 260, msg, 80, '#fff', bg);
-    this.ending.active = true;
   }
 
   // To be overridden by child class
@@ -84,8 +85,6 @@ class Title extends Vector {
   }
 
   update(dt) {
-    if (!this.active) return;
-
     this.elapsed += dt;
 
     let x;

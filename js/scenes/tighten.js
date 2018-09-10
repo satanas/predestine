@@ -29,7 +29,7 @@ class TightenScene extends BaseScene {
   }
 
   finish() {
-    console.log(this.gauge.isDone());
+    console.log(this.gauge.isOk());
   }
 }
 
