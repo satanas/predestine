@@ -13,6 +13,7 @@ class LevelSelectionScene extends Scene {
     this.zoneButtons.add(new UltraCommBtn(this.layoutFont, this.selectBranch1.bind(this)));
     this.zoneButtons.add(new EscapePodBtn(this.layoutFont));
     this.zoneButtons.add(new OxygenBtn(this.layoutFont));
+    this.zoneButtons.add(new PowerBtn(this.layoutFont));
     this.zoneButtons.add(new EngineBtn(this.layoutFont));
     this.zoneButtons.add(new CryoBtn(this.layoutFont));
     this.zoneButtons.add(new FuelBtn(this.layoutFont));
@@ -53,6 +54,20 @@ class LevelSelectionScene extends Scene {
         [
           'Choose the course of action by selecting the blinking',
           'area on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 2 && $.data.branch === 1) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(3).done = true;
+      this.zoneButtons.at(4).highlight = true;
+      this.aeros.speak([
+        [
+          'Good job, captain. The oxygen supply was enabled in the',
+          'communications rooms. Now, let\'s repair the power',
+          'generator.'
+        ],
+        [
+          'Select the power generator section on the screen.'
         ]
       ]);
     }
@@ -184,6 +199,17 @@ class OxygenBtn extends ZoneButton {
     if ($.data.level === 1 && $.data.branch === 1) {
       $.scenemng.load(RechargeScene);
     }
+  }
+}
+
+class PowerBtn extends ZoneButton {
+  constructor(font) {
+    super(435, 200, 60, 48, 'POWER', font);
+  }
+
+  onClick() {
+    if (!this.highlight) return;
+    $.scenemng.load(ConnectScene);
   }
 }
 
