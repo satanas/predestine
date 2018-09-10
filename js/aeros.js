@@ -47,6 +47,8 @@ class Aeros extends UIButton {
       this.elapsed = 0;
     }
     this.dialog = d.reverse();
+    this.currLine = 0;
+    this.lineIndex = -1;
   }
 
   update(dt) {

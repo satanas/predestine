@@ -13,12 +13,12 @@ class TerminalScene extends Scene {
       ['Cryotex chambers', 0],
       ['Escape pods', 0],
     ];
-    if ($.data.level === 1) {
+    if ($.data.level >= 1) {
       this.output[0][1] = 1;
       this.output[1][1] = 1;
     }
     if ($.data.branch === 1) {
-      if ($.data.level === 2) {
+      if ($.data.level >= 2) {
         this.output[3][1] = 1;
       }
     } else if ($.data.branch === 2) {

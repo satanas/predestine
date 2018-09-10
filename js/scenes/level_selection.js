@@ -10,7 +10,7 @@ class LevelSelectionScene extends Scene {
     // Zone buttons
     this.zoneButtons = new Group();
     this.zoneButtons.add(new AuxCtrlBtn(this.layoutFont));
-    this.zoneButtons.add(new UltraCommBtn(this.layoutFont));
+    this.zoneButtons.add(new UltraCommBtn(this.layoutFont, this.selectBranch1.bind(this)));
     this.zoneButtons.add(new EscapePodBtn(this.layoutFont));
     this.zoneButtons.add(new OxygenBtn(this.layoutFont));
     this.zoneButtons.add(new EngineBtn(this.layoutFont));
@@ -48,7 +48,7 @@ class LevelSelectionScene extends Scene {
         [
           'Two courses of action possible: repair the ultracomm',
           'to request a rescue operation or repair the escape',
-          'pod and try to reach Andromeda.',
+          'pod and try to reach the Andromeda Space Station.',
         ],
         [
           'Choose the course of action by selecting the blinking',
@@ -56,6 +56,23 @@ class LevelSelectionScene extends Scene {
         ]
       ]);
     }
+  }
+
+  selectBranch1() {
+    $.data.branch = 1;
+    this.zoneButtons.at(1).highlight = false;
+    this.zoneButtons.at(2).highlight = false;
+    this.zoneButtons.at(3).highlight = true;
+    this.aeros.speak([
+        [
+          'Ok, you selected repairing the Ultracomm. First thing',
+          'you need to do, is to recharge the Oxypack System to',
+          're-establish the oxygen flow in the comm room'
+        ],
+        [
+          'Select the OXY module on the screen to start.',
+        ]
+    ]);
   }
 
   update() {
@@ -130,14 +147,18 @@ class AuxCtrlBtn extends ZoneButton {
 }
 
 class UltraCommBtn extends ZoneButton {
-  constructor(font) {
+  constructor(font, cb) {
     super(410, 280, 90, 30, 'ULTRACOMM', font);
+    this.cb = cb;
   }
 
   onClick() {
     if (!this.highlight) return;
-    $.data.branch = 1;
-    $.scenemng.load(ConnectScene);
+
+    if ($.data.branch === 0) {
+      this.cb();
+    }
+    //$.scenemng.load(ConnectScene);
   }
 }
 
@@ -159,7 +180,10 @@ class OxygenBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
+
+    if ($.data.level === 1 && $.data.branch === 1) {
+      $.scenemng.load(RechargeScene);
+    }
   }
 }
 
