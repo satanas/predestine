@@ -1,6 +1,6 @@
 class RechargeScene extends BaseScene {
   constructor() {
-    super('Recharge the Oxypack unit', TAP_FAST + 'recharge');
+    super('Recharge Oxypacks', TAP_FAST + 'recharge');
     let barWidth = 700,
         x = ($.vw - barWidth) / 2,
         dragStep = 50,
@@ -9,6 +9,7 @@ class RechargeScene extends BaseScene {
     this.gauge.fgColor = 'lightblue';
 
     $.events.listen('mousedown', this.recharge.bind(this));
+    this.endingMessage();
   }
 
   recharge() {
@@ -18,6 +19,7 @@ class RechargeScene extends BaseScene {
   update() {
     this.updateProgress();
     this.gauge.update(this.deltaTime);
+    this.checkSuccess();
   }
 
   render() {
@@ -27,6 +29,12 @@ class RechargeScene extends BaseScene {
   }
 
   finish() {
-    console.log(this.gauge.isDone());
+    checkSuccess();
+  }
+
+  checkSuccess() {
+    if (this.gauge.isDone()) {
+      this.gauge.active = false;
+    }
   }
 }

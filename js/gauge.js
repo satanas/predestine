@@ -10,6 +10,7 @@ class Gauge extends Sprite {
     this.dragStep = dragStep;
     this.bgColor = '#666';
     this.fgColor = 'yellow';
+    this.active = true;
   }
 
   incr() {
@@ -21,6 +22,7 @@ class Gauge extends Sprite {
   }
 
   update(dt) {
+    if (!this.active) return;
     this.barWidth -= this.dragStep * dt / 1000;
 
     if (this.barWidth >= this.maxWidth) {

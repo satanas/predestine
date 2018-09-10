@@ -2,8 +2,8 @@ class BaseScene extends Scene {
   constructor(title, subtitle, maxTimer) {
     super();
 
-    this.title = new Title(-600, ($.vw - (title.length * 24)) / 2, 120, title, 40);
-    this.subtitle = new Title(-600, ($.vw - (title.length * 14)) / 2, 160, subtitle, 25);
+    this.title = new Title(-600, 300, 120, title, 40);
+    this.subtitle = new Title(-600, 300, 160, subtitle, 25);
     this.processed = false;
     this.maxTimer = (maxTimer) ? maxTimer : 5000;
     this.maxTimer += (this.title.delay * 2) + this.title.showTime / 2;
@@ -14,6 +14,9 @@ class BaseScene extends Scene {
     this.timer -= this.deltaTime;
     this.title.update(this.deltaTime);
     this.subtitle.update(this.deltaTime);
+    if (this.ending) {
+      this.ending.update(this.deltaTime);
+    }
 
     if (this.timer <= 0 && !this.processed) {
       this.finish();
@@ -24,6 +27,9 @@ class BaseScene extends Scene {
   renderProgress() {
     this.title.render();
     this.subtitle.render();
+    if (this.ending) {
+      this.ending.render();
+    }
 
     $.ctx.save();
     // Render progress bar bg
@@ -40,25 +46,46 @@ class BaseScene extends Scene {
     $.ctx.restore();
   }
 
+  endingMessage(failed) {
+    let msg, bg, posX;
+
+    if (failed) {
+      msg = 'REPAIR FAILED!';
+      bg = 'red';
+      posX = 160
+    } else {
+      msg = 'REPAIR SUCCESSFUL!';
+      bg = 'green';
+      posX = 100;
+    }
+    this.ending = new Title(-1200, posX, 260, msg, 80, '#fff', bg);
+    this.ending.active = true;
+  }
+
   // To be overridden by child class
   finish() {
   }
 }
 
 class Title extends Vector {
-  constructor(origX, destX, y, text, size) {
+  constructor(origX, destX, y, text, size, color, bg) {
     super(origX, y);
+    color = color || '#333';
     this.origX = origX;
     this.destX = destX;
     this.text = text;
-    this.font = new TextRenderer('monospace', '#333', size);
+    this.font = new TextRenderer('monospace', color, size);
     this.status = 'in';
     this.elapsed = 0;
     this.delay = 300;
     this.showTime = 1500;
+    this.active = false;
+    this.bg = bg;
   }
 
   update(dt) {
+    if (!this.active) return;
+
     this.elapsed += dt;
 
     let x;
@@ -85,6 +112,12 @@ class Title extends Vector {
   }
 
   render() {
+    if (this.bg) {
+      $.ctx.save();
+      $.ctx.fillStyle = this.bg;
+      $.ctx.fillRect(this.x - this.destX, this.y - 100, $.vw, 160);
+      $.ctx.restore();
+    }
     this.font.render($.ctx, this.text, this.x, this.y);
   }
 }
