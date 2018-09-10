@@ -15,6 +15,9 @@ class BaseScene extends Scene {
     this.subtitle.update(this.deltaTime);
     if (this.ending) {
       this.ending.update(this.deltaTime);
+      if (this.ending.status === 'done') {
+        this.ended();
+      }
     }
 
     if (!this.processed) {
@@ -29,9 +32,6 @@ class BaseScene extends Scene {
   renderProgress() {
     this.title.render();
     this.subtitle.render();
-    if (this.ending) {
-      this.ending.render();
-    }
 
     $.ctx.save();
     // Render progress bar bg
@@ -46,6 +46,10 @@ class BaseScene extends Scene {
     $.ctx.fillRect(0, 0, w, 20);
 
     $.ctx.restore();
+
+    if (this.ending) {
+      this.ending.render();
+    }
   }
 
   endingMessage(failed) {
@@ -65,6 +69,9 @@ class BaseScene extends Scene {
 
   // To be overridden by child class
   finish() {
+  }
+
+  ended() {
   }
 }
 

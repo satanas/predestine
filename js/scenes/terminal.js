@@ -5,7 +5,7 @@ class TerminalScene extends Scene {
       ['Emergency power source', 0],
       ['Auxiliary control panel', 0],
       ['Power generator', 0],
-      ['Life support system', 0],
+      ['Oxypack system', 0],
       ['Nuclear engines', 0],
       ['Fuel tanks', 0],
       ['Ultracomm emitter', 0],
@@ -16,6 +16,12 @@ class TerminalScene extends Scene {
     if ($.data.level === 1) {
       this.output[0][1] = 1;
       this.output[1][1] = 1;
+    }
+    if ($.data.branch === 1) {
+      if ($.data.level === 2) {
+        this.output[3][1] = 1;
+      }
+    } else if ($.data.branch === 2) {
     }
     this.booting = [
       ['AEROS ROM Operating System', 0],

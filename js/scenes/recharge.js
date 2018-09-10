@@ -5,7 +5,7 @@ class RechargeScene extends BaseScene {
         x = ($.vw - barWidth) / 2,
         dragStep = 50,
         incrStep = 25;
-    this.gauge = new Gauge(x, 500, barWidth, dragStep, incrStep, 80, 30);
+    this.gauge = new Gauge(x, 300, barWidth, dragStep, incrStep, 80, 30);
     this.gauge.fgColor = 'lightblue';
 
     $.events.listen('mousedown', this.recharge.bind(this));
@@ -28,8 +28,13 @@ class RechargeScene extends BaseScene {
 
   render() {
     $.cam.clear('#a3ffed');
-    this.renderProgress();
+    $.ctx.save();
+    $.ctx.fillStyle = '#333';
+    $.ctx.fillRoundRect(this.gauge.x - 20, this. gauge.y - 20, this.gauge.w + 40, this.gauge.h + 40, 30);
+    $.ctx.restore();
     $.cam.render(this.gauge);
+
+    this.renderProgress();
   }
 
   finish() {
@@ -38,6 +43,15 @@ class RechargeScene extends BaseScene {
       this.endingMessage(0);
     } else {
       this.endingMessage(1);
+    }
+  }
+
+  ended() {
+    if (this.gauge.isOk()) {
+      $.data.level += 1;
+      $.scenemng.load(TerminalScene);
+    } else {
+      $.scenemng.load(RechargeScene);
     }
   }
 }
