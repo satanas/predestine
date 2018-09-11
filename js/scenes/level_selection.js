@@ -7,6 +7,10 @@ class LevelSelectionScene extends Scene {
 
     this.layoutFont = new TextRenderer('monospace', '#aaa', 14);
     this.map = new ShipMap(600, 350);
+    this.siren = new Siren();
+    this.fadeout = new FadeOut();
+    this.recording = false;
+
     // Zone buttons
     this.zoneButtons = new Group();
     this.zoneButtons.add(new AuxCtrlBtn(this.layoutFont));
@@ -85,6 +89,50 @@ class LevelSelectionScene extends Scene {
           'Select the Ultracomm room on the screen.'
         ]
       ]);
+    } else if ($.data.level === 4 && $.data.branch === 1) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(3).done = true;
+      this.zoneButtons.at(4).done = true;
+      this.zoneButtons.at(1).done = true;
+      this.zoneButtons.at(7).highlight = true;
+      this.aeros.speak([
+        [
+          'Captain, we have an emergency! The fuel tank had a leak',
+          'and a fire started near the engines. Fix the tank and',
+          'I will take care of the fire. Hurry up!'
+        ],
+        [
+          'Select the Fuel room on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 5) {
+      this.aeros.speak([
+        [
+          'Captain! Despite our efforts, the Life Support',
+          'System has been compromised and the oxygen levels',
+          'are below 7%. Your chance of survival is below 0.1%'
+        ],
+        [
+          'I\'m activating the Emergency Cockpit Voice Recorder',
+          'so you can record a last message before you pass out',
+          'for the absence of oxygen.'
+        ],
+        [
+          ''
+        ]
+      ]);
+    } else if ($.data.level === 6) {
+      this.aeros.speak([
+        [
+          'Message recorded. Oxygen levels below 2%, you will',
+          'lose your consciousness in less than ten seconds.'
+        ],
+        [
+          'I don\'t know abouT fe3lings... bUt I yh11k hdhdhkk',
+          'MhU* ---AjTz ujksw here*8 and 2here v5g2Lw. {++//a;',
+          'pIF& l0vG b^%GU $haK #/>Ret DvS, xZRS 00. Thlank'
+        ]
+      ]);
     }
   }
 
@@ -106,8 +154,17 @@ class LevelSelectionScene extends Scene {
   }
 
   update() {
+    this.siren.update(this.deltaTime);
     this.aeros.update(this.deltaTime);
     this.zoneButtons.update(this.deltaTime);
+
+    if ($.data.level === 5 && !this.aeros.dialog.length && !this.recording) {
+      this.recording = true;
+      $.scenemng.load(RecordingScene);
+    }
+    if ($.data.level === 6) {
+      this.fadeout.update(this.deltaTime);
+    }
   }
 
   render() {
@@ -119,13 +176,21 @@ class LevelSelectionScene extends Scene {
     $.ctx.restore();
 
     // Start rendering objects here
-
     this.aeros.render();
+    this.fadeout.render();
 
     $.ctx.drawImage(this.map.canvas, this.map.x, this.map.y, this.map.w, this.map.h);
+    $.cam.render(this.zoneButtons);
+    //if ($.data.level >= 4 && this.siren.anim.get()) {
+    //  $.ctx.drawImage(this.siren.canvas, 0, 0, $.vw, $.vh);
+    //}
     $.ctx.drawImage(this.aeros.canvas, this.aeros.x, this.aeros.y, this.aeros.w, this.aeros.h);
 
-    $.cam.render(this.zoneButtons);
+    // Ending fade out
+    if ($.data.level === 6) {
+      $.ctx.drawImage(this.fadeout.canvas, 0, 0, $.vw, $.vh);
+    }
+
   }
 }
 
@@ -259,7 +324,51 @@ class FuelBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
+
+    if ($.data.level === 4) {
+      $.scenemng.load(SealScene);
+    }
+  }
+}
+
+class Siren {
+  constructor() {
+    this.anim = new Animator([0, 1], 196, 0);
+    this.canvas = $.canvas.create($.vw, $.vh);
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.fillStyle = 'rgba(255,0,0,0.4)';
+    this.ctx.fillRect(0, 0, $.vw, $.vh);
+    this.active = true;
+  }
+
+  update(dt) {
+    if (!this.active) return;
+    this.anim.update(dt);
+  }
+}
+
+class FadeOut {
+  constructor(cb) {
+    this.canvas = $.canvas.create($.vw, $.vh);
+    this.ctx = this.canvas.getContext('2d');
+    this.alpha = 0;
+    this.timeout = 6500;
+    this.delay = 0;
+    this.done = false;
+  }
+
+  update(dt) {
+    if (this.done) return;
+
+    this.delay = clamp(this.delay + dt, 0, this.timeout);
+    this.alpha = this.delay / this.timeout;
+    if (this.delay === this.timeout) this.done;
+  }
+
+  render() {
+    this.ctx.clearRect(0, 0, $.vw, $.vh);
+    this.ctx.fillStyle = 'rgba(255,255,255,' + this.alpha + ')';
+    this.ctx.fillRect(0, 0, $.vw, $.vh);
   }
 }
 
