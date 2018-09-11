@@ -1,11 +1,17 @@
 class TightenScene extends BaseScene {
   constructor() {
-    super();
+    super('Adjust nuts', 'Click rapidly to move the wrench', 12000, 335);
     this.wrench = new Wrench();
     let barWidth = 700,
         x = ($.vw - barWidth) / 2,
-        dragStep = 50,
-        incrStep = 25;
+        dragStep,
+        incrStep;
+    if ($.data.level === 3 && $.data.branch === 1) {
+      incrStep = 20;
+      dragStep = 10;
+    } else {
+      incrStep = 20;
+    }
     this.gauge = new Gauge(x, 500, barWidth, dragStep, incrStep, 80, 30);
 
     $.events.listen('mousedown', this.tighten.bind(this));
@@ -18,18 +24,37 @@ class TightenScene extends BaseScene {
 
   update() {
     this.updateProgress();
+    this.wrench.update(this.deltaTime);
     this.gauge.update(this.deltaTime);
+
+    if (this.gauge.isComplete() && !this.processed) {
+      this.processed = true;
+      this.finish();
+    }
   }
 
   render() {
     $.cam.clear('#a3ffed');
-    this.renderProgress();
     this.wrench.render();
     $.cam.render(this.gauge);
+
+    this.renderProgress();
   }
 
   finish() {
-    console.log(this.gauge.isOk());
+    if (this.gauge.isOk()) {
+      this.endingMessage(0);
+    } else {
+      this.endingMessage(1);
+    }
+  }
+
+  ended() {
+    if (this.gauge.isOk()) {
+      $.scenemng.load(FillingScene);
+    } else {
+      $.scenemng.load(TightenScene);
+    }
   }
 }
 
@@ -45,15 +70,25 @@ class Wrench {
 
     this.angle = 0;
     this.maxAngle = PI / 2;
-    this.factor = PI / 24;
+    this.factor = PI / 25;
+
     this.dir = 1;
     this.canvas = $.canvas.create(this.w, this.h);
     this.ctx = this.canvas.getContext('2d');
     this.renderWrench(this.ctx, nutSize);
+
+    this.maxSpeed = PI;
+    this.speed = 0;
+    this.maxCoolDown = 600;
+    this.coolDown = 99999;
   }
 
-  tighten() {
-    this.angle += this.factor * this.dir;
+  update(dt) {
+    this.angle += this.speed * dt * this.dir / 1000;
+    this.coolDown -= dt;
+    if (this.coolDown <= 0) {
+      this.speed = clamp(this.speed - this.factor / 2, 0);
+    }
 
     if (this.angle >= this.maxAngle) {
       this.angle = this.maxAngle;
@@ -62,6 +97,11 @@ class Wrench {
       this.angle = 0;
       this.dir = 1;
     }
+  }
+
+  tighten() {
+    this.speed += this.factor;
+    this.coolDown = this.maxCoolDown;
   }
 
   renderWrench(ctx, size) {

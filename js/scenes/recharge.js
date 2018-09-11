@@ -28,10 +28,6 @@ class RechargeScene extends BaseScene {
 
   render() {
     $.cam.clear('#a3ffed');
-    $.ctx.save();
-    $.ctx.fillStyle = '#333';
-    $.ctx.fillRoundRect(this.gauge.x - 20, this. gauge.y - 20, this.gauge.w + 40, this.gauge.h + 40, 30);
-    $.ctx.restore();
     $.cam.render(this.gauge);
 
     this.renderProgress();

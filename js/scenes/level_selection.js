@@ -188,7 +188,8 @@ class UltraCommBtn extends ZoneButton {
     if ($.data.branch === 0) {
       this.cb();
     } else {
-      $.scenemng.load(CalibrateScene);
+      //$.scenemng.load(CalibrateScene);
+      $.scenemng.load(TightenScene);
     }
   }
 }
