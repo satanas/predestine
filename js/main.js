@@ -1,9 +1,8 @@
 const ENTER = 13,
       KEY_A = 65,
-      GRID = 64,
-      TAP_FAST = 'Click rapidly to ';
+      GRID = 64;
 
-debug = false;
+debug = true;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
@@ -12,8 +11,8 @@ $.input.bindMouse();
 $.cam.setWorldSize(1024, 576);
 
 $.data = {
-  branch: 0,
-  level: 0
+  branch: 1,
+  level: 3
 };
 
 $.scenemng.load(LevelSelectionScene);

@@ -1,9 +1,11 @@
 class BaseScene extends Scene {
-  constructor(title, subtitle, maxTimer) {
+  constructor(title, subtitle, maxTimer, yTitle) {
     super();
 
-    this.title = new Title(-600, 300, 120, title, 40);
-    this.subtitle = new Title(-600, 300, 160, subtitle, 25);
+    yTitle = yTitle || 120;
+
+    this.title = new Title(-600, 300, yTitle, title, 40);
+    this.subtitle = new Title(-600, 300, yTitle + 40, subtitle, 25);
     this.processed = false;
     this.maxTimer = (maxTimer) ? maxTimer : 5000;
     this.maxTimer += (this.title.delay * 2) + this.title.showTime / 2;

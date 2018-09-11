@@ -1,6 +1,6 @@
 class RechargeScene extends BaseScene {
   constructor() {
-    super('Recharge Oxypack', TAP_FAST + 'recharge');
+    super('Recharge Oxypack', 'Click rapidly to recharge');
     let barWidth = 700,
         x = ($.vw - barWidth) / 2,
         dragStep = ($.data.level === 2) ? 30 : 50,

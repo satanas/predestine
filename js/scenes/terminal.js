@@ -21,6 +21,9 @@ class TerminalScene extends Scene {
       if ($.data.level >= 2) {
         this.output[3][1] = 1;
       }
+      if ($.data.level >= 3) {
+        this.output[2][1] = 1;
+      }
     } else if ($.data.branch === 2) {
     }
     this.booting = [

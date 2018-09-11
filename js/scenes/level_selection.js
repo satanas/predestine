@@ -43,8 +43,8 @@ class LevelSelectionScene extends Scene {
       this.zoneButtons.at(2).highlight = true;
       this.aeros.speak([
         [
-          'The status of the spaceship is critical and survival',
-          'chances are minimal with 10% of power remaining.',
+          'The status of the spaceship is critical and we have',
+          '1% of power. Chances of survival are minimal.',
         ],
         [
           'Two courses of action possible: repair the ultracomm',
@@ -68,6 +68,21 @@ class LevelSelectionScene extends Scene {
         ],
         [
           'Select the power generator section on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 3 && $.data.branch === 1) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(3).done = true;
+      this.zoneButtons.at(4).done = true;
+      this.zoneButtons.at(1).highlight = true;
+      this.aeros.speak([
+        [
+          'With that fix we got 5% of power and we could send a',
+          'distress signal. However, the Ultracomm requires minor',
+          'fixes to be operational. Hurry up and fix it!'
+        ],
+        [
+          'Select the Ultracomm room on the screen.'
         ]
       ]);
     }
@@ -139,7 +154,7 @@ class ZoneButton extends UIButton {
         $.ctx.strokeRect(this.x, this.y, this.w, this.h);
       }
     } else if (!this.highlight && !this.done) {
-      $.ctx.fillStyle = '#383838';
+      $.ctx.fillStyle = '#420000'; //383838';
       $.ctx.fillRect(this.x, this.y, this.w, this.h);
     } else if (this.done) {
       $.ctx.fillStyle = '#187000';
@@ -172,8 +187,9 @@ class UltraCommBtn extends ZoneButton {
 
     if ($.data.branch === 0) {
       this.cb();
+    } else {
+      $.scenemng.load(CalibrateScene);
     }
-    //$.scenemng.load(ConnectScene);
   }
 }
 

@@ -1,13 +1,14 @@
 class ConnectScene extends BaseScene {
   constructor() {
-    super();
+    super('Restablish connection', 'Click on cable end and drag to connect');
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
 
+    this.successful = false;
     // Number of cables
-    if ($.data.level === 1 && $.data.branch === 1) {
+    if ($.data.level === 2 && $.data.branch === 1) {
       this.num = 3;
     } else {
       this.num = 2;
@@ -94,6 +95,11 @@ class ConnectScene extends BaseScene {
 
   update() {
     this.updateProgress();
+    if (this.connections.length === this.num && !this.processed) {
+      this.successful = true;
+      this.processed = true;
+      this.finish();
+    }
   }
 
   render() {
@@ -135,12 +141,19 @@ class ConnectScene extends BaseScene {
   }
 
   finish() {
-    if (this.connections.length === this.num) {
-      // TODO: Success scene
-      $.data.level += 1;
-      //$.scenemng.load(FuseScene);
+    if (this.successful) {
+      this.endingMessage(0);
     } else {
-      // TODO: Failure case
+      this.endingMessage(1);
+    }
+  }
+
+  ended() {
+    if (this.successful) {
+      $.data.level += 1;
+      $.scenemng.load(TerminalScene);
+    } else {
+      $.scenemng.load(ConnectScene);
     }
   }
 }

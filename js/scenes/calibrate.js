@@ -1,18 +1,28 @@
 class CalibrateScene extends BaseScene {
   constructor() {
-    super();
-    this.meter = new Meter(1250, 80);
+    let title, speed;
+    if ($.data.level === 3 && $.data.branch === 1) {
+      title = 'Calibrate the Ultracomm';
+      speed = 1200;
+    }
+    super(title, 'Press button when bar reaches maximum', 6000, 330);
+    this.meter = new Meter(speed, 80);
     this.button = new TurnOnButton(() => { this.meter.turnOn(); });
   }
 
   update() {
     this.updateProgress();
     this.meter.update(this.deltaTime);
-    this.button.checkClick();
+    $.cam.update(this.deltaTime);
+
+    if (this.meter.isOk() && !this.processed) {
+      this.processed = true;
+      this.finish();
+    }
   }
 
   render() {
-    $.cam.clear('brown');
+    $.cam.clear('#deb887');
     $.cam.render(this.meter);
     $.cam.render(this.button);
 
@@ -20,12 +30,24 @@ class CalibrateScene extends BaseScene {
   }
 
   finish() {
-    this.meter.isOn();
+    if (this.meter.isOk()) {
+      this.endingMessage(0);
+    } else {
+      this.endingMessage(1);
+    }
+  }
+
+  ended() {
+    if (this.meter.isOk()) {
+      $.scenemng.load(TightenScene);
+    } else {
+      $.scenemng.load(CalibrateScene);
+    }
   }
 }
 
 class Meter extends Sprite {
-  constructor(speed, perc) {
+  constructor(speed, perc, successRate) {
     super(112, 100, 800, 150);
     this.speed = speed;
     this.dir = 1;
@@ -36,19 +58,22 @@ class Meter extends Sprite {
     this.successes = 0;
     this.tick = false;
     this.count = false;
+    this.successRate = 60;
+
+    this.num = 5;
   }
 
   turnOn() {
     if (this.isEnabled() && !this.count) {
       this.count = true;
       this.successes += 1;
+    } else {
+      $.cam.shake(4, 100);
     }
-    console.log(this.tries, 'vs', this.successes);
   }
 
-  isOn() {
-    console.log('result', this.successes * 100 / this.tries);
-    return this.successes * 100 / this.tries > 0.9;
+  isOk() {
+    return this.successes >= this.num;
   }
 
   isEnabled() {
@@ -73,34 +98,35 @@ class Meter extends Sprite {
     }
   }
 
-  render(rect) {
+  render(r) {
     $.ctx.save();
-    $.ctx.fillStyle = '#ccc';
-    $.ctx.fillRect(this.x, this.y, this.w, this.h);
-    $.ctx.fillStyle = '#666';
-    $.ctx.fillRect(this.x + this.bar.x, this.y + this.bar.y, this.maxWidth, this.bar.h);
-    $.ctx.fillStyle = 'rgba(9, 179, 0, 0.4)';
-    $.ctx.fillRect(this.x + this.bar.x + this.successWidth, this.y + this.bar.y, this.maxWidth - this.successWidth, this.bar.h);
 
-    // Draw mark
-    $.ctx.strokeStyle = '#000';
-    $.ctx.lineWidth = 4;
-    $.ctx.moveTo(this.x + this.bar.x + this.successWidth, this.y + 15);
-    $.ctx.lineTo(this.x + this.bar.x + this.successWidth, this.y + 135);
-    $.ctx.stroke();
+    // Draw meter indicators
+    let i, color, box = 200, w = 30, margin = (box - w) / 2;
+    for (i = 0; i < this.num; i++) {
+      color = (this.successes >= i + 1) ? '#0f0' : '#555';
+      $.ctx.fillStyle = color;
+      $.ctx.fillRect(r.x + (i * 160) + margin, r.y + 160, w, 20);
+    }
+
+    $.ctx.fillStyle = '#ccc';
+    $.ctx.fillRect(r.x, r.y, this.w, this.h);
+    $.ctx.fillStyle = '#666';
+    $.ctx.fillRect(r.x + this.bar.x, r.y + this.bar.y, this.maxWidth, this.bar.h);
+    $.ctx.fillStyle = 'rgba(9, 179, 0, 0.4)';
+    $.ctx.fillRect(r.x + this.bar.x + this.successWidth, r.y + this.bar.y, this.maxWidth - this.successWidth, this.bar.h);
 
     // Draw moving bar
     $.ctx.fillStyle = 'red';
-    $.ctx.fillRect(this.x + this.bar.x, this.y + this.bar.y, this.bar.w, this.bar.h);
+    $.ctx.fillRect(r.x + this.bar.x, r.y + this.bar.y, this.bar.w, this.bar.h);
     $.ctx.restore();
   }
 }
 
 class TurnOnButton extends UIButton {
   constructor(cb) {
-    let w = 160,
-        h = 80;
-    super(($.vw - w) / 2, $.vh - (h * 2), w, h);
+    let w = 96;
+    super(($.vw - w) / 2, $.vh - (w * 2), w, w);
     this.cb = cb;
   }
 
@@ -108,11 +134,26 @@ class TurnOnButton extends UIButton {
     this.cb();
   }
 
-  render(rect) {
+  render(r) {
+    let cx = r.x + this.w / 2,
+        cy = r.y + this.h / 2,
+        radius1 = this.w / 2,
+        radius2 = floor(this.w / 1.5);
+
     $.ctx.save();
+
+    $.ctx.fillStyle = '#666';
+    $.ctx.fillArc($.ctx, cx, cy + 55, radius2, 0, PI * 2);
+
+    $.ctx.fillStyle = '#888';
+    $.ctx.fillArc($.ctx, cx, cy + 45, radius2, 0, PI * 2);
+
+    $.ctx.fillStyle = 'darkgreen';
+    $.ctx.fillRect(r.x, r.y + 55, this.w, 45);
+    $.ctx.fillArc($.ctx, cx, cy + 45, radius1, 0, PI * 2);
+
     $.ctx.fillStyle = 'green';
-    $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    //$.txt.render($.ctx, 'RUN', rect.x + 12, rect.y + 16, '#fff', 6);
+    $.ctx.fillArc($.ctx, cx, cy, radius1, 0, PI * 2);
     $.ctx.restore();
   }
 }
