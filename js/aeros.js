@@ -113,7 +113,7 @@ class Aeros extends UIButton {
       this.ctx.lineTo(this.w - 20, this.h - 10);
       this.ctx.lineTo(this.w - 30, this.h - 30);
       this.ctx.fill();
-    } else if (this.anim.get() && this.dialog.length === 0) {
+    } else if (this.dialog.length === 0) {
       this.ctx.fillStyle = '#fff';
       this.ctx.fillRect(this.w - 30, this.h - 30, 20, 20);
     }

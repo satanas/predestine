@@ -5,8 +5,9 @@ class AuxiliaryScene extends Scene {
     let i;
     this.buttons = [];
     this.colors = ['blue', 'red', 'purple', 'green'];
+    this.darkColors = ['darkblue', 'darkred', 'darkmagenta', 'darkgreen'];
     for (i = 0; i < this.colors.length; i++) {
-      this.buttons.push(new KeyButton(i, this.colors[i], this.addSeq.bind(this)));
+      this.buttons.push(new KeyButton(i, this.colors[i], this.darkColors[i], this.addSeq.bind(this)));
     }
     this.realSeq = [0, 1, 2, 3];
     this.realSeq = this.realSeq.concat([rndi(0, this.buttons.length - 1)]);
@@ -122,7 +123,7 @@ class Indicator extends Sprite {
 }
 
 class KeyButton extends UIButton {
-  constructor(i, color, cb) {
+  constructor(i, color, darkColor, cb) {
     let w = 96,
         y = 380,
         padding = 60,
@@ -133,6 +134,7 @@ class KeyButton extends UIButton {
     this.index = i;
     this.cb = cb;
     this.color = color;
+    this.darkColor = darkColor;
   }
 
   onClick() {
@@ -140,9 +142,25 @@ class KeyButton extends UIButton {
   }
 
   render(r) {
+    let cx = r.x + this.w / 2,
+        cy = r.y + this.h / 2,
+        radius1 = this.w / 2,
+        radius2 = floor(this.w / 1.5);
+
     $.ctx.save();
+
+    $.ctx.fillStyle = '#666';
+    $.ctx.fillArc($.ctx, cx, cy + 55, radius2, 0, PI * 2);
+
+    $.ctx.fillStyle = '#888';
+    $.ctx.fillArc($.ctx, cx, cy + 45, radius2, 0, PI * 2);
+
+    $.ctx.fillStyle = this.darkColor;
+    $.ctx.fillRect(r.x, r.y + 55, this.w, 45);
+    $.ctx.fillArc($.ctx, cx, cy + 45, radius1, 0, PI * 2);
+
     $.ctx.fillStyle = this.color;
-    $.ctx.fillRect(r.x, r.y, this.w, this.h);
+    $.ctx.fillArc($.ctx, cx, cy, radius1, 0, PI * 2);
     $.ctx.restore();
   }
 }

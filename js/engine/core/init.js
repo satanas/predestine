@@ -28,6 +28,13 @@ $.init = function() {
     $.ctx.closePath();
     $.ctx.fill();
   }
+
+  $.ctx.fillArc = function(ctx, x, y, radius, start, end) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, start, end);
+    ctx.closePath();
+    ctx.fill();
+  }
 }
 
 $.easeInQuad = function(elapsed, begin, end, duration) {
