@@ -189,7 +189,7 @@ class UltraCommBtn extends ZoneButton {
       this.cb();
     } else {
       //$.scenemng.load(CalibrateScene);
-      $.scenemng.load(TightenScene);
+      $.scenemng.load(FillingScene);
     }
   }
 }

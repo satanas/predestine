@@ -1,56 +1,77 @@
 class FillingScene extends BaseScene {
   constructor() {
-    super();
+    let title;
+    if ($.data.level === 3 && $.data.branch === 1) {
+      title = 'Weld the Ultracomm';
+    }
+    super(title, 'Click and hold to draw on screen', 10000);
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
 
     this.painting = false;
-    this.percSuccess = 80;
     this.color = [255, 0, 0, 255];
+    this.canvas = $.canvas.create($.vw, $.vh);
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.fillStyle = 'red';
+    this.ctx.strokeStyle = 'red';
+    this.ctx.lineWidth = 20;
 
-    this.pad = new Pad(this.percSuccess, this.color);
-
-    $.ctx.lineWidth = 20;
-
-    // Render everything only once to allow painting over
-    $.cam.clear('#444');
-    $.cam.render(this.pad);
+    this.pad = new Pad(90, this.color);
   }
 
   togglePaint(val) {
+    if (this.processed) return;
+
     this.painting = val;
     this.lastPos = $.input.mousePos;
   }
 
   doPaint() {
-    if (this.painting) {
+    if (this.painting && !this.processed) {
       let mousePos = $.input.mousePos;
-      $.ctx.save();
-      $.ctx.fillStyle = 'red';
-      $.ctx.strokeStyle = 'red';
-      $.ctx.beginPath();
-      $.ctx.moveTo(this.lastPos.x, this.lastPos.y);
-      $.ctx.lineTo(mousePos.x, mousePos.y);
-      $.ctx.stroke();
-      $.ctx.arc(mousePos.x, mousePos.y, 10, 0, 2 * PI, false);
-      $.ctx.fill();
-      $.ctx.restore();
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
+      this.ctx.lineTo(mousePos.x, mousePos.y);
+      this.ctx.stroke();
+      this.ctx.arc(mousePos.x, mousePos.y, 10, 0, 2 * PI, false);
+      this.ctx.fill();
       this.lastPos = mousePos;
     }
   }
 
   update() {
     this.updateProgress();
+
+    if (this.pad.isCovered(this.ctx) && !this.processed) {
+      this.processed = true;
+      this.finish();
+    }
   }
 
   render() {
+    $.cam.clear('#fff8dc');
+    $.cam.render(this.pad);
+    $.ctx.drawImage(this.canvas, 0, 0, $.vw, $.vh);
     this.renderProgress();
   }
 
   finish() {
-    this.pad.isCovered();
+    if (this.pad.isCovered(this.ctx)) {
+      this.endingMessage(0);
+    } else {
+      this.endingMessage(1);
+    }
+  }
+
+  ended() {
+    if (this.pad.isCovered(this.ctx)) {
+      $.data.level += 1;
+      $.scenemng.load(TerminalScene);
+    } else {
+      $.scenemng.load(FillingScene);
+    }
   }
 }
 
@@ -58,16 +79,16 @@ class Pad extends Sprite {
   constructor(percSuccess, color) {
     let x = rndi(100, 900),
         y = rndi(100, 400);
-    super(x, y, 120, 120);
+    super(x, y, 160, 160);
     this.percSuccess = percSuccess;
     this.color = color;
   }
 
-  isCovered() {
+  isCovered(ctx) {
     let i, r, g, b, a, perc,
         totalPx = 0,
         totalCovered = 0,
-        imgData = $.ctx.getImageData(this.x, this.y, this.w, this.h),
+        imgData = ctx.getImageData(this.x, this.y, this.w, this.h),
         data = imgData.data;
     for (i = 0; i < data.length; i += 4) {
       r = data[i];
@@ -80,7 +101,6 @@ class Pad extends Sprite {
       }
     }
     perc = totalCovered * 100 / totalPx;
-    console.log(perc, perc >= this.percSuccess);
     return perc >= this.percSuccess;
   }
 
