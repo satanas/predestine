@@ -10,6 +10,7 @@ class LevelSelectionScene extends Scene {
     this.siren = new Siren();
     this.fadeout = new FadeOut();
     this.recording = false;
+    this.faded = false;
 
     // Zone buttons
     this.zoneButtons = new Group();
@@ -164,6 +165,10 @@ class LevelSelectionScene extends Scene {
     }
     if ($.data.level === 6) {
       this.fadeout.update(this.deltaTime);
+      if (this.fadeout.done && !this.faded) {
+        this.faded = true;
+        $.scenemng.load(Ending);
+      }
     }
   }
 
@@ -352,7 +357,7 @@ class FadeOut {
     this.canvas = $.canvas.create($.vw, $.vh);
     this.ctx = this.canvas.getContext('2d');
     this.alpha = 0;
-    this.timeout = 6500;
+    this.timeout = 7500;
     this.delay = 0;
     this.done = false;
   }
@@ -362,7 +367,7 @@ class FadeOut {
 
     this.delay = clamp(this.delay + dt, 0, this.timeout);
     this.alpha = this.delay / this.timeout;
-    if (this.delay === this.timeout) this.done;
+    if (this.delay === this.timeout) this.done = true;
   }
 
   render() {
