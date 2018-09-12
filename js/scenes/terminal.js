@@ -24,7 +24,19 @@ class TerminalScene extends Scene {
       if ($.data.level >= 3) {
         this.output[2][1] = 1;
       }
+      if ($.data.level >= 4) {
+        this.output[6][1] = 1;
+      }
     } else if ($.data.branch === 2) {
+      if ($.data.level >= 2) {
+        this.output[2][1] = 1;
+      }
+      if ($.data.level >= 3) {
+        this.output[5][1] = 1;
+      }
+      if ($.data.level >= 4) {
+        this.output[4][1] = 1;
+      }
     }
     this.booting = [
       ['AEROS ROM Operating System', 0],
@@ -48,12 +60,17 @@ class TerminalScene extends Scene {
     this.charTime = 0;
     this.lineHeight = 18;
     this.charWidth = 10;
-    this.lineIndex = 0;
     this.charIndex = 0;
     this.font = new TextRenderer("monospace", "#0f0", 16);
     this.rFont = new TextRenderer("monospace", "#f00", 16);
     this.booted = false;
     this.analyzed = false;
+
+    if ($.data.level > 1) {
+      this.lineIndex = 10;
+    } else {
+      this.lineIndex = 0;
+    }
 
     $.events.listen('mousedown', this.next.bind(this));
   }

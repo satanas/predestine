@@ -2,7 +2,6 @@ class SealScene extends BaseScene {
   constructor() {
     super('Fix the leak', 'Tap the holes to seal them', 12000);
 
-    this.siren = new Siren();
     this.success = true;
 
     let holes;
@@ -10,7 +9,6 @@ class SealScene extends BaseScene {
       holes = 20;
     } else {
       holes = 10;
-      this.siren.active = false;
     }
 
     this.holes = new Group();
@@ -42,7 +40,6 @@ class SealScene extends BaseScene {
   }
 
   update() {
-    this.siren.update(this.deltaTime);
     this.delay = clamp(this.delay - this.deltaTime, 0);
 
     this.holes.update();
@@ -60,9 +57,6 @@ class SealScene extends BaseScene {
   render() {
     $.cam.clear('darkcyan');
     $.cam.render(this.holes);
-    if (this.siren.active && this.siren.anim.get()) {
-      $.ctx.drawImage(this.siren.canvas, 0, 0, $.vw, $.vh);
-    }
     this.renderProgress();
   }
 
@@ -84,10 +78,8 @@ class SealScene extends BaseScene {
   }
 
   ended() {
-    if ($.data.level === 4) {
-      $.data.level += 1;
-      $.scenemng.load(LevelSelectionScene);
-    }
+    $.data.level += 1;
+    $.scenemng.load(LevelSelectionScene);
   }
 }
 

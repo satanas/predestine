@@ -1,9 +1,10 @@
 class CalibrateScene extends BaseScene {
   constructor() {
-    let title, speed;
-    if ($.data.level === 3 && $.data.branch === 1) {
+    let title, speed = 1200;
+    if ($.data.branch === 1) {
       title = 'Calibrate the Ultracomm';
-      speed = 1200;
+    } else if ($.data.branch === 2) {
+      title = 'Calibrate the Engine';
     }
     super(title, 'Press button when bar reaches maximum', 6000, 330);
     this.meter = new Meter(speed, 80);
@@ -39,7 +40,11 @@ class CalibrateScene extends BaseScene {
 
   ended() {
     if (this.meter.isOk()) {
-      $.scenemng.load(TightenScene);
+      if ($.data.branch === 1) {
+        $.scenemng.load(TightenScene);
+      } else {
+        $.scenemng.load(FillingScene);
+      }
     } else {
       $.scenemng.load(CalibrateScene);
     }

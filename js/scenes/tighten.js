@@ -11,6 +11,7 @@ class TightenScene extends BaseScene {
       dragStep = 10;
     } else {
       incrStep = 20;
+      dragStep = 10;
     }
     this.gauge = new Gauge(x, 500, barWidth, dragStep, incrStep, 80, 30);
 
@@ -18,6 +19,8 @@ class TightenScene extends BaseScene {
   }
 
   tighten() {
+    if (this.processed) return;
+
     this.gauge.incr();
     this.wrench.tighten();
   }
@@ -25,7 +28,10 @@ class TightenScene extends BaseScene {
   update() {
     this.updateProgress();
     this.wrench.update(this.deltaTime);
-    this.gauge.update(this.deltaTime);
+
+    if (!this.processed) {
+      this.gauge.update(this.deltaTime);
+    }
 
     if (this.gauge.isComplete() && !this.processed) {
       this.processed = true;
@@ -51,7 +57,11 @@ class TightenScene extends BaseScene {
 
   ended() {
     if (this.gauge.isOk()) {
-      $.scenemng.load(FillingScene);
+      if ($.data.branch === 1) {
+        $.scenemng.load(FillingScene);
+      } else {
+        $.scenemng.load(CalibrateScene);
+      }
     } else {
       $.scenemng.load(TightenScene);
     }

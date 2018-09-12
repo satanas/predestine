@@ -37,7 +37,7 @@ class Ending extends Scene {
     this.status = 'in';
     this.transitionTime = 1200;
     this.maxShowingTime = 150;
-    this.maxOutTime = 1000;
+    this.maxOutTime = 3000;
     this.maxDelayTime = 400;
     this.maxIterations = 6;
     this.timeCounter = this.transitionTime;
@@ -48,7 +48,6 @@ class Ending extends Scene {
     this.bg = '#fff';
 
     this.word = new Word();
-    // 50 x text.length
   }
 
   getWords() {

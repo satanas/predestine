@@ -1,8 +1,10 @@
 class FillingScene extends BaseScene {
   constructor() {
     let title;
-    if ($.data.level === 3 && $.data.branch === 1) {
+    if ($.data.branch === 1) {
       title = 'Weld the Ultracomm';
+    } else {
+      title = 'Weld the Engine';
     }
     super(title, 'Click and hold to draw on screen', 10000);
 
@@ -18,7 +20,7 @@ class FillingScene extends BaseScene {
     this.ctx.strokeStyle = 'red';
     this.ctx.lineWidth = 20;
 
-    this.pad = new Pad(90, this.color);
+    this.pad = new Pad(94, this.color);
   }
 
   togglePaint(val) {

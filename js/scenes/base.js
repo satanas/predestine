@@ -88,7 +88,7 @@ class Title extends Vector {
     this.status = 'in';
     this.elapsed = 0;
     this.delay = 300;
-    this.showTime = 1700;
+    this.showTime = 2100;
     this.active = false;
     this.bg = bg;
   }

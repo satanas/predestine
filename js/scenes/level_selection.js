@@ -16,7 +16,7 @@ class LevelSelectionScene extends Scene {
     this.zoneButtons = new Group();
     this.zoneButtons.add(new AuxCtrlBtn(this.layoutFont));
     this.zoneButtons.add(new UltraCommBtn(this.layoutFont, this.selectBranch1.bind(this)));
-    this.zoneButtons.add(new EscapePodBtn(this.layoutFont));
+    this.zoneButtons.add(new EscapePodBtn(this.layoutFont, this.selectBranch2.bind(this)));
     this.zoneButtons.add(new OxygenBtn(this.layoutFont));
     this.zoneButtons.add(new PowerBtn(this.layoutFont));
     this.zoneButtons.add(new EngineBtn(this.layoutFont));
@@ -72,7 +72,7 @@ class LevelSelectionScene extends Scene {
           'generator.'
         ],
         [
-          'Select the power generator section on the screen.'
+          'Select the POWER section on the screen.'
         ]
       ]);
     } else if ($.data.level === 3 && $.data.branch === 1) {
@@ -84,10 +84,10 @@ class LevelSelectionScene extends Scene {
         [
           'With that fix we got 5% of power and we could send a',
           'distress signal. However, the Ultracomm requires minor',
-          'fixes to be operational. Hurry up and fix it!'
+          'fixes to be operational. Let\'s fix it.'
         ],
         [
-          'Select the Ultracomm room on the screen.'
+          'Select the ULTRACOMM room on the screen.'
         ]
       ]);
     } else if ($.data.level === 4 && $.data.branch === 1) {
@@ -103,7 +103,51 @@ class LevelSelectionScene extends Scene {
           'I will take care of the fire. Hurry up!'
         ],
         [
-          'Select the Fuel room on the screen.'
+          'Select the FUEL room on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 2 && $.data.branch === 2) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(4).done = true;
+      this.zoneButtons.at(7).highlight = true;
+      this.aeros.speak([
+        [
+          'Good job, captain. With that fix our power levels went',
+          'up to 5%, enough to deploy the pod. However, we need to',
+          'fix a leak in the fuel tank.'
+        ],
+        [
+          'Select the FUEL section on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 3 && $.data.branch === 2) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(4).done = true;
+      this.zoneButtons.at(7).done = true;
+      this.zoneButtons.at(5).highlight = true;
+      this.aeros.speak([
+        [
+          'Ok, the fuel deposit has been sealed. Now we need to fix',
+          'some damage in the engine of the pod before leaving.',
+        ],
+        [
+          'Select the ENGINE section on the screen.'
+        ]
+      ]);
+    } else if ($.data.level === 4 && $.data.branch === 2) {
+      this.zoneButtons.at(0).done = true;
+      this.zoneButtons.at(4).done = true;
+      this.zoneButtons.at(7).done = true;
+      this.zoneButtons.at(5).done = true;
+      this.zoneButtons.at(3).highlight = true;
+      this.aeros.speak([
+        [
+          'Captain, we have an emergency! The Oxypack system has a',
+          'leak and the oxygen levels are decreasing abruptly. You',
+          'need to take care of that immediately. Hurry up!'
+        ],
+        [
+          'Select the OXY room on the screen.'
         ]
       ]);
     } else if ($.data.level === 5) {
@@ -146,10 +190,27 @@ class LevelSelectionScene extends Scene {
         [
           'Ok, you selected repairing the Ultracomm. First thing',
           'you need to do, is to recharge the Oxypack System to',
-          're-establish the oxygen flow in the comm room'
+          're-establish the oxygen flow in the comm room.'
         ],
         [
           'Select the OXY module on the screen to start.',
+        ]
+    ]);
+  }
+
+  selectBranch2() {
+    $.data.branch = 2;
+    this.zoneButtons.at(1).highlight = false;
+    this.zoneButtons.at(2).highlight = false;
+    this.zoneButtons.at(4).highlight = true;
+    this.aeros.speak([
+        [
+          'You selected repairing the escape pod, but with 1% of',
+          'power we cannot deploy the pod. First, we need to',
+          'repair the power generator.'
+        ],
+        [
+          'Select the POWER module on the screen to start.',
         ]
     ]);
   }
@@ -186,9 +247,9 @@ class LevelSelectionScene extends Scene {
 
     $.ctx.drawImage(this.map.canvas, this.map.x, this.map.y, this.map.w, this.map.h);
     $.cam.render(this.zoneButtons);
-    //if ($.data.level >= 4 && this.siren.anim.get()) {
-    //  $.ctx.drawImage(this.siren.canvas, 0, 0, $.vw, $.vh);
-    //}
+    if ($.data.level >= 4 && this.siren.anim.get()) {
+      $.ctx.drawImage(this.siren.canvas, 0, 0, $.vw, $.vh);
+    }
     $.ctx.drawImage(this.aeros.canvas, this.aeros.x, this.aeros.y, this.aeros.w, this.aeros.h);
 
     // Ending fade out
@@ -258,20 +319,25 @@ class UltraCommBtn extends ZoneButton {
     if ($.data.branch === 0) {
       this.cb();
     } else {
-      //$.scenemng.load(CalibrateScene);
-      $.scenemng.load(FillingScene);
+      $.scenemng.load(CalibrateScene);
     }
   }
 }
 
 class EscapePodBtn extends ZoneButton {
-  constructor(font) {
+  constructor(font, cb) {
     super(500, 200, 48, 48, 'POD', font);
+    this.cb = cb;
   }
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
+
+    if ($.data.branch === 0) {
+      this.cb();
+    } else {
+      $.scenemng.load(ConnectScene);
+    }
   }
 }
 
@@ -282,10 +348,7 @@ class OxygenBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-
-    if ($.data.level === 1 && $.data.branch === 1) {
-      $.scenemng.load(RechargeScene);
-    }
+    $.scenemng.load(RechargeScene);
   }
 }
 
@@ -307,7 +370,7 @@ class EngineBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
+    $.scenemng.load(TightenScene);
   }
 }
 
@@ -318,7 +381,6 @@ class CryoBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-    $.scenemng.load(AuxiliaryScene);
   }
 }
 
@@ -329,10 +391,7 @@ class FuelBtn extends ZoneButton {
 
   onClick() {
     if (!this.highlight) return;
-
-    if ($.data.level === 4) {
-      $.scenemng.load(SealScene);
-    }
+    $.scenemng.load(SealScene);
   }
 }
 

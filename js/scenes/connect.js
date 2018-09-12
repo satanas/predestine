@@ -1,6 +1,6 @@
 class ConnectScene extends BaseScene {
   constructor() {
-    super('Restablish connection', 'Click on cable end and drag to connect');
+    super('Restablish connection', 'Click on cable end and drag to connect', 6000, 300);
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
@@ -9,9 +9,9 @@ class ConnectScene extends BaseScene {
     this.successful = false;
     // Number of cables
     if ($.data.level === 2 && $.data.branch === 1) {
-      this.num = 3;
+      this.num = 4;
     } else {
-      this.num = 2;
+      this.num = 3;
     }
     this.colors = shuffle(['red', 'green', 'blue', 'orange', 'black', 'white', 'purple', 'yellow']).slice(0, this.num);
 
