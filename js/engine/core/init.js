@@ -73,6 +73,16 @@ function resizeCanvas(canvas, w, h, t) {
   canvas.style.height = h + 'px';
 }
 
+function goFullscreen() {
+  if ($.canvas.requestFullScreen) {
+    $.canvas.requestFullScreen();
+  } else if ($.canvas.webkitRequestFullScreen) {
+    $.canvas.webkitRequestFullScreen();
+  } else if ($.canvas.mozRequestFullScreen) {
+    $.canvas.mozRequestFullScreen();
+  }
+}
+
 // Request Animation Frame
 raf = W.requestAnimationFrame ||
   W.webkitRequestAnimationFrame ||
