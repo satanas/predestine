@@ -37,19 +37,22 @@ class Ending extends Scene {
     this.status = 'in';
     this.transitionTime = 1200;
     this.maxShowingTime = 150;
+    this.maxOutTime = 1000;
     this.maxDelayTime = 400;
+    this.maxIterations = 6;
     this.timeCounter = this.transitionTime;
     this.currWords = [];
     this.iterations = 0;
     this.wordIndex = -1;
     this.wordPos = 0;
+    this.bg = '#fff';
 
     this.word = new Word();
     // 50 x text.length
   }
 
   getWords() {
-    return shuffle(this.words).slice(0, rndi(10, 16));
+    return shuffle(this.words).slice(0, rndi(8, 16));
   }
 
   update() {
@@ -66,27 +69,36 @@ class Ending extends Scene {
         this.status = 'show';
         this.currWords = this.getWords();
         this.wordIndex = -1;
+        if (this.iterations >= this.maxIterations) {
+          this.status = 'out';
+          this.timeCounter = this.maxOutTime;
+        }
       }
     } else if (this.status === 'show') {
       if (this.word.done) {
         this.wordIndex += 1;
-        if (this.wordIndex > this.currWords.length) {
+        if (this.wordIndex >= this.currWords.length) {
           this.status = 'delay';
+          this.timeCounter = rndi(50, this.maxDelayTime - 100);
         } else {
           this.word.set(this.currWords[this.wordIndex]);
         }
       }
+    } else if (this.status === 'out') {
+      this.timeCounter -= this.deltaTime;
+      if (this.timeCounter <= 0) {
+        this.status = 'end';
+      }
     }
 
     this.word.update(this.deltaTime);
-    console.log(this.status, this.timeCounter);
   }
 
   render() {
     let bg;
     if (this.status === 'in') {
       bg = '#fff';
-    } else if (this.status === 'show') {
+    } else if (this.status === 'show' || this.status === 'out') {
       bg = '#000';
     } else if (this.status === 'delay') {
       bg = rnda(['red', 'blue', 'yellow', 'pink', 'orange', 'cyan']);
@@ -95,6 +107,8 @@ class Ending extends Scene {
 
     if (this.status === 'show') {
       this.word.render();
+    } else if (this.status === 'end') {
+      this.word.renderEnd();
     }
   }
 }
@@ -105,6 +119,7 @@ class Word extends Vector {
     this.done = 1;
     this.word = 0;
     this.font = new TextRenderer('monospace', '#fff', 50);
+    this.smallFont = new TextRenderer('monospace', '#fff', 14);
     this.timeCounter = 0;
     this.maxShowingTime = 150;
     this.maxWaitingTime = 50;
@@ -138,5 +153,11 @@ class Word extends Vector {
     if (this.show) {
       this.font.render($.ctx, this.word, this.x, this.y);
     }
+  }
+
+  renderEnd() {
+    this.font.render($.ctx, 'YOU ARE OFFLINE', 300, 280);
+    this.smallFont.render($.ctx, 'Thanks for playing. Touch the screen to exit', 330, 500);
+    this.smallFont.render($.ctx, 'Story by Juan F. Guzman. Programming by Wil Alvarez', 310, 550);
   }
 }
