@@ -2,10 +2,11 @@ class MenuScene extends Scene {
   constructor() {
     super();
     this.speed = 300;
-    this.titleY = 56;
+    this.titleY = 100;
     this.transition = false;
     this.intro = 0;
-    this.startBtn = new StartButton(0, 400, () => { this.startTransition(); });
+    this.startBtn = new StartButton(0, 400, this.goTo.bind(this));
+    this.font = new TextRenderer('monospace', '#fff', 50);
   }
 
   startTransition() {
@@ -13,7 +14,7 @@ class MenuScene extends Scene {
   }
 
   goTo() {
-    $.scenemng.load(new ProgrammingScene());
+    $.scenemng.load(LevelSelectionScene);
   }
 
   update() {
@@ -28,42 +29,18 @@ class MenuScene extends Scene {
     } else if (this.intro) {
       this.intro.update(this.deltaTime);
     } else {
-      this.startBtn.checkClick();
     }
   }
 
   render() {
-    $.cam.clear('#000');
+    $.cam.clear('#060608');
+
 
     if (this.intro) {
       this.intro.render();
     } else {
-      $.txt.render($.ctx, 'Planetary Mission', 140, this.titleY, '#fff', 32);
+      this.font.render($.ctx, 'PLANETARY MISSION', 240, this.titleY);
       $.cam.render(this.startBtn);
-    }
-  }
-}
-
-class IntroDialog {
-  constructor() {
-    this.index = 0;
-    this.alpha = 0;
-    this.baseY = 30;
-    this.dialog = new Animator([
-      'Part 1 of the intro',
-      'Part 2 of the intro',
-      'Part 3 of the intro'
-    ], 2000);
-  }
-
-  update(dt) {
-    this.dialog.update(dt);
-  }
-
-  render() {
-    let i;
-    for (i = 0; i < this.dialog.frame; i++) {
-      $.txt.render($.ctx, this.dialog.imgArr[i], 10, this.baseY * i, '#fff', 20);
     }
   }
 }
@@ -83,13 +60,20 @@ class StartButton extends UIButton {
     $.ctx.save();
     $.ctx.fillStyle = 'purple';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
-    $.txt.render($.ctx, 'START', rect.x + 58, rect.y + 16, '#fff', 16);
+    //$.txt.render($.ctx, 'START', rect.x + 58, rect.y + 16, '#fff', 16);
     $.ctx.restore();
   }
 }
 
-class Mountains extends Sprite {
+class Mountains {
   constructor(points) {
     this.points = points
+
+    this.canvas = $.canvas.create($.vw, $.vh);
+    this.ctx = this.canvas.getContext('2d');
+
+    //181715
+    this.ctx.fillStyle = '#473a41';
+
   }
 }

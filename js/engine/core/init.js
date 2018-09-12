@@ -55,14 +55,17 @@ $.canvas.create = function(w, h) {
 }
 
 function resize() {
-  let w = floor(W.innerWidth),
-      h = floor(w * 9 / 16),
-      t = floor((W.innerHeight - h) / 2);
+  let h = floor(W.innerHeight),
+      w = floor(h * 16 / 9);
 
-  console.log(w,h,t);
+  if (w > W.innerWidth) {
+    w = floor(W.innerWidth);
+    h = floor(w * 9 / 16);
+  }
+
   resizeCanvas($.canvas, w, h);
-  $.canvas.style.marginTop = t + 'px';
-  $.events.emit('resizeCanvas', {w:w, h:h, t:t});
+  //$.canvas.style.marginTop = t + 'px';
+  $.events.emit('resizeCanvas', {w:w, h:h});
 }
 
 function resizeCanvas(canvas, w, h, t) {
