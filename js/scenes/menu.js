@@ -44,7 +44,10 @@ class MenuScene extends Scene {
     } else {
       this.font.render($.ctx, 'PLANETARY MISSION', 145, this.titleY);
       $.cam.render(this.startBtn);
-      $.cam.render(this.fullScreenBtn);
+
+      if (!isFullscreen()) {
+        $.cam.render(this.fullScreenBtn);
+      }
     }
   }
 }

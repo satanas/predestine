@@ -80,7 +80,13 @@ function goFullscreen() {
     $.canvas.webkitRequestFullScreen();
   } else if ($.canvas.mozRequestFullScreen) {
     $.canvas.mozRequestFullScreen();
+  } else if ($.canvas.msRequestFullScreen) {
+    $.canvas.msRequestFullScreen();
   }
+}
+
+function isFullscreen() {
+  return D.webkitFullscreenElement || D.mozFullScreenElement || D.msFullscreenElement || D.fullscreenElement;
 }
 
 // Request Animation Frame
