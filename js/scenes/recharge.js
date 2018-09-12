@@ -3,8 +3,9 @@ class RechargeScene extends BaseScene {
     super('Recharge Oxypack', 'Click rapidly to recharge');
     let barWidth = 700,
         x = ($.vw - barWidth) / 2,
-        dragStep = ($.data.level === 2) ? 30 : 50,
+        dragStep = ($.data.level === 1) ? 18 : 50,
         incrStep = 25;
+    console.log('dragStep', dragStep, 'incrStep', incrStep);
     this.gauge = new Gauge(x, 300, barWidth, dragStep, incrStep, 80, 30);
     this.gauge.fgColor = 'lightblue';
 

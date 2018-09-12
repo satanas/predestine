@@ -11,8 +11,8 @@ $.input.bindMouse();
 $.cam.setWorldSize(1024, 576);
 
 $.data = {
-  branch: 1,
-  level: 5
+  branch: 0,
+  level: 6
 };
 
-$.scenemng.load(LevelSelectionScene);
+$.scenemng.load(Ending);

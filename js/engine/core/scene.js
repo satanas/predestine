@@ -57,7 +57,6 @@ class Scene {
   }
 
   exit() {
-    console.log('exit scene');
     this.exitFlag = true;
   }
 
@@ -76,7 +75,6 @@ class Scene {
   // To be override by child class
   // Here, the fade out (and stuff like that) can be activated
   unload() {
-    console.log('unload scene');
     this.exit();
   }
 }
