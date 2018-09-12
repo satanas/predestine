@@ -4,51 +4,96 @@ class MenuScene extends Scene {
     this.speed = 300;
     this.titleY = 100;
     this.transition = false;
-    this.intro = 0;
-    this.startBtn = new MenuButton(0, 380, 'Start', 'purple', this.goTo.bind(this));
+    this.startBtn = new MenuButton(0, 380, 'Start', 'purple', this.startTransition.bind(this));
     this.fullScreenBtn = new MenuButton(0, 480, 'Fullscreen', 'blue', goFullscreen);
     this.font = new TextRenderer('monospace', '#fff', 70);
     this.mountains = new Mountains();
+    this.timeCounter = 5000;
+    this.done = 0;
+    this.ship = 0;
+
+    this.explosions = new Group();
   }
 
   startTransition() {
-    this.transition = true;
-  }
-
-  goTo() {
-    //$.scenemng.load(LevelSelectionScene);
+    this.status = 'in';
   }
 
   update() {
-    if (this.transition) {
+    $.cam.update(this.deltaTime);
+    this.explosions.update(this.deltaTime);
+
+    if (this.status === 'in') {
       this.startBtn.y += this.speed * this.deltaTime / 1000;
+      this.fullScreenBtn.y += this.speed * this.deltaTime / 1000;
       this.titleY -= this.speed * this.deltaTime / 1000;
       if (this.startBtn.y > $.vh && this.titleY <= 0) {
-        this.transition = false;
-        this.goTo();
-        //this.intro = new IntroDialog();
+        this.status = 'crash';
       }
-    } else if (this.intro) {
-      this.intro.update(this.deltaTime);
-    } else {
+    } else if (this.status === 'crash') {
+      this.ship = new Ship(this.explosions);
+      this.status = 'delay';
+    } else if (this.status === 'delay') {
+      this.ship.update(this.deltaTime);
+      this.timeCounter -= this.deltaTime;
+      if (this.timeCounter <= 0 && !this.done) {
+        this.done = 1;
+        $.scenemng.load(LevelSelectionScene);
+      }
     }
   }
 
   render() {
     $.cam.clear('#060608');
 
-    $.ctx.drawImage(this.mountains.canvas, 0, 0, $.vw, $.vh);
+    $.ctx.drawImage(this.mountains.canvas, $.cam.offsetX, $.cam.offsetY, $.vw, $.vh);
 
-    if (this.intro) {
-      this.intro.render();
-    } else {
-      this.font.render($.ctx, 'PLANETARY MISSION', 145, this.titleY);
-      $.cam.render(this.startBtn);
+    this.font.render($.ctx, 'PLANETARY MISSION', 145, this.titleY);
+    $.cam.render(this.startBtn);
 
-      if (!isFullscreen()) {
-        $.cam.render(this.fullScreenBtn);
-      }
+    if (!isFullscreen()) {
+      $.cam.render(this.fullScreenBtn);
     }
+
+    if (this.status === 'delay') {
+      $.cam.render(this.ship);
+    }
+    $.cam.render(this.explosions);
+  }
+}
+
+class Ship extends Sprite {
+  constructor(grp) {
+    super(1100, 176, 16, 16);
+    this.destX = 135;
+    this.destY = 476;
+    this.speed = 500;
+    this.angle = atan2((this.destY - this.y), (this.x - this.destX))
+    this.crashed = false;
+    this.expGrp = grp;
+  }
+
+  update(dt) {
+    if (this.crashed) return;
+
+    this.x -= this.speed * cos(this.angle) * dt / 1000;
+    this.y += this.speed * sin(this.angle) * dt / 1000;
+
+    this.x = clamp(this.x, this.destX);
+    this.y = clamp(this.y, 0, this.destY);
+
+    if (this.x === this.destX && this.y === this.destY) {
+      this.crashed = true;
+      this.expGrp.add(new Explosion(this));
+      $.cam.shake(6, 200);
+    }
+  }
+
+  render(r) {
+    $.ctx.restore();
+    $.ctx.fillStyle = '#fff';
+    $.ctx.fillRect(r.x, r.y, this.w, this.h);
+    $.ctx.save();
   }
 }
 
@@ -72,6 +117,26 @@ class MenuButton extends UIButton {
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     this.font.render($.ctx, this.text, rect.x + (this.w - (18 * this.text.length)) / 2, rect.y + 38);
     $.ctx.restore();
+  }
+}
+
+class Explosion extends Sprite {
+  constructor(obj) {
+    super(obj.center().x, obj.center().y, 64, 64);
+    this.radius = 50;
+    this.life = 100;
+  }
+
+  update(dt) {
+    this.life -= dt;
+    if (this.life < 0) this.alive = 0;
+  }
+
+  render(r) {
+    $.ctx.fillStyle = rnda(['yellow', 'white', 'red', 'orange']);
+    $.ctx.beginPath();
+    $.ctx.arc(r.x, r.y, this.radius, 0, 2 * PI);
+    $.ctx.fill();
   }
 }
 
