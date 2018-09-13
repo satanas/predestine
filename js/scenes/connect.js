@@ -4,8 +4,18 @@ class ConnectScene extends BaseScene {
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
+    //$.events.listen('mouseleave', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
 
+    $.events.register('touchstart');
+    $.events.register('touchmove');
+    $.events.register('touchend');
+
+    $.events.listen('touchstart', this.touchStart.bind(this));
+    $.events.listen('touchmove', this.touchMove.bind(this));
+    $.events.listen('touchend', this.touchEnd.bind(this));
+
+    this.lastKnownTouch = 0;
     this.successful = false;
     // Number of cables
     if ($.data.level === 2 && $.data.branch === 1) {
@@ -44,6 +54,24 @@ class ConnectScene extends BaseScene {
         new Sensor(this.lowerCables[color].x, this.lowerCables[color].y - 32, color)
       ];
     }
+  }
+
+  touchStart(ev) {
+    let e = ev.touches[0];
+    $.input.updateMousePos(e);
+    D.body.dispatchEvent(new MouseEvent('mousedown', e));
+  }
+
+  touchMove(ev) {
+    let e = ev.touches[0];
+    this.lastKnownTouch = e;
+    $.input.updateMousePos(e);
+    D.body.dispatchEvent(new MouseEvent('mousemove', e));
+  }
+
+  touchEnd(ev) {
+    let e = ev.touches[0];
+    D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
   }
 
   togglePaint(val) {

@@ -43,6 +43,7 @@ class Events {
 
   register(evt) {
     if (!this.listeners[evt]) {
+      if (evt.preventDefault) evt.preventDefault();
       this.listeners[evt] = [];
       W.addEventListener(evt, this.onCustom.bind(this, evt));
     }
