@@ -46,7 +46,6 @@ class TerminalScene extends Scene {
       ['', 0],
       ['Initializing...', 0],
       ['Loading neural network', 100],
-      ['Loading FxD-6 module', 0],
       ['Loading quantic matrix', 0],
       ['Loading hyperspacial sensors', 0],
       ['', 0],
