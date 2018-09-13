@@ -64,7 +64,7 @@ class MenuScene extends Scene {
 
 class Ship extends Sprite {
   constructor(grp) {
-    super(1100, 176, 16, 16);
+    super(1100, 176, 16, 8);
     this.destX = 135;
     this.destY = 476;
     this.speed = 500;
@@ -90,10 +90,15 @@ class Ship extends Sprite {
   }
 
   render(r) {
-    $.ctx.restore();
-    $.ctx.fillStyle = '#fff';
-    $.ctx.fillRect(r.x, r.y, this.w, this.h);
     $.ctx.save();
+    $.ctx.fillStyle = '#fff';
+    $.ctx.beginPath();
+    $.ctx.moveTo(r.x + this.w, r.y);
+    $.ctx.lineTo(r.x + this.w, r.y + this.h);
+    $.ctx.lineTo(r.x, r.y + (this.h / 2));
+    $.ctx.lineTo(r.x + this.w, r.y);
+    $.ctx.fill();
+    $.ctx.restore();
   }
 }
 
@@ -133,10 +138,12 @@ class Explosion extends Sprite {
   }
 
   render(r) {
+    $.ctx.save();
     $.ctx.fillStyle = rnda(['yellow', 'white', 'red', 'orange']);
     $.ctx.beginPath();
     $.ctx.arc(r.x, r.y, this.radius, 0, 2 * PI);
     $.ctx.fill();
+    $.ctx.restore();
   }
 }
 
