@@ -34,7 +34,7 @@ class Ending extends Scene {
       'OFFLINE'
     ].reverse();
 
-    this.status = 'in';
+    this.status = 'end';
     this.transitionTime = 1200;
     this.maxShowingTime = 150;
     this.maxOutTime = 3000;
@@ -48,10 +48,16 @@ class Ending extends Scene {
     this.bg = '#fff';
 
     this.word = new Word();
+
+    $.events.listen('mousedown', this.restart.bind(this));
   }
 
   getWords() {
     return shuffle(this.words).slice(0, rndi(8, 16));
+  }
+
+  restart() {
+    $.scenemng.load(MenuScene);
   }
 
   update() {
@@ -157,6 +163,6 @@ class Word extends Vector {
   renderEnd() {
     this.font.render($.ctx, 'YOU ARE OFFLINE', 300, 280);
     this.smallFont.render($.ctx, 'Thanks for playing. Touch the screen to exit', 330, 500);
-    this.smallFont.render($.ctx, 'Story by Juan F. Guzman. Programming by Wil Alvarez', 310, 550);
+    this.smallFont.render($.ctx, 'Story by Juan F. Guzman. Code by Wil Alvarez', 330, 550);
   }
 }

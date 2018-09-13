@@ -9,10 +9,6 @@ class Events {
     this.listeners['mousedown'] = [];
     this.listeners['mouseup'] = [];
     this.listeners['mousemove'] = [];
-
-    D.body.addEventListener('touchstart', this.touchstart.bind(this));
-    D.body.addEventListener('touchend', this.touchend.bind(this));
-    D.body.addEventListener('touchmove', this.touchmove.bind(this));
   }
 
   mousedown(ev) {
@@ -70,6 +66,12 @@ class Events {
       this.listeners[evt] = [];
       W.addEventListener(evt, this.onCustom.bind(this, evt));
     }
+  }
+
+  registerTouch() {
+    D.body.addEventListener('touchstart', this.touchstart.bind(this));
+    D.body.addEventListener('touchend', this.touchend.bind(this));
+    D.body.addEventListener('touchmove', this.touchmove.bind(this));
   }
 
   listen(evt, cb) {

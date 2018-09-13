@@ -11,6 +11,7 @@ class FillingScene extends BaseScene {
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
+    $.events.registerTouch();
 
     this.painting = false;
     this.color = [255, 235, 153, 255];

@@ -5,8 +5,9 @@ class MenuScene extends Scene {
     this.titleY = 100;
     this.transition = false;
     this.startBtn = new MenuButton(0, 380, 'Start', 'purple', this.startTransition.bind(this));
-    this.fullScreenBtn = new MenuButton(0, 480, 'Fullscreen', 'blue', goFullscreen);
+    this.fullScreenBtn = new MenuButton(0, 470, 'Fullscreen', 'blue', goFullscreen);
     this.font = new TextRenderer('monospace', '#fff', 70);
+    this.smallFont = new TextRenderer('monospace', '#fff', 16);
     this.mountains = new Mountains();
     this.timeCounter = 5000;
     this.done = 0;
@@ -49,6 +50,7 @@ class MenuScene extends Scene {
     $.ctx.drawImage(this.mountains.canvas, $.cam.offsetX, $.cam.offsetY, $.vw, $.vh);
 
     this.font.render($.ctx, 'PLANETARY MISSION', 145, this.titleY);
+    this.smallFont.render($.ctx, 'By @satanas82 for js13k 2018', 378, 560);
     $.cam.render(this.startBtn);
 
     if (!isFullscreen()) {
