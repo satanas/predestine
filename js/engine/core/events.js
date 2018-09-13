@@ -45,6 +45,7 @@ class Events {
     let e = ev.touches[0];
     this.lastKnownTouch = e;
     $.input.updateMousePos(e);
+    ev.preventDefault();
     ev.stopPropagation();
     this.mousedown(new MouseEvent('mousedown', e));
     //D.body.dispatchEvent(new MouseEvent('mousedown', e));
@@ -55,6 +56,7 @@ class Events {
     let e = ev.touches[0];
     this.lastKnownTouch = e;
     $.input.updateMousePos(e);
+    ev.preventDefault();
     ev.stopPropagation();
     this.mousemove(new MouseEvent('mousemove', e))
     //D.body.dispatchEvent(new MouseEvent('mousemove', e));
@@ -63,6 +65,7 @@ class Events {
 
   touchend(ev) {
     let e = ev.touches[0];
+    ev.preventDefault();
     ev.stopPropagation();
     this.mouseup(new MouseEvent('mouseup', this.lastKnownTouch));
     //D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
