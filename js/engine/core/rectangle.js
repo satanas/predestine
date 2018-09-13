@@ -7,9 +7,9 @@ class Rectangle {
     this.bounds = Bounds.fromRect(this);
   }
 
-  center() {
-    return new Vector(this.x + (this.w / 2), this.y + (this.h / 2));
-  }
+  //center() {
+  //  return new Vector(this.x + (this.w / 2), this.y + (this.h / 2));
+  //}
 
   //setPos(props) {
   //  for(let p in props) {

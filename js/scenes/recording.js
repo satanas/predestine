@@ -29,7 +29,7 @@ class RecordingScene extends Scene {
   }
 
   finish(msg) {
-    localStorage.setItem('AgathaMessage', msg);
+    W.localStorage.setItem('AgathaMessage', msg);
     $.data.level += 1;
     $.scenemng.load(LevelSelectionScene);
   }

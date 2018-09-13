@@ -1,0 +1,27 @@
+{
+  "name": "js13-2018",
+  "version": "0.0.0",
+  "description": "My entry for the js13k compo 2018",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/satanas/js13k-2018.git"
+  },
+  "author": "Wil Alvarez",
+  "license": "MIT",
+  "homepage": "https://github.com/satanas/#",
+  "devDependencies": {
+    "chalk": "^2.4.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-size": "^3.0.0"
+  }
+}

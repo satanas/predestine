@@ -1,12 +1,12 @@
+//# sourceMappingURL=all.min.js.map
 const ENTER = 13,
-      KEY_A = 65,
       GRID = 64;
 
-debug = true;
+debug = false;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
-$.input.bind([ENTER, KEY_A]);
+$.input.bind([ENTER]);
 $.input.bindMouse();
 $.cam.setWorldSize(1024, 576);
 

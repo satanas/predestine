@@ -156,53 +156,52 @@ class Mountains {
     //this.ctx.fillStyle = '#473a41';
     // TODO: drawPoints method that receives an array of points
     this.ctx.fillStyle = '#171518';
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, 576);
-    this.ctx.lineTo(159, 284);
-    this.ctx.lineTo(195, 276);
-    this.ctx.lineTo(214, 262);
-    this.ctx.lineTo(242, 276);
-    this.ctx.lineTo(304, 290);
-    this.ctx.lineTo(355, 320);
-    this.ctx.lineTo(423, 305);
-    this.ctx.lineTo(497, 300);
-    this.ctx.lineTo(564, 284);
-    this.ctx.lineTo(638, 306);
-    this.ctx.lineTo(750, 290);
-    this.ctx.lineTo(821, 310);
-    this.ctx.lineTo(911, 280);
-    this.ctx.lineTo(943, 244);
-    this.ctx.lineTo(986, 248);
-    this.ctx.lineTo(1024, 264);
-    this.ctx.lineTo(1024, 576);
-    this.ctx.lineTo(0, 576);
-    this.ctx.fill();
+    $.ctx.fillLines([
+      [0, 576],
+      [159, 284],
+      [195, 276],
+      [214, 262],
+      [242, 276],
+      [304, 290],
+      [355, 320],
+      [423, 305],
+      [497, 300],
+      [564, 284],
+      [638, 306],
+      [750, 290],
+      [821, 310],
+      [911, 280],
+      [943, 244],
+      [986, 248],
+      [1024, 264],
+      [1024, 576],
+      [0, 576]
+    ], this.ctx);
 
     this.ctx.fillStyle = '#253326';
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, 576);
-    this.ctx.lineTo(0, 326);
-    this.ctx.lineTo(24, 333);
-    this.ctx.lineTo(56, 316);
-    this.ctx.lineTo(82, 284);
-    this.ctx.lineTo(126, 273);
-    this.ctx.lineTo(185, 290);
-    this.ctx.lineTo(245, 326);
-    this.ctx.lineTo(382, 369);
-    this.ctx.lineTo(466, 373);
-    this.ctx.lineTo(523, 353);
-    this.ctx.lineTo(584, 365);
-    this.ctx.lineTo(616, 347);
-    this.ctx.lineTo(655, 361);
-    this.ctx.lineTo(723, 350);
-    this.ctx.lineTo(788, 376);
-    this.ctx.lineTo(902, 352);
-    this.ctx.lineTo(944, 324);
-    this.ctx.lineTo(987, 333);
-    this.ctx.lineTo(1024, 357);
-    this.ctx.lineTo(1024, 576);
-    this.ctx.lineTo(0, 576);
-    this.ctx.fill();
-
+    $.ctx.fillLines([
+      [0, 576],
+      [0, 326],
+      [24, 333],
+      [56, 316],
+      [82, 284],
+      [126, 273],
+      [185, 290],
+      [245, 326],
+      [382, 369],
+      [466, 373],
+      [523, 353],
+      [584, 365],
+      [616, 347],
+      [655, 361],
+      [723, 350],
+      [788, 376],
+      [902, 352],
+      [944, 324],
+      [987, 333],
+      [1024, 357],
+      [1024, 576],
+      [0, 576]
+    ], this.ctx);
   }
 }

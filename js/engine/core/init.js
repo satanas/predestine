@@ -35,6 +35,16 @@ $.init = function() {
     ctx.closePath();
     ctx.fill();
   }
+
+  $.ctx.fillLines = function(points, ctx) {
+    ctx = ctx || $.ctx;
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i][0], points[i][1]);
+    }
+    ctx.fill();
+  }
 }
 
 $.easeInQuad = function(elapsed, begin, end, duration) {
@@ -90,13 +100,13 @@ function isFullscreen() {
 }
 
 // Request Animation Frame
-raf = W.requestAnimationFrame ||
+let raf = W.requestAnimationFrame ||
   W.webkitRequestAnimationFrame ||
   W.mozRequestAnimationFrame ||
   function(a){ W.setTimeout(a,1E3/60); };
 
 // Cancel Animation Frame
-caf = W.cancelAnimationFrame ||
+let caf = W.cancelAnimationFrame ||
   W.mozCancelAnimationFrame;
 
 W.addEventListener('load', resize, false);
