@@ -45,7 +45,6 @@ class Events {
     let e = ev.touches[0];
     this.lastKnownTouch = e;
     $.input.updateMousePos(e);
-    ev.preventDefault();
     ev.stopPropagation();
     this.mousedown(new MouseEvent('mousedown', e));
     //D.body.dispatchEvent(new MouseEvent('mousedown', e));
@@ -56,7 +55,6 @@ class Events {
     let e = ev.touches[0];
     this.lastKnownTouch = e;
     $.input.updateMousePos(e);
-    ev.preventDefault();
     ev.stopPropagation();
     this.mousemove(new MouseEvent('mousemove', e))
     //D.body.dispatchEvent(new MouseEvent('mousemove', e));
@@ -65,7 +63,6 @@ class Events {
 
   touchend(ev) {
     let e = ev.touches[0];
-    ev.preventDefault();
     ev.stopPropagation();
     this.mouseup(new MouseEvent('mouseup', this.lastKnownTouch));
     //D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
@@ -81,7 +78,7 @@ class Events {
 
   register(evt) {
     if (!this.listeners[evt]) {
-      if (evt.preventDefault) evt.preventDefault();
+      //if (evt.preventDefault) evt.preventDefault();
       this.listeners[evt] = [];
       D.body.addEventListener(evt, this.onCustom.bind(this, evt));
     }
@@ -95,10 +92,10 @@ class Events {
     D.body.addEventListener('touchend', this.touchend.bind(this), true);
     D.body.addEventListener('touchmove', this.touchmove.bind(this), true);
     W.addEventListener('scroll', (ev) =>{
-      ev.preventDefault();
       ev.stopPropagation();
       return false;
     }, true);
+    D.ontouchmove = function(e){ e.preventDefault(); }
   }
 
   registerMouse() {
