@@ -1,6 +1,7 @@
 class Events {
   constructor() {
     this.listeners = {};
+    this.lastKnownTouch = 0;
 
     D.body.addEventListener('mousedown', this.mousedown.bind(this));
     D.body.addEventListener('mouseup', this.mouseup.bind(this));
@@ -8,6 +9,10 @@ class Events {
     this.listeners['mousedown'] = [];
     this.listeners['mouseup'] = [];
     this.listeners['mousemove'] = [];
+
+    D.body.addEventListener('touchstart', this.touchstart.bind(this));
+    D.body.addEventListener('touchend', this.touchend.bind(this));
+    D.body.addEventListener('touchmove', this.touchmove.bind(this));
   }
 
   mousedown(ev) {
@@ -32,6 +37,24 @@ class Events {
         cb(ev);
       }
     }
+  }
+
+  touchstart(ev) {
+    let e = ev.touches[0];
+    $.input.updateMousePos(e);
+    D.body.dispatchEvent(new MouseEvent('mousedown', e));
+  }
+
+  touchmove(ev) {
+    let e = ev.touches[0];
+    this.lastKnownTouch = e;
+    $.input.updateMousePos(e);
+    D.body.dispatchEvent(new MouseEvent('mousemove', e));
+  }
+
+  touchend(ev) {
+    let e = ev.touches[0];
+    D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
   }
 
   clear() {
