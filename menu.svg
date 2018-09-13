@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="menu.svg">
+   sodipodi:docname="menu.svg"
+   inkscape:export-filename="/Users/walvarezrodrigu/proyectos/games/js13k-2018/ss.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -26,10 +29,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="530.86552"
+     inkscape:cx="545.51273"
      inkscape:cy="281.62441"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
@@ -45,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -54,7 +57,7 @@
      id="layer2"
      inkscape:label="BG"
      sodipodi:insensitive="true"
-     style="display:none">
+     style="display:inline">
     <rect
        transform="translate(0,-476.36216)"
        style="opacity:1;fill:#060608;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.59340665"
@@ -68,9 +71,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-476.36216)">
+     transform="translate(0,-476.36216)"
+     sodipodi:insensitive="true">
     <path
-       style="fill:#171518;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       style="fill:#171518;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 161.62441,757.39762 32.32488,-7.07107 21.2132,-13.13198 26.26397,15.15228 64.64976,14.14214 50.50763,29.29442 66.67007,-16.16244 71.72083,-5.05076 69.70052,-17.17259 73.74114,21.2132 112.12693,-15.15229 71.72083,21.21321 88.89343,-31.31473 32.32488,-33.33504 40.4061,3.03046 38.38582,16.16244 0,311.12703 -1022.2744,0 z"
        id="path4163"
        inkscape:connector-curvature="0" />
@@ -81,9 +85,26 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccccccccccccc" />
     <path
-       style="fill:#44343f;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       style="fill:#44343f;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m -1.0101525,908.9205 37.3756445,19.1929 68.690368,-24.24366 84.85282,-9.09138 103.03556,40.4061 22.22335,23.23351 131.31984,-43.43656 49.49747,-35.35534 33.33503,33.33504 102.02541,24.24366 90.91373,-25.25381 45.45686,-48.48733 23.23351,25.25382 23.23351,-10.10153 73.74114,39.39595 38.38579,16.16244 30.30458,-13.13198 39.39595,-15.15229 29.29439,14.14214 0,133.34012 -1025.3048,0 z"
        id="path4155"
        inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Text">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="137.21362"
+       y="229.86285"
+       id="text4309"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4311"
+         x="137.21362"
+         y="229.86285"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:125px;font-family:Monaco;-inkscape-font-specification:Monaco;fill:#ffffff;fill-opacity:1">PREDESTINE</tspan></text>
   </g>
 </svg>
