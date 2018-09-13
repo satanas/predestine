@@ -1,26 +1,26 @@
 class FillingScene extends BaseScene {
   constructor() {
-    let title;
+    let title = 'Weld ';
     if ($.data.branch === 1) {
-      title = 'Weld the Ultracomm';
+      title += 'Ultracomm';
     } else {
-      title = 'Weld the Engine';
+      title += 'Engine';
     }
-    super(title, 'Click and hold to draw on screen', 10000);
+    super(title, 'Hold click and move to cover square', 10000);
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
 
     this.painting = false;
-    this.color = [255, 0, 0, 255];
+    this.color = [255, 235, 153, 255];
     this.canvas = $.canvas.create($.vw, $.vh);
     this.ctx = this.canvas.getContext('2d');
-    this.ctx.fillStyle = 'red';
-    this.ctx.strokeStyle = 'red';
+    this.ctx.fillStyle = '#ffeb99';
+    this.ctx.strokeStyle = '#ffeb99';
     this.ctx.lineWidth = 20;
 
-    this.pad = new Pad(94, this.color);
+    this.pad = new Pad(85, this.color);
   }
 
   togglePaint(val) {
@@ -108,7 +108,7 @@ class Pad extends Sprite {
 
   render(rect) {
     $.ctx.save();
-    $.ctx.fillStyle = '#deb887';
+    $.ctx.fillStyle = '#38260f';
     $.ctx.fillRect(rect.x, rect.y, this.w, this.h);
     $.ctx.restore();
   }

@@ -55,7 +55,7 @@ class SealScene extends BaseScene {
   }
 
   render() {
-    $.cam.clear('darkcyan');
+    $.cam.clear('#8fdfff');
     $.cam.render(this.holes);
     this.renderProgress();
   }
@@ -96,17 +96,22 @@ class Hole extends UIButton {
 
     super(hPadding + (x * w), vPadding + (y * h), w, h);
     this.sealed = false;
+    this.color = '#333';
   }
 
   render() {
     $.ctx.save();
-    $.ctx.fillStyle = 'brown';
-    $.ctx.fillRect(this.x, this.y, this.w, this.h);
+    $.ctx.fillStyle = this.color;
+    //$.ctx.fillRect(this.x, this.y, this.w, this.h);
+    $.ctx.beginPath();
+    $.ctx.arc(this.center().x, this.center().y, this.w / 2, 0, 2 * PI);
+    $.ctx.fill();
     $.ctx.restore();
   }
 
   onClick() {
     this.sealed = true;
-    this.enabled = false;
+    this.color = '#00b7ff';
+    //this.enabled = false;
   }
 }

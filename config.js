@@ -32,6 +32,7 @@ module.exports = {
     "js/scenes/recording.js",
     "js/scenes/ending.js",
     "js/scenes/level_selection.js",
+    "js/music.js",
     "js/aeros.js",
     "js/gauge.js",
     "js/main.js",

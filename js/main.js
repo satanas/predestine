@@ -2,7 +2,7 @@
 const ENTER = 13,
       GRID = 64;
 
-debug = false;
+debug = true;
 
 $.init(); // init(['collisions', 'sound', 'astar', ...])
 // Bind keyboard
@@ -15,4 +15,23 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(MenuScene);
+$.scenemng.load(SealScene);
+
+// create a new Web Audio API context
+var ac = new AudioContext();
+
+// set the playback tempo (120 beats per minute)
+var tempo = 120;
+
+// create a new sequence
+var sequence = new Sequence( ac, tempo, [
+  'G3 q',
+  'E4 q',
+  'C4 h'
+]);
+
+// disable looping
+sequence.loop = false;
+
+// play it
+sequence.play();
