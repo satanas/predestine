@@ -15,7 +15,7 @@ $.data = {
   level: 0
 };
 
-$.scenemng.load(MenuScene);
+$.scenemng.load(AuxiliaryScene);
 
 // create a new Web Audio API context
 //var ac = new AudioContext();

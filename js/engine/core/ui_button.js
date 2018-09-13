@@ -18,7 +18,7 @@ class UIButton extends Sprite {
   }
 
   onMouseDown(ev) {
-    if (ev.button === 0) {
+    if (ev.button === 0 && !this.pressed) {
       if ($.collision.vector($.input.mousePos, this)) {
         this.pressed = true;
         this.onClick();

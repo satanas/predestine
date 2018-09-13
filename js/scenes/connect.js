@@ -4,9 +4,7 @@ class ConnectScene extends BaseScene {
 
     $.events.listen('mousedown', this.togglePaint.bind(this, true));
     $.events.listen('mouseup', this.togglePaint.bind(this, false));
-    //$.events.listen('mouseleave', this.togglePaint.bind(this, false));
     $.events.listen('mousemove', this.doPaint.bind(this));
-    $.events.registerTouch();
 
     this.lastKnownTouch = 0;
     this.successful = false;

@@ -3,12 +3,18 @@ class Events {
     this.listeners = {};
     this.lastKnownTouch = 0;
 
-    D.body.addEventListener('mousedown', this.mousedown.bind(this));
-    D.body.addEventListener('mouseup', this.mouseup.bind(this));
-    D.body.addEventListener('mousemove', this.mousemove.bind(this));
-    this.listeners['mousedown'] = [];
-    this.listeners['mouseup'] = [];
-    this.listeners['mousemove'] = [];
+    //D.body.addEventListener('mousedown', this.mousedown.bind(this));
+    //D.body.addEventListener('mouseup', this.mouseup.bind(this));
+    //D.body.addEventListener('mousemove', this.mousemove.bind(this));
+    //this.listeners['mousedown'] = [];
+    //this.listeners['mouseup'] = [];
+    //this.listeners['mousemove'] = [];
+
+    if ($.input.isTouch) {
+      this.registerTouch();
+    } else {
+      this.registerMouse();
+    }
   }
 
   mousedown(ev) {
@@ -37,20 +43,24 @@ class Events {
 
   touchstart(ev) {
     let e = ev.touches[0];
+    this.lastKnownTouch = e;
     $.input.updateMousePos(e);
-    D.body.dispatchEvent(new MouseEvent('mousedown', e));
+    this.mousedown(new MouseEvent('mousedown', e));
+    //D.body.dispatchEvent(new MouseEvent('mousedown', e));
   }
 
   touchmove(ev) {
     let e = ev.touches[0];
     this.lastKnownTouch = e;
     $.input.updateMousePos(e);
-    D.body.dispatchEvent(new MouseEvent('mousemove', e));
+    this.mousemove(new MouseEvent('mousemove', e))
+    //D.body.dispatchEvent(new MouseEvent('mousemove', e));
   }
 
   touchend(ev) {
     let e = ev.touches[0];
-    D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
+    this.mouseup(new MouseEvent('mouseup', this.lastKnownTouch));
+    //D.body.dispatchEvent(new MouseEvent('mouseup', this.lastKnownTouch));
   }
 
   clear() {
@@ -64,14 +74,23 @@ class Events {
     if (!this.listeners[evt]) {
       if (evt.preventDefault) evt.preventDefault();
       this.listeners[evt] = [];
-      W.addEventListener(evt, this.onCustom.bind(this, evt));
+      D.body.addEventListener(evt, this.onCustom.bind(this, evt));
     }
   }
 
   registerTouch() {
+    this.listeners['mousedown'] = [];
+    this.listeners['mouseup'] = [];
+    this.listeners['mousemove'] = [];
     D.body.addEventListener('touchstart', this.touchstart.bind(this));
     D.body.addEventListener('touchend', this.touchend.bind(this));
     D.body.addEventListener('touchmove', this.touchmove.bind(this));
+  }
+
+  registerMouse() {
+    this.register('mousedown');
+    this.register('mouseup');
+    this.register('mousemove');
   }
 
   listen(evt, cb) {
@@ -80,7 +99,7 @@ class Events {
 
   emit(evt, data) {
     let ev = new CustomEvent(evt, {detail: data});
-    W.dispatchEvent(ev);
+    D.body.dispatchEvent(ev);
   }
 
   onCustom(evt, data) {

@@ -3,6 +3,7 @@ class Input {
     this.pressed = {};
     this.events = {};
     this.mousePos = new Vector(0, 0);
+    this.isTouch = 'ontouchstart' in W;
 
     D.body.addEventListener('keydown', (e) => {
       if (e.keyCode in this.events) {
@@ -16,19 +17,19 @@ class Input {
       }
     });
 
-    D.body.addEventListener('mousedown', (e) => {
-      let key = e.button + 1;
-      if (key in this.events) {
-        this.updateEvent(e, -1, 1, key);
-      }
-    });
+    //D.body.addEventListener('mousedown', (e) => {
+    //  let key = e.button + 1;
+    //  if (key in this.events) {
+    //    this.updateEvent(e, -1, 1, key);
+    //  }
+    //});
 
-    D.body.addEventListener('mouseup', (e) => {
-      let key = e.button + 1;
-      if (key in this.events) {
-        this.updateEvent(e, 1, 0, key);
-      }
-    });
+    //D.body.addEventListener('mouseup', (e) => {
+    //  let key = e.button + 1;
+    //  if (key in this.events) {
+    //    this.updateEvent(e, 1, 0, key);
+    //  }
+    //});
   }
 
   isPressed(c) {
