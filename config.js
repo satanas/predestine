@@ -1,5 +1,5 @@
 module.exports = {
-  appName: 'js13k-2018',
+  appName: 'predestine',
   sourceFiles: [
     "js/engine/core/setup.js",
     "js/engine/core/input.js",

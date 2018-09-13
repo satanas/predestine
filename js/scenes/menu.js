@@ -2,7 +2,7 @@ class MenuScene extends Scene {
   constructor() {
     super();
     this.speed = 300;
-    this.titleY = 100;
+    this.titleY = 160;
     this.transition = false;
     this.startBtn = new MenuButton(0, 380, 'Start', 'purple', this.startTransition.bind(this));
     //this.fullScreenBtn = new MenuButton(0, 470, 'Fullscreen', 'blue', goFullscreen);
@@ -50,7 +50,7 @@ class MenuScene extends Scene {
 
     $.ctx.drawImage(this.mountains.canvas, $.cam.offsetX, $.cam.offsetY, $.vw, $.vh);
 
-    this.font.render($.ctx, 'PLANETARY MISSION', 145, this.titleY);
+    this.font.render($.ctx, 'PREDESTINE', 310, this.titleY);
     this.smallFont.render($.ctx, 'By @satanas82 for js13k 2018', 378, 560);
     $.cam.render(this.startBtn);
 
