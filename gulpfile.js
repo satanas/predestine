@@ -1,3 +1,4 @@
+var fs = require('fs');
 var child = require('child_process');
 var gulp = require('gulp');
 var size = require('gulp-size');
@@ -80,5 +81,20 @@ gulp.task('minify_js', ['concat_js'], function() {
 });
 
 gulp.task('zip', function() {
-  child.spawn('advzip', ['-p', '-4', '--add', 'min/test.zip', 'min/all.min.js', 'min/index.html', 'min/style.min.css']);
+  var outputFileName = 'min/' + config.appName + '.zip';
+  const cmd = child.spawn('advzip', ['-p', '-4', '--add', outputFileName, 'min/all.min.js', 'min/index.html', 'min/style.min.css']);
+
+  cmd.on('close', (code) => {
+    if (code === 0) {
+      var fstats = fs.statSync(outputFileName);
+      var r = (13312 - fstats.size) + ' bytes';
+      var time = new Date().toTimeString().slice(0, 8);
+      var sizeText;
+      if (r < 0)
+        sizeText = chalk.red(r);
+      else
+        sizeText = chalk.green(r);
+      console.log('[' + chalk.gray(time) + '] ' + chalk.yellow('Remaining size: ') + sizeText);
+    }
+  });
 });
