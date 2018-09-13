@@ -12,7 +12,6 @@ module.exports = {
     "js/engine/core/sprite.js",
     "js/engine/core/animator.js",
     "js/engine/core/collision.js",
-    "js/engine/asteroids_text.js",
     "js/engine/core/text_renderer.js",
     "js/engine/core/ui_button.js",
     "js/engine/core/scene_manager.js",
