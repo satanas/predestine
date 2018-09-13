@@ -5,7 +5,7 @@ class MenuScene extends Scene {
     this.titleY = 100;
     this.transition = false;
     this.startBtn = new MenuButton(0, 380, 'Start', 'purple', this.startTransition.bind(this));
-    this.fullScreenBtn = new MenuButton(0, 470, 'Fullscreen', 'blue', goFullscreen);
+    //this.fullScreenBtn = new MenuButton(0, 470, 'Fullscreen', 'blue', goFullscreen);
     this.font = new TextRenderer('monospace', '#fff', 70);
     this.smallFont = new TextRenderer('monospace', '#fff', 16);
     this.mountains = new Mountains();
@@ -26,7 +26,7 @@ class MenuScene extends Scene {
 
     if (this.status === 'in') {
       this.startBtn.y += this.speed * this.deltaTime / 1000;
-      this.fullScreenBtn.y += this.speed * this.deltaTime / 1000;
+      //this.fullScreenBtn.y += this.speed * this.deltaTime / 1000;
       this.titleY -= this.speed * this.deltaTime / 1000;
       if (this.startBtn.y > $.vh && this.titleY <= 0) {
         this.status = 'crash';
@@ -38,6 +38,7 @@ class MenuScene extends Scene {
       this.ship.update(this.deltaTime);
       this.timeCounter -= this.deltaTime;
       if (this.timeCounter <= 0 && !this.done) {
+        D.body.getElementsByTagName('button')[0].remove();
         this.done = 1;
         $.scenemng.load(LevelSelectionScene);
       }
@@ -53,9 +54,9 @@ class MenuScene extends Scene {
     this.smallFont.render($.ctx, 'By @satanas82 for js13k 2018', 378, 560);
     $.cam.render(this.startBtn);
 
-    if (!isFullscreen()) {
-      $.cam.render(this.fullScreenBtn);
-    }
+    //if (!isFullscreen()) {
+    //  $.cam.render(this.fullScreenBtn);
+    //}
 
     if (this.status === 'delay') {
       $.cam.render(this.ship);

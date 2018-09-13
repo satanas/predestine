@@ -19,3 +19,11 @@ canvas {
   display: block;
   /*cursor: none;*/
 }
+#b {
+  position: absolute;
+  color: #fff;
+  top: 10px;
+  right: 10px;
+  background-color: blue;
+  border: 0;
+}
