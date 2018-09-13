@@ -94,6 +94,11 @@ class Events {
     D.body.addEventListener('touchstart', this.touchstart.bind(this), true);
     D.body.addEventListener('touchend', this.touchend.bind(this), true);
     D.body.addEventListener('touchmove', this.touchmove.bind(this), true);
+    W.addEventListener('scroll', (ev) =>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      return false;
+    }, true);
   }
 
   registerMouse() {
