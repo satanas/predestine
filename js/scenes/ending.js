@@ -34,7 +34,7 @@ class Ending extends Scene {
       'OFFLINE'
     ].reverse();
 
-    this.status = 'end';
+    this.status = 'in';
     this.transitionTime = 1200;
     this.maxShowingTime = 150;
     this.maxOutTime = 3000;
